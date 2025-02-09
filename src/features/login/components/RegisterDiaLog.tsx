@@ -35,14 +35,9 @@ export const RegisterDiaLog: React.FC<RegisterDialogProps> = ({
   const [errorMessage, setErrorMessage] = useState("")
   const [errorDialogOpen, setErrorDialogOpen] = useState(false)
   const handleRegister = async () => {
-    try {
-      let apiResponse = await fetchRegisterUser(data)
-      if (apiResponse.code !== 0) {
-        setErrorMessage(apiResponse.errorMessage || "註冊失敗，請稍後再試。")
-        setErrorDialogOpen(true)
-      }
-    } catch (error: any) {
-      setErrorMessage(error.message || "註冊失敗，請稍後再試。")
+    let apiResponse = await fetchRegisterUser(data)
+    if (apiResponse.code !== 0) {
+      setErrorMessage(apiResponse.errorMessage || "註冊失敗，請稍後再試。")
       setErrorDialogOpen(true)
     }
   }
