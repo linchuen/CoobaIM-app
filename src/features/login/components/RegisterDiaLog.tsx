@@ -8,8 +8,9 @@ import {
   DialogTitle,
   TextField,
 } from "@mui/material"
-import { fetchRegisterUser } from "../../../fetch/UserAPI"
-import { ErrorDialog } from "../../ErrorDialog"
+import { fetchRegisterUser } from "../../../services/UserAPI"
+import { ErrorDialog } from "../../../components/ErrorDialog"
+import {RegisterResponse} from "../../../services/ResponseInterface";
 
 // 使用 React.FC 來定義函數式組件
 interface RegisterDialogProps {
@@ -35,11 +36,12 @@ export const RegisterDiaLog: React.FC<RegisterDialogProps> = ({
   const [errorMessage, setErrorMessage] = useState("")
   const [errorDialogOpen, setErrorDialogOpen] = useState(false)
   const handleRegister = async () => {
-    let apiResponse = await fetchRegisterUser(data)
+    const apiResponse = await fetchRegisterUser(data)
     if (apiResponse.code !== 0) {
       setErrorMessage(apiResponse.errorMessage || "註冊失敗，請稍後再試。")
       setErrorDialogOpen(true)
     }
+    setErrorDialogOpen(false)
   }
 
   return (
