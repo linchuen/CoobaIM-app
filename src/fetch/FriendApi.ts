@@ -1,5 +1,5 @@
-import {FriendRemoveRequest, FriendRequest} from "./RequestInterface";
-import {ApiResponse, ApplyFriendResponse} from "./ResponseInterface";
+import type {FriendRemoveRequest, FriendRequest} from "./RequestInterface";
+import type {ApiResponse, ApplyFriendResponse} from "./ResponseInterface";
 
 const getAuthHeaders = (token?: string) => ({
     "Content-Type": "application/json",
