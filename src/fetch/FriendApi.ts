@@ -1,58 +1,24 @@
-import type {FriendRemoveRequest, FriendRequest} from "./RequestInterface";
-import type {ApiResponse, ApplyFriendResponse} from "./ResponseInterface";
-
-const getAuthHeaders = (token?: string) => ({
-    "Content-Type": "application/json",
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
-});
+import type { FriendRemoveRequest, FriendRequest } from "./RequestInterface"
+import type { ApiResponse, ApplyFriendResponse } from "./ResponseInterface"
+import {callFetch} from "./common";
 
 export const fetchApplyFriend = async (
     data: FriendRequest,
-    token?: string
+    token?: string,
 ): Promise<ApiResponse<ApplyFriendResponse>> => {
-    const res = await fetch("http://127.0.0.1:8080/friend/apply", {
-        method: "POST",
-        headers: getAuthHeaders(token),
-        body: JSON.stringify(data),
-    });
-
-    if (!res.ok) {
-        throw new Error(`HTTP error! Status: ${res.status}`);
-    }
-
-    return res.json();
-};
+  return callFetch("http://127.0.0.1:8080/friend/apply", "POST", token, data)
+}
 
 export const fetchPermitFriend = async (
     data: FriendRequest,
-    token?: string
+    token?: string,
 ): Promise<ApiResponse<boolean>> => {
-    const res = await fetch("http://127.0.0.1:8080/friend/permit", {
-        method: "POST",
-        headers: getAuthHeaders(token),
-        body: JSON.stringify(data),
-    });
-
-    if (!res.ok) {
-        throw new Error(`HTTP error! Status: ${res.status}`);
-    }
-
-    return res.json();
-};
+  return callFetch("http://127.0.0.1:8080/friend/permit", "POST", token, data)
+}
 
 export const fetchRemoveFriend = async (
     data: FriendRemoveRequest,
-    token?: string
+    token?: string,
 ): Promise<ApiResponse<boolean>> => {
-    const res = await fetch("http://127.0.0.1:8080/friend/remove", {
-        method: "DELETE",
-        headers: getAuthHeaders(token),
-        body: JSON.stringify(data),
-    });
-
-    if (!res.ok) {
-        throw new Error(`HTTP error! Status: ${res.status}`);
-    }
-
-    return res.json();
-};
+  return callFetch("http://127.0.0.1:8080/friend/remove", "DELETE", token, data)
+}

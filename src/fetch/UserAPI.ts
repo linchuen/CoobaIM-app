@@ -1,39 +1,15 @@
 import type {LoginRequest, RegisterRequest} from "./RequestInterface"
 import type {ApiResponse, LoginResponse, RegisterResponse} from "./ResponseInterface"
-
-const getAuthHeaders = (token?: string) => ({
-  "Content-Type": "application/json",
-  ...(token ? { Authorization: `Bearer ${token}` } : {}),
-});
+import {callFetch} from "./common";
 
 export const fetchRegisterUser = async (
-    data: RegisterRequest
+    data: RegisterRequest,
 ): Promise<ApiResponse<RegisterResponse>> => {
-  const res = await fetch("http://127.0.0.1:8080/user/register", {
-    method: "POST",
-    headers: getAuthHeaders(),
-    body: JSON.stringify(data),
-  });
-
-  if (!res.ok) {
-    throw new Error(`HTTP error! Status: ${res.status}`);
-  }
-
-  return res.json();
-};
+  return callFetch("http://127.0.0.1:8080/user/register", "POST", undefined, data)
+}
 
 export const fetchLogin = async (
-    data: LoginRequest
+    data: LoginRequest,
 ): Promise<ApiResponse<LoginResponse>> => {
-  const res = await fetch("http://127.0.0.1:8080/user/login", {
-    method: "POST",
-    headers: getAuthHeaders(),
-    body: JSON.stringify(data),
-  });
-
-  if (!res.ok) {
-    throw new Error(`HTTP error! Status: ${res.status}`);
-  }
-
-  return res.json();
-};
+  return callFetch("http://127.0.0.1:8080/user/login", "POST", undefined, data)
+}

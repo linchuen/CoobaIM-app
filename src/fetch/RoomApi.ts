@@ -1,76 +1,31 @@
 import type {RoomRequest, RoomUserRequest} from "./RequestInterface";
 import type {ApiResponse, BuildRoomResponse, DestroyRoomResponse} from "./ResponseInterface";
-
-
-const getAuthHeaders = (token?: string) => ({
-    "Content-Type": "application/json",
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
-});
+import {callFetch} from "./common";
 
 export const fetchBuildRoom = async (
     data: RoomRequest,
-    token?: string
+    token?: string,
 ): Promise<ApiResponse<BuildRoomResponse>> => {
-    const res = await fetch(`http://127.0.0.1:8080/room/build`, {
-        method: "POST",
-        headers: getAuthHeaders(token),
-        body: JSON.stringify(data),
-    });
-
-    if (!res.ok) {
-        throw new Error(`HTTP error! Status: ${res.status}`);
-    }
-
-    return res.json();
-};
+    return callFetch("http://127.0.0.1:8080/room/build", "POST", token, data)
+}
 
 export const fetchDestroyRoom = async (
     data: RoomRequest,
-    token?: string
+    token?: string,
 ): Promise<ApiResponse<DestroyRoomResponse>> => {
-    const res = await fetch(`http://127.0.0.1:8080/room/destroy`, {
-        method: "DELETE",
-        headers: getAuthHeaders(token),
-        body: JSON.stringify(data),
-    });
-
-    if (!res.ok) {
-        throw new Error(`HTTP error! Status: ${res.status}`);
-    }
-
-    return res.json();
-};
+    return callFetch("http://127.0.0.1:8080/room/destroy", "DELETE", token, data)
+}
 
 export const fetchInviteUser = async (
     data: RoomUserRequest,
-    token?: string
+    token?: string,
 ): Promise<ApiResponse<boolean>> => {
-    const res = await fetch(`http://127.0.0.1:8080/room/invite`, {
-        method: "POST",
-        headers: getAuthHeaders(token),
-        body: JSON.stringify(data),
-    });
-
-    if (!res.ok) {
-        throw new Error(`HTTP error! Status: ${res.status}`);
-    }
-
-    return res.json();
-};
+    return callFetch("http://127.0.0.1:8080/room/invite", "POST", token, data)
+}
 
 export const fetchEvictUser = async (
     data: RoomUserRequest,
-    token?: string
+    token?: string,
 ): Promise<ApiResponse<boolean>> => {
-    const res = await fetch(`http://127.0.0.1:8080/room/evict`, {
-        method: "DELETE",
-        headers: getAuthHeaders(token),
-        body: JSON.stringify(data),
-    });
-
-    if (!res.ok) {
-        throw new Error(`HTTP error! Status: ${res.status}`);
-    }
-
-    return res.json();
-};
+    return callFetch("http://127.0.0.1:8080/room/evict", "DELETE", token, data)
+}
