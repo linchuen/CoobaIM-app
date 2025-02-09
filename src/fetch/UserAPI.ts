@@ -1,18 +1,7 @@
-export interface RegisterData {
-  name: string
-  email: string
-  password: string
-}
-
-export interface ApiResponse<T> {
-  traceId: string
-  code: number
-  errorMessage?: string
-  data?: T
-}
+import type { ApiResponse, RegisterRequest } from "./DtoInterface"
 
 export const fetchRegister = async (
-  data: RegisterData,
+  data: RegisterRequest,
 ): Promise<ApiResponse<any>> => {
   const res = await fetch("http://127.0.0.1:8080/user/register", {
     method: "POST",

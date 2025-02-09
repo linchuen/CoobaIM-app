@@ -14,7 +14,7 @@ interface ForgetPasswordDialogProps {
     onClose: () => void
 }
 
-const ForgetPasswordDialog: React.FC<ForgetPasswordDialogProps> = ({ open, onClose }) => {
+export const ForgetPasswordDialog: React.FC<ForgetPasswordDialogProps> = ({ open, onClose }) => {
     const [email, setEmail] = useState("")
     const [newPassword, setNewPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
@@ -61,5 +61,3 @@ const ForgetPasswordDialog: React.FC<ForgetPasswordDialogProps> = ({ open, onClo
         </Dialog>
     )
 }
-
-export default ForgetPasswordDialog

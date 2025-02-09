@@ -11,8 +11,8 @@ import {
 } from "@mui/material"
 import { Facebook, Google } from "@mui/icons-material"
 import { useNavigate } from "react-router"
+import { RegisterDiaLog } from "./components/RegisterDiaLog"
 import { ForgetPasswordDialog } from "./components/ForgetPasswordDialog"
-import RegisterDiaLog from "./components/RegisterDiaLog";
 
 const LoginRegisterPage: React.FC = () => {
   let navigate = useNavigate()

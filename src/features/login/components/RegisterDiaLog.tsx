@@ -8,7 +8,7 @@ import {
   DialogTitle,
   TextField,
 } from "@mui/material"
-import { fetchRegister } from "../../../fetch/LoginAPI"
+import { fetchRegister } from "../../../fetch/UserAPI"
 
 // 使用 React.FC 來定義函數式組件
 interface RegisterDialogProps {
@@ -16,7 +16,7 @@ interface RegisterDialogProps {
   onClose: () => void
 }
 
-const RegisterDiaLog: React.FC<RegisterDialogProps> = ({ open, onClose }) => {
+export const RegisterDiaLog: React.FC<RegisterDialogProps> = ({ open, onClose }) => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [name, setName] = useState("")
@@ -80,5 +80,3 @@ const RegisterDiaLog: React.FC<RegisterDialogProps> = ({ open, onClose }) => {
     </Dialog>
   )
 }
-
-export default RegisterDiaLog
