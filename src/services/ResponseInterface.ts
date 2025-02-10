@@ -24,7 +24,7 @@ export interface LoginResponse {
     platform: string;
 
     /** IP 地址 */
-    ip: string;
+    ip?: string;
 
     /** 登入時間 */
     loginTime: string;

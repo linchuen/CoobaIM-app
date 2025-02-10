@@ -13,11 +13,54 @@ import { Facebook, Google } from "@mui/icons-material"
 import { useNavigate } from "react-router"
 import { RegisterDiaLog } from "./components/RegisterDiaLog"
 import { ForgetPasswordDialog } from "./components/ForgetPasswordDialog"
+import { fetchLogin } from "../../services/UserAPI"
+import {
+  setErrorDialogOpen,
+  setErrorMessage,
+  setTokenInfo,
+} from "../common/globalSlice"
+import { useAppDispatch } from "../../app/hooks"
 
 const LoginRegisterPage: React.FC = () => {
-  let navigate = useNavigate()
+  const navigate = useNavigate()
+  const dispatch = useAppDispatch()
   const [openSignUp, setOpenSignUp] = useState(false)
   const [openForgotPassword, setOpenForgotPassword] = useState(false)
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+
+  let request = {
+    userId: 1,
+    password: password,
+  }
+  const handleLogin = async () => {
+    const apiResponse = await fetchLogin(request)
+    if (apiResponse.code !== 0) {
+      dispatch(
+        setErrorMessage(apiResponse.errorMessage || "註冊失敗，請稍後再試。"),
+      )
+      dispatch(setErrorDialogOpen(true))
+      return
+    }
+
+    if (!apiResponse.data) {
+      throw new Error("User ID is required but missing.")
+    }
+    dispatch(setErrorDialogOpen(false))
+
+    const data = apiResponse.data
+    dispatch(
+      setTokenInfo({
+        userId: data.userId,
+        token: data.token,
+        platform: data.platform,
+        ip: data.ip,
+        loginTime: data.loginTime,
+        expireTime: data.expireTime,
+      }),
+    )
+    navigate("/chat")
+  }
 
   return (
     <Box
@@ -54,6 +97,7 @@ const LoginRegisterPage: React.FC = () => {
           InputProps={{ style: { color: "white" } }}
           InputLabelProps={{ style: { color: "#b9bbbe" } }}
           sx={{ bgcolor: "#0d1117", marginBottom: 2 }}
+          onChange={e => setEmail(e.target.value)}
         />
         <TextField
           fullWidth
@@ -63,6 +107,7 @@ const LoginRegisterPage: React.FC = () => {
           InputProps={{ style: { color: "white" } }}
           InputLabelProps={{ style: { color: "#b9bbbe" } }}
           sx={{ bgcolor: "#0d1117", marginBottom: 2 }}
+          onChange={e => setPassword(e.target.value)}
         />
 
         <FormControlLabel
@@ -79,7 +124,7 @@ const LoginRegisterPage: React.FC = () => {
           fullWidth
           variant="contained"
           sx={{ bgcolor: "#3f51b5", color: "white", marginBottom: 2 }}
-          onClick={() => navigate("/chat")}
+          onClick={() => handleLogin()}
         >
           Sign in
         </Button>

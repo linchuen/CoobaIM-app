@@ -7,12 +7,27 @@ interface User {
   email: string
 }
 
+interface TokenInfo {
+  userId: number
+  token: string
+  platform: string
+  ip?: string
+  loginTime: string
+  expireTime: string
+}
+
 interface GlobalState {
   user: User | null
+  tokenInfo: TokenInfo | null
+  errorMessage: string
+  errorDialogOpen: boolean
 }
 
 const initialState: GlobalState = {
   user: null,
+  tokenInfo: null,
+  errorMessage: "",
+  errorDialogOpen: false,
 }
 
 export const globalSlice = createAppSlice({
@@ -25,7 +40,22 @@ export const globalSlice = createAppSlice({
     clearUser: create.reducer(state => {
       state.user = null
     }),
+    setTokenInfo: create.reducer((state, action: PayloadAction<TokenInfo>) => {
+      state.tokenInfo = action.payload
+    }),
+    setErrorMessage: (state, action: PayloadAction<string>) => {
+      state.errorMessage = action.payload
+    },
+    setErrorDialogOpen: (state, action: PayloadAction<boolean>) => {
+      state.errorDialogOpen = action.payload
+    },
   }),
 })
 
-export const { setUser, clearUser } = globalSlice.actions
+export const {
+  setUser,
+  clearUser,
+  setTokenInfo,
+  setErrorMessage,
+  setErrorDialogOpen,
+} = globalSlice.actions

@@ -50,6 +50,8 @@ export const RegisterDiaLog: React.FC<RegisterDialogProps> = ({
     if (!apiResponse.data || typeof apiResponse.data.userId === "undefined") {
       throw new Error("User ID is required but missing.");
     }
+    setErrorDialogOpen(false)
+    onClose()
 
     const data = apiResponse.data
     dispatch(
@@ -59,7 +61,6 @@ export const RegisterDiaLog: React.FC<RegisterDialogProps> = ({
         email: email,
       }),
     )
-    setErrorDialogOpen(false)
   }
 
   return (
