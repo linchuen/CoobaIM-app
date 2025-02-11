@@ -30,7 +30,7 @@ const LoginRegisterPage: React.FC = () => {
   const [password, setPassword] = useState("")
 
   let request = {
-    userId: 1,
+    email: email,
     password: password,
   }
   const handleLogin = async () => {

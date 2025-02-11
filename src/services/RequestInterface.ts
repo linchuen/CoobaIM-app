@@ -15,8 +15,8 @@ export interface FriendRemoveRequest {
 }
 
 export interface LoginRequest {
-    /** 使用者ID */
-    userId: number;
+    /** 電子郵件 */
+    email: string;
 
     /** 密碼 */
     password: string;
