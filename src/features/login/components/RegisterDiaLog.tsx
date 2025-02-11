@@ -11,7 +11,7 @@ import {
 import { fetchRegisterUser } from "../../../services/UserAPI"
 import { ErrorDialog } from "../../../components/ErrorDialog"
 import { useAppDispatch } from "../../../app/hooks"
-import { setUser } from "../../common/globalSlice"
+import { setErrorDialogOpen, setErrorMessage, setUser } from "../../common/globalSlice"
 
 // 使用 React.FC 來定義函數式組件
 interface RegisterDialogProps {
@@ -35,22 +35,20 @@ export const RegisterDiaLog: React.FC<RegisterDialogProps> = ({
     password: password,
   }
 
-  const [errorMessage, setErrorMessage] = useState("")
-  const [errorDialogOpen, setErrorDialogOpen] = useState(false)
   const handleRegister = async () => {
     const apiResponse = await fetchRegisterUser(request)
     if (
       apiResponse.code !== 0
     ) {
-      setErrorMessage(apiResponse.errorMessage || "註冊失敗，請稍後再試。")
-      setErrorDialogOpen(true)
+      dispatch(setErrorMessage(apiResponse.errorMessage || "註冊失敗，請稍後再試。"))
+      dispatch(setErrorDialogOpen(true))
       return
     }
 
     if (!apiResponse.data || typeof apiResponse.data.userId === "undefined") {
       throw new Error("User ID is required but missing.");
     }
-    setErrorDialogOpen(false)
+    dispatch(setErrorDialogOpen(false))
     onClose()
 
     const data = apiResponse.data
@@ -116,11 +114,7 @@ export const RegisterDiaLog: React.FC<RegisterDialogProps> = ({
         </DialogActions>
       </Dialog>
 
-      <ErrorDialog
-        open={errorDialogOpen}
-        errorMessage={errorMessage}
-        onClose={() => setErrorDialogOpen(false)}
-      />
+      <ErrorDialog />
     </>
   )
 }

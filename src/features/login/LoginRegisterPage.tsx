@@ -20,6 +20,7 @@ import {
   setTokenInfo,
 } from "../common/globalSlice"
 import { useAppDispatch } from "../../app/hooks"
+import { ErrorDialog } from "../../components/ErrorDialog"
 
 const LoginRegisterPage: React.FC = () => {
   const navigate = useNavigate()
@@ -63,122 +64,125 @@ const LoginRegisterPage: React.FC = () => {
   }
 
   return (
-    <Box
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-      height="100vh"
-      bgcolor="#0d1117"
-      color="white"
-    >
-      <Paper
-        sx={{
-          padding: 4,
-          maxWidth: 400,
-          width: "100%",
-          bgcolor: "#161b22",
-          boxShadow: 3,
-          borderRadius: 2,
-        }}
+    <>
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        height="100vh"
+        bgcolor="#0d1117"
+        color="white"
       >
-        <Typography
-          variant="h5"
-          textAlign="center"
-          gutterBottom
-          sx={{ color: "white" }}
+        <Paper
+          sx={{
+            padding: 4,
+            maxWidth: 400,
+            width: "100%",
+            bgcolor: "#161b22",
+            boxShadow: 3,
+            borderRadius: 2,
+          }}
         >
-          Sign in
-        </Typography>
-
-        <TextField
-          fullWidth
-          label="Email"
-          variant="filled"
-          InputProps={{ style: { color: "white" } }}
-          InputLabelProps={{ style: { color: "#b9bbbe" } }}
-          sx={{ bgcolor: "#0d1117", marginBottom: 2 }}
-          onChange={e => setEmail(e.target.value)}
-        />
-        <TextField
-          fullWidth
-          label="Password"
-          type="password"
-          variant="filled"
-          InputProps={{ style: { color: "white" } }}
-          InputLabelProps={{ style: { color: "#b9bbbe" } }}
-          sx={{ bgcolor: "#0d1117", marginBottom: 2 }}
-          onChange={e => setPassword(e.target.value)}
-        />
-
-        <FormControlLabel
-          control={<Checkbox sx={{ color: "#b9bbbe" }} />}
-          label={
-            <Typography variant="body2" color="#b9bbbe">
-              Remember me
-            </Typography>
-          }
-          sx={{ marginBottom: 2 }}
-        />
-
-        <Button
-          fullWidth
-          variant="contained"
-          sx={{ bgcolor: "#3f51b5", color: "white", marginBottom: 2 }}
-          onClick={() => handleLogin()}
-        >
-          Sign in
-        </Button>
-
-        <Typography variant="body2" textAlign="center" sx={{ marginBottom: 2 }}>
-          <a
-            href="#"
-            style={{ color: "#3f51b5", textDecoration: "none" }}
-            onClick={() => {
-              setOpenForgotPassword(true)
-            }}
+          <Typography
+            variant="h5"
+            textAlign="center"
+            gutterBottom
+            sx={{ color: "white" }}
           >
-            Forgot your password?
-          </a>
-        </Typography>
+            Sign in
+          </Typography>
 
-        <Button
-          fullWidth
-          variant="outlined"
-          startIcon={<Google />}
-          sx={{ borderColor: "#3f51b5", color: "white", marginBottom: 2 }}
-        >
-          Sign in with Google
-        </Button>
+          <TextField
+            fullWidth
+            label="Email"
+            variant="filled"
+            InputProps={{ style: { color: "white" } }}
+            InputLabelProps={{ style: { color: "#b9bbbe" } }}
+            sx={{ bgcolor: "#0d1117", marginBottom: 2 }}
+            onChange={e => setEmail(e.target.value)}
+          />
+          <TextField
+            fullWidth
+            label="Password"
+            type="password"
+            variant="filled"
+            InputProps={{ style: { color: "white" } }}
+            InputLabelProps={{ style: { color: "#b9bbbe" } }}
+            sx={{ bgcolor: "#0d1117", marginBottom: 2 }}
+            onChange={e => setPassword(e.target.value)}
+          />
 
-        <Button
-          fullWidth
-          variant="outlined"
-          startIcon={<Facebook />}
-          sx={{ borderColor: "#3f51b5", color: "white", marginBottom: 2 }}
-        >
-          Sign in with Facebook
-        </Button>
+          <FormControlLabel
+            control={<Checkbox sx={{ color: "#b9bbbe" }} />}
+            label={
+              <Typography variant="body2" color="#b9bbbe">
+                Remember me
+              </Typography>
+            }
+            sx={{ marginBottom: 2 }}
+          />
 
-        <Typography variant="body2" textAlign="center" sx={{ color: "white" }}>
-          Don’t have an account?{" "}
-          <span
-            style={{ color: "#3f51b5", textDecoration: "none" }}
-            onClick={() => {
-              setOpenSignUp(true)
-            }}
+          <Button
+            fullWidth
+            variant="contained"
+            sx={{ bgcolor: "#3f51b5", color: "white", marginBottom: 2 }}
+            onClick={() => handleLogin()}
           >
-            Sign up
-          </span>
-        </Typography>
-      </Paper>
+            Sign in
+          </Button>
 
-      <RegisterDiaLog open={openSignUp} onClose={() => setOpenSignUp(false)} />
+          <Typography variant="body2" textAlign="center" sx={{ marginBottom: 2 }}>
+            <span
+              style={{ color: "#3f51b5", textDecoration: "none" }}
+              onClick={() => {
+                setOpenForgotPassword(true)
+              }}
+            >
+              Forgot your password?
+            </span>
+          </Typography>
 
-      <ForgetPasswordDialog
-        open={openForgotPassword}
-        onClose={() => setOpenForgotPassword(false)}
-      />
-    </Box>
+          <Button
+            fullWidth
+            variant="outlined"
+            startIcon={<Google />}
+            sx={{ borderColor: "#3f51b5", color: "white", marginBottom: 2 }}
+          >
+            Sign in with Google
+          </Button>
+
+          <Button
+            fullWidth
+            variant="outlined"
+            startIcon={<Facebook />}
+            sx={{ borderColor: "#3f51b5", color: "white", marginBottom: 2 }}
+          >
+            Sign in with Facebook
+          </Button>
+
+          <Typography variant="body2" textAlign="center" sx={{ color: "white" }}>
+            Don’t have an account?{" "}
+            <span
+              style={{ color: "#3f51b5", textDecoration: "none" }}
+              onClick={() => {
+                setOpenSignUp(true)
+              }}
+            >
+              Sign up
+            </span>
+          </Typography>
+        </Paper>
+
+        <RegisterDiaLog open={openSignUp} onClose={() => setOpenSignUp(false)} />
+
+        <ForgetPasswordDialog
+          open={openForgotPassword}
+          onClose={() => setOpenForgotPassword(false)}
+        />
+      </Box>
+
+      <ErrorDialog />
+    </>
   )
 }
 

@@ -50,6 +50,10 @@ export const globalSlice = createAppSlice({
       state.errorDialogOpen = action.payload
     },
   }),
+  selectors: {
+    selectErrorMessage: state => state.errorMessage,
+    selectErrorDialogOpen: state => state.errorDialogOpen,
+  },
 })
 
 export const {
@@ -59,3 +63,5 @@ export const {
   setErrorMessage,
   setErrorDialogOpen,
 } = globalSlice.actions
+
+export const { selectErrorMessage, selectErrorDialogOpen } = globalSlice.selectors
