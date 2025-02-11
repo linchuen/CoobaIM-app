@@ -1,5 +1,5 @@
-import type { FriendRemoveRequest, FriendRequest } from "./RequestInterface"
-import type { ApiResponse, ApplyFriendResponse } from "./ResponseInterface"
+import type { FriendRemoveRequest, FriendRequest, FriendSearchRequest } from "./RequestInterface"
+import type { ApiResponse, ApplyFriendResponse, FriendInfo } from "./ResponseInterface"
 import {callFetch} from "./common";
 
 export const fetchApplyFriend = async (
@@ -21,4 +21,11 @@ export const fetchRemoveFriend = async (
     token?: string,
 ): Promise<ApiResponse<boolean>> => {
   return callFetch("http://127.0.0.1:8080/friend/remove", "DELETE", token, data)
+}
+
+export const fetchSearchFriend = async (
+  data: FriendSearchRequest,
+  token?: string,
+): Promise<ApiResponse<FriendInfo[]>> => {
+return callFetch("http://127.0.0.1:8080/friend/search", "POST", token, data)
 }

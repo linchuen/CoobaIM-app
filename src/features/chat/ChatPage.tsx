@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import type React from "react";
+import { useState } from "react";
 import { AppBar, Toolbar, IconButton, InputBase, Paper, List, ListItem, ListItemText, TextField, Button, Box, Avatar, Divider, Typography } from "@mui/material";
 import { Search, GroupAdd, AttachFile, InsertEmoticon, Image, VideoCall, Call, Chat } from "@mui/icons-material";
 

@@ -3,6 +3,20 @@ export interface ApplyFriendResponse {
     applyId: number;
 }
 
+export interface FriendInfo {
+    /** ID */
+    id: number;
+    
+    /** 使用者ID */
+    userId: number;
+    
+    /** 朋友使用者ID */
+    friendUserId: number;
+    
+    /** 顯示名稱 */
+    showName: string;
+}
+
 export interface BuildRoomResponse {
     /** 房間ID */
     roomId: number;

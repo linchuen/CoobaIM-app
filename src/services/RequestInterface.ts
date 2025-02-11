@@ -14,6 +14,11 @@ export interface FriendRemoveRequest {
     friendUserId: number;
 }
 
+export interface FriendSearchRequest {
+    /** 刪除用戶ID */
+    friendUserIds: number[];
+}
+
 export interface LoginRequest {
     /** 電子郵件 */
     email: string;
