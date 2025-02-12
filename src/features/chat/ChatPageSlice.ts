@@ -1,6 +1,4 @@
-import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
-import { createSelector } from "reselect";
 import type { FriendInfo } from "../../services/ResponseInterface";
 import { fetchSearchFriend } from "../../services/FriendApi";
 
@@ -14,7 +12,7 @@ const initialState: FriendState = {
     status: ""
 };
 
-const chatSlice = createSlice({
+export const chatPageSlice = createSlice({
     name: "chat",
     initialState,
     reducers: create => ({
@@ -28,16 +26,19 @@ const chatSlice = createSlice({
                 },
                 fulfilled: (state, action) => {
                     state.status = "idle"
-                    state.firendInfoList = action.payload ?? []
+                    state.firendInfoList = action.payload?.friends ?? []
                 },
                 rejected: state => {
                     state.status = "failed"
                 },
             },
         )
-    })
+    }),
+    selectors: {
+        selectFirendInfoList: state => state.firendInfoList,
+        selectStatus: state => state.status,
+    },
 });
 
-export const { loadFriends } = chatSlice.actions;
-
-export default chatSlice.reducer;
+export const { loadFriends } = chatPageSlice.actions;
+export const { selectFirendInfoList, selectStatus } = chatPageSlice.selectors

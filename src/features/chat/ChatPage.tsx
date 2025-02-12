@@ -2,8 +2,14 @@ import type React from "react";
 import { useState } from "react";
 import { AppBar, Toolbar, IconButton, InputBase, Paper, List, ListItem, ListItemText, TextField, Button, Box, Avatar, Divider, Typography } from "@mui/material";
 import { Search, GroupAdd, AttachFile, InsertEmoticon, Image, VideoCall, Call, Chat } from "@mui/icons-material";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { selectFirendInfoList, selectStatus } from "./chatPageSlice";
 
 const ChatPage: React.FC = () => {
+  const dispatch = useAppDispatch()
+  const firendInfoList = useAppSelector(selectFirendInfoList)
+  const status = useAppSelector(selectStatus)
+
   const [messages, setMessages] = useState([
     { id: 1, user: "Alice", text: "Hello!", align: "left" },
     { id: 2, user: "Bob", text: "Hi Alice! How are you?", align: "right" },
@@ -18,6 +24,7 @@ const ChatPage: React.FC = () => {
             Personal Chats
           </Typography>
           <List>
+            {firendInfoList.map(item=>)}
             <ListItem sx={{ marginBottom: 1 }}>
               <Avatar sx={{ marginRight: 2 }}>A</Avatar>
               <ListItemText primary="Alice" secondary="Hello!" />
