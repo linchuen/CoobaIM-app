@@ -3,8 +3,8 @@ export interface ApplyFriendResponse {
     applyId: number;
 }
 
-export interface FriendSearchResponse{
-    friends: FriendInfo[]
+export interface FriendSearchResponse {
+    friends: FriendInfo[];
 }
 
 export interface FriendInfo {

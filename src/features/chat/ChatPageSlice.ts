@@ -1,6 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit";
 import type { FriendInfo } from "../../services/ResponseInterface";
 import { fetchSearchFriend } from "../../services/FriendApi";
+import { createAppSlice } from "../../app/createAppSlice";
 
 type FriendState = {
     firendInfoList: FriendInfo[];
@@ -12,21 +12,22 @@ const initialState: FriendState = {
     status: ""
 };
 
-export const chatPageSlice = createSlice({
+export const chatSlice = createAppSlice({
     name: "chat",
     initialState,
     reducers: create => ({
-        loadFriends: create.asyncThunk(async (friendUserIds: number[]) => {
-            const response = await fetchSearchFriend({ friendUserIds: friendUserIds })
-            return response.data
-        },
+        loadFriends: create.asyncThunk(
+            async (friendUserIds: number[]) => {
+                const response = await fetchSearchFriend({ friendUserIds: friendUserIds })
+                return response.data?.friends
+            },
             {
                 pending: state => {
                     state.status = "loading"
                 },
                 fulfilled: (state, action) => {
                     state.status = "idle"
-                    state.firendInfoList = action.payload?.friends ?? []
+                    state.firendInfoList = action.payload ?? []
                 },
                 rejected: state => {
                     state.status = "failed"
@@ -40,5 +41,8 @@ export const chatPageSlice = createSlice({
     },
 });
 
-export const { loadFriends } = chatPageSlice.actions;
-export const { selectFirendInfoList, selectStatus } = chatPageSlice.selectors
+export const { loadFriends } = chatSlice.actions;
+
+export const { selectFirendInfoList, selectStatus } = chatSlice.selectors
+
+export default chatSlice.reducer;

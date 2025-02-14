@@ -35,17 +35,17 @@ export const fetchSearchFriend = async (
         {
           id: 1,
           userId: 1,
-          friendUserId: 1,
-          showName: "Alice"
-        },{
-          id: 1,
+          friendUserId: 2,
+          showName: "Alice",
+        },
+        {
+          id: 2,
           userId: 1,
-          friendUserId: 1,
-          showName: "Bob"
+          friendUserId: 3,
+          showName: "Cat",
         }
       ]
     }
   }
-
   // return callFetch("http://127.0.0.1:8080/friend/search", "POST", token, data)
 }
