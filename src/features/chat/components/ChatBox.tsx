@@ -1,4 +1,5 @@
-import type React from "react"
+import type React from "react";
+import {useCallback, useEffect} from "react"
 import { useRef } from "react"
 import {
   AppBar,
@@ -31,12 +32,12 @@ import { selectTokenInfo } from "../../common/globalSlice"
 const ChatBox: React.FC = () => {
   const dispatch = useAppDispatch()
   const inputRef = useRef<HTMLInputElement>(null)
+  const chatContainerRef = useRef<HTMLDivElement>(null)
   const chatInfos = useAppSelector(selectChatInfoList)
   const tokenInfo = useAppSelector(selectTokenInfo)
   const currentRoomId = useAppSelector(selectCurrentRoomId)
 
   const handleSendMessage = () => {
-    console.log("sendMessage")
     if (inputRef.current) {
       dispatch(
         sendMessage({
@@ -46,6 +47,26 @@ const ChatBox: React.FC = () => {
       )
     }
   }
+
+  const handleScroll = useCallback(() => {
+    if (!chatContainerRef.current) return
+
+    if (chatContainerRef.current.scrollTop === 0) {
+        alert("已經是最上方")
+    }
+  }, [dispatch, currentRoomId])
+
+  useEffect(() => {
+    const chatContainer = chatContainerRef.current
+    if (chatContainer) {
+      chatContainer.addEventListener("scroll", handleScroll)
+    }
+    return () => {
+      if (chatContainer) {
+        chatContainer.removeEventListener("scroll", handleScroll)
+      }
+    }
+  }, [handleScroll])
 
   const userId = tokenInfo?.userId
 
@@ -108,12 +129,19 @@ const ChatBox: React.FC = () => {
 
       {/* Messages */}
       <Box
+        ref={chatContainerRef}
         flex={1}
         padding={2}
         overflow="auto"
         display="flex"
         flexDirection="column"
         gap={2}
+        sx={{
+          "&::-webkit-scrollbar": {
+            display: "none",
+          },
+          scrollbarWidth: "none",
+        }}
       >
         {messages}
       </Box>
