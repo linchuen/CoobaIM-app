@@ -2,8 +2,8 @@ import type { FriendInfo, RoomInfo } from "../../services/ResponseInterface"
 import { fetchSearchFriend } from "../../services/FriendApi"
 import { createAppSlice } from "../../app/createAppSlice"
 import { fetchSearchRoom } from "../../services/RoomApi"
-import { useAppSelector } from "../../app/hooks"
 import { selectTokenInfo } from "../common/globalSlice"
+import type { RootState } from "../../app/store"
 
 type FriendState = {
   friendInfoList: FriendInfo[]
@@ -22,8 +22,9 @@ export const chatSlice = createAppSlice({
   initialState,
   reducers: create => ({
     loadFriends: create.asyncThunk(
-      async (friendUserIds: number[]) => {
-        const tokenInfo = useAppSelector(selectTokenInfo)
+      async (friendUserIds: number[], { getState }) => {
+        const state = getState() as RootState
+        const tokenInfo = selectTokenInfo(state)
         const response = await fetchSearchFriend(
           {
             friendUserIds: friendUserIds,
@@ -37,9 +38,9 @@ export const chatSlice = createAppSlice({
           state.status = "loading"
         },
         fulfilled: (state, action) => {
-          console.log("loadFriends", action.payload)
           state.status = "idle"
           state.friendInfoList = action.payload ?? []
+          console.log("loadFriends", action.payload)
         },
         rejected: state => {
           state.status = "failed"
@@ -47,8 +48,9 @@ export const chatSlice = createAppSlice({
       },
     ),
     loadGroups: create.asyncThunk(
-      async (roomIds: number[]) => {
-        const tokenInfo = useAppSelector(selectTokenInfo)
+      async (roomIds: number[], { getState }) => {
+        const state = getState() as RootState
+        const tokenInfo = selectTokenInfo(state)
         const response = await fetchSearchRoom(
           {
             roomIds: roomIds,
@@ -63,8 +65,8 @@ export const chatSlice = createAppSlice({
         },
         fulfilled: (state, action) => {
           state.status = "idle"
-          console.log("loadGroups", action.payload)
           state.roomInfoList = action.payload ?? []
+          console.log("loadGroups", action.payload)
         },
         rejected: state => {
           state.status = "failed"
@@ -83,5 +85,3 @@ export const { loadFriends, loadGroups } = chatSlice.actions
 
 export const { selectFriendInfoList, selectRoomInfoList, selectStatus } =
   chatSlice.selectors
-
-export default chatSlice.reducer

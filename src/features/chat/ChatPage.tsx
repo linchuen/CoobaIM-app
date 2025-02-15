@@ -42,11 +42,9 @@ const ChatPage: React.FC = () => {
   const tokenInfo = useAppSelector(selectTokenInfo)
 
   useEffect(() => {
-    if (tokenInfo?.token !== null) {
-      dispatch(loadFriends([]))
-      dispatch(loadGroups([]))
-    }
-  }, [tokenInfo, dispatch])
+    dispatch(loadFriends([]))
+    dispatch(loadGroups([]))
+  }, [tokenInfo])
 
   const friendList = friendInfos.map(info => {
     return (
