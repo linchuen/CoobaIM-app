@@ -1,5 +1,5 @@
 import type React from "react"
-import { useState } from "react"
+import { useRef } from "react"
 import {
   AppBar,
   Toolbar,
@@ -21,13 +21,31 @@ import {
   Call,
 } from "@mui/icons-material"
 import { useAppDispatch, useAppSelector } from "../../../app/hooks"
-import { selectChatInfoList } from "../ChatPageSlice"
+import {
+  selectChatInfoList,
+  selectCurrentRoomId,
+  sendMessage,
+} from "../ChatPageSlice"
 import { selectTokenInfo } from "../../common/globalSlice"
 
 const ChatBox: React.FC = () => {
   const dispatch = useAppDispatch()
+  const inputRef = useRef<HTMLInputElement>(null)
   const chatInfos = useAppSelector(selectChatInfoList)
   const tokenInfo = useAppSelector(selectTokenInfo)
+  const currentRoomId = useAppSelector(selectCurrentRoomId)
+
+  const handleSendMessage = () => {
+    console.log("sendMessage")
+    if (inputRef.current) {
+      dispatch(
+        sendMessage({
+          roomId: currentRoomId,
+          message: inputRef.current.value,
+        }),
+      )
+    }
+  }
 
   const userId = tokenInfo?.userId
 
@@ -128,6 +146,7 @@ const ChatBox: React.FC = () => {
           <Call />
         </IconButton>
         <TextField
+          inputRef={inputRef}
           fullWidth
           placeholder="Type a message..."
           variant="outlined"
@@ -138,7 +157,11 @@ const ChatBox: React.FC = () => {
             input: { color: "white" },
           }}
         />
-        <Button variant="contained" sx={{ bgcolor: "#3f51b5", color: "white" }}>
+        <Button
+          variant="contained"
+          sx={{ bgcolor: "#3f51b5", color: "white" }}
+          onClick={handleSendMessage}
+        >
           Send
         </Button>
       </Paper>

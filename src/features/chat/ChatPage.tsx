@@ -17,7 +17,7 @@ import {
   loadFriends,
   loadGroups,
   selectFriendInfoList,
-  selectRoomInfoList,
+  selectRoomInfoList, setCurrentRoomId, setType,
 } from "./ChatPageSlice"
 import { selectTokenInfo } from "../common/globalSlice"
 import ChatBox from "./components/ChatBox"
@@ -33,15 +33,18 @@ const ChatPage: React.FC = () => {
     dispatch(loadGroups({ roomIds: [] }))
   }, [dispatch, tokenInfo])
 
-  const handleLoadChat = (roomId: number) =>
+  const handleLoadChat = (roomId: number, type: string) => {
+    dispatch(setType(type))
+    dispatch(setCurrentRoomId(roomId))
     dispatch(loadChats({ roomId: roomId }))
+  }
 
   const friendList = friendInfos.map(info => {
     return (
       <ListItem
         sx={{ marginBottom: 1 }}
         key={"friend_" + info.id}
-        onClick={() => handleLoadChat(1)}
+        onClick={() => handleLoadChat(1, "user")}
       >
         <Avatar sx={{ marginRight: 2 }}>{info.showName.charAt(0)}</Avatar>
         <ListItemText primary={info.showName} secondary={info.friendUserId} />
@@ -51,7 +54,10 @@ const ChatPage: React.FC = () => {
 
   const roomList = roomInfos.map(info => {
     return (
-      <ListItem key={"room_" + info.id} onClick={() => handleLoadChat(1)}>
+      <ListItem
+        key={"room_" + info.id}
+        onClick={() => handleLoadChat(1, "room")}
+      >
         <Avatar sx={{ marginRight: 2, bgcolor: "#3f51b5" }}>
           <Chat />
         </Avatar>

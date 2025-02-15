@@ -49,8 +49,8 @@ export interface RoomSearchRequest {
 }
 
 export interface SpeakRequest {
-    roomId?: number;
-    message?: string;
+    roomId: number;
+    message: string;
 }
 
 export interface ChatLoadRequest {
