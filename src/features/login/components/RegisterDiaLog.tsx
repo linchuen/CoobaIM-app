@@ -8,18 +8,13 @@ import {
   DialogTitle,
   TextField,
 } from "@mui/material"
-import { fetchLogin, fetchRegisterUser } from "../../../services/UserAPI"
-import { ErrorDialog } from "../../../components/ErrorDialog"
+import { fetchRegisterUser } from "../../../services/UserAPI"
 import { useAppDispatch } from "../../../app/hooks"
 import {
-  setErrorDialogOpen,
-  setErrorMessage,
-  setTokenInfo,
   setUser,
 } from "../../common/globalSlice"
 import { handleFetch } from "../../../services/common"
 import type {
-  LoginResponse,
   RegisterResponse,
 } from "../../../services/ResponseInterface"
 
