@@ -16,7 +16,6 @@ import { ForgetPasswordDialog } from "./components/ForgetPasswordDialog"
 import { fetchLogin } from "../../services/UserAPI"
 import { setTokenInfo } from "../common/globalSlice"
 import { useAppDispatch } from "../../app/hooks"
-import { ErrorDialog } from "../../components/ErrorDialog"
 import { handleFetch } from "../../services/common"
 import type { LoginResponse } from "../../services/ResponseInterface"
 

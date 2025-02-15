@@ -1,19 +1,31 @@
-import type { FriendInfo, RoomInfo } from "../../services/ResponseInterface"
+import type {
+  ChatInfo,
+  FriendInfo,
+  RoomInfo,
+} from "../../services/ResponseInterface"
 import { fetchSearchFriend } from "../../services/FriendApi"
 import { createAppSlice } from "../../app/createAppSlice"
 import { fetchSearchRoom } from "../../services/RoomApi"
 import { selectTokenInfo } from "../common/globalSlice"
 import type { RootState } from "../../app/store"
+import { fetchLoadChat } from "../../services/MessageApi"
+import type {
+  ChatLoadRequest,
+  FriendSearchRequest,
+  RoomSearchRequest,
+} from "../../services/RequestInterface"
 
 type FriendState = {
   friendInfoList: FriendInfo[]
   roomInfoList: RoomInfo[]
+  chatInfoList: ChatInfo[]
   status: string
 }
 
 const initialState: FriendState = {
   friendInfoList: [],
   roomInfoList: [],
+  chatInfoList: [],
   status: "",
 }
 
@@ -22,15 +34,10 @@ export const chatSlice = createAppSlice({
   initialState,
   reducers: create => ({
     loadFriends: create.asyncThunk(
-      async (friendUserIds: number[], { getState }) => {
+      async (request: FriendSearchRequest, { getState }) => {
         const state = getState() as RootState
         const tokenInfo = selectTokenInfo(state)
-        const response = await fetchSearchFriend(
-          {
-            friendUserIds: friendUserIds,
-          },
-          tokenInfo?.token,
-        )
+        const response = await fetchSearchFriend(request, tokenInfo?.token)
         return response.data?.friends
       },
       {
@@ -48,15 +55,10 @@ export const chatSlice = createAppSlice({
       },
     ),
     loadGroups: create.asyncThunk(
-      async (roomIds: number[], { getState }) => {
+      async (request: RoomSearchRequest, { getState }) => {
         const state = getState() as RootState
         const tokenInfo = selectTokenInfo(state)
-        const response = await fetchSearchRoom(
-          {
-            roomIds: roomIds,
-          },
-          tokenInfo?.token,
-        )
+        const response = await fetchSearchRoom(request, tokenInfo?.token)
         return response.data?.rooms
       },
       {
@@ -73,15 +75,41 @@ export const chatSlice = createAppSlice({
         },
       },
     ),
+    loadChats: create.asyncThunk(
+      async (request: ChatLoadRequest, { getState }) => {
+        const state = getState() as RootState
+        const tokenInfo = selectTokenInfo(state)
+        const response = await fetchLoadChat(request, tokenInfo?.token)
+        return response.data?.chats
+      },
+      {
+        pending: state => {
+          state.status = "loading"
+        },
+        fulfilled: (state, action) => {
+          state.status = "idle"
+          state.chatInfoList = action.payload ?? []
+          console.log("loadChats", action.payload)
+        },
+        rejected: state => {
+          state.status = "failed"
+        },
+      },
+    ),
   }),
   selectors: {
     selectFriendInfoList: state => state.friendInfoList,
     selectRoomInfoList: state => state.roomInfoList,
+    selectChatInfoList: state => state.chatInfoList,
     selectStatus: state => state.status,
   },
 })
 
-export const { loadFriends, loadGroups } = chatSlice.actions
+export const { loadFriends, loadGroups, loadChats } = chatSlice.actions
 
-export const { selectFriendInfoList, selectRoomInfoList, selectStatus } =
-  chatSlice.selectors
+export const {
+  selectFriendInfoList,
+  selectRoomInfoList,
+  selectChatInfoList,
+  selectStatus,
+} = chatSlice.selectors
