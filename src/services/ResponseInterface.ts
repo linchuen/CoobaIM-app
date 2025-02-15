@@ -1,89 +1,73 @@
 export interface ApplyFriendResponse {
-    /** 申請ID */
-    applyId: number;
+  applyId: number
 }
 
 export interface FriendSearchResponse {
-    friends: FriendInfo[];
+  friends: FriendInfo[]
 }
 
 export interface FriendInfo {
-    /** ID */
-    id: number;
-    
-    /** 使用者ID */
-    userId: number;
-    
-    /** 朋友使用者ID */
-    friendUserId: number;
-    
-    /** 顯示名稱 */
-    showName: string;
+  id: number
+  userId: number
+  friendUserId: number
+  showName: string
 }
 
 export interface BuildRoomResponse {
-    /** 房間ID */
-    roomId: number;
+  roomId: number
 }
 
 export interface DestroyRoomResponse {
-    /** 房間ID */
-    roomId: number;
+  roomId: number
 }
 
 export interface LoginResponse {
-    /** 使用者ID */
-    userId: number;
-
-    /** 登入Token */
-    token: string;
-
-    /** 平台 */
-    platform: string;
-
-    /** IP 地址 */
-    ip?: string;
-
-    /** 登入時間 */
-    loginTime: string;
-
-    /** 過期時間 */
-    expireTime: string;
+  userId: number
+  token: string
+  platform: string
+  ip?: string
+  loginTime: string
+  expireTime: string
 }
 
 export interface LogoutResponse {
-    /** 登出時間 */
-    logoutTime: string;
+  logoutTime: string
 }
 
 export interface RegisterResponse {
-    /** 使用者ID */
-    userId: number;
+  userId: number
 }
 
 export interface RoomResponse {
-    /** 房間ID */
-    roomId: number;
-
-    /** 使用者ID */
-    userId: number;
+  roomId: number
+  userId: number
 }
 
 export interface RoomInfo {
-    /** 房間ID */
-    id: number;
-
-    /** 房間名稱 */
-    name: string;
+  id: number
+  name: string
 }
 
-export interface RoomSearchResponse{
-    rooms: RoomInfo[];
+export interface RoomSearchResponse {
+  rooms: RoomInfo[]
+}
+
+export interface ChatInfo {
+  id: number
+  name: string
+  roomId: number
+  userId: number
+  message: string
+  type: string
+}
+
+export interface ChatLoadResponse {
+  chats: ChatInfo[]
 }
 
 export interface ApiResponse<T> {
-    traceId: string
-    code: number
-    errorMessage?: string
-    data?: T
+  traceId: string
+  code: number
+  errorMessage?: string
+  data?: T
 }
