@@ -8,10 +8,20 @@ import {
   DialogTitle,
   TextField,
 } from "@mui/material"
-import { fetchRegisterUser } from "../../../services/UserAPI"
+import { fetchLogin, fetchRegisterUser } from "../../../services/UserAPI"
 import { ErrorDialog } from "../../../components/ErrorDialog"
 import { useAppDispatch } from "../../../app/hooks"
-import { setErrorDialogOpen, setErrorMessage, setUser } from "../../common/globalSlice"
+import {
+  setErrorDialogOpen,
+  setErrorMessage,
+  setTokenInfo,
+  setUser,
+} from "../../common/globalSlice"
+import { handleFetch } from "../../../services/common"
+import type {
+  LoginResponse,
+  RegisterResponse,
+} from "../../../services/ResponseInterface"
 
 // 使用 React.FC 來定義函數式組件
 interface RegisterDialogProps {
@@ -29,92 +39,75 @@ export const RegisterDiaLog: React.FC<RegisterDialogProps> = ({
   const [name, setName] = useState("")
   const [phone, setPhone] = useState("")
 
-  let request = {
-    name: name,
-    email: email,
-    password: password,
-  }
-
-  const handleRegister = async () => {
-    const apiResponse = await fetchRegisterUser(request)
-    if (
-      apiResponse.code !== 0
-    ) {
-      dispatch(setErrorMessage(apiResponse.errorMessage || "註冊失敗，請稍後再試。"))
-      dispatch(setErrorDialogOpen(true))
-      return
-    }
-
-    if (!apiResponse.data || typeof apiResponse.data.userId === "undefined") {
-      throw new Error("User ID is required but missing.");
-    }
-    dispatch(setErrorDialogOpen(false))
-    onClose()
-
-    const data = apiResponse.data
-    dispatch(
-      setUser({
-        id: data.userId,
+  const handleRegister = () =>
+    handleFetch<RegisterResponse>(
+      dispatch,
+      fetchRegisterUser({
         name: name,
         email: email,
+        password: password,
       }),
+      data => {
+        dispatch(
+          setUser({
+            id: data.userId,
+            name: name,
+            email: email,
+          }),
+        )
+      },
     )
-  }
 
   return (
-    <>
-      <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
-        <DialogTitle>Sign up</DialogTitle>
-        <DialogContent>
-          <TextField
-            fullWidth
-            label="Name"
-            variant="outlined"
-            margin="normal"
-            value={name}
-            onChange={e => setName(e.target.value)}
-          />
-          <TextField
-            fullWidth
-            label="Email"
-            variant="outlined"
-            margin="normal"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-          />
-          <TextField
-            fullWidth
-            label="Phone"
-            variant="outlined"
-            margin="normal"
-            value={phone}
-            onChange={e => setPhone(e.target.value)}
-          />
-          <TextField
-            fullWidth
-            label="Password"
-            type="password"
-            variant="outlined"
-            margin="normal"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={onClose} color="secondary">
-            Cancel
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => handleRegister()}
-          >
-            Register
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      <ErrorDialog />
-    </>
+    <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
+      <DialogTitle>Sign up</DialogTitle>
+      <DialogContent>
+        <TextField
+          fullWidth
+          label="Name"
+          variant="outlined"
+          margin="normal"
+          value={name}
+          onChange={e => setName(e.target.value)}
+        />
+        <TextField
+          fullWidth
+          label="Email"
+          variant="outlined"
+          margin="normal"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+        />
+        <TextField
+          fullWidth
+          label="Phone"
+          variant="outlined"
+          margin="normal"
+          value={phone}
+          onChange={e => setPhone(e.target.value)}
+        />
+        <TextField
+          fullWidth
+          label="Password"
+          type="password"
+          variant="outlined"
+          margin="normal"
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+        />
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onClose} color="secondary">
+          Cancel
+        </Button>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => handleRegister()}
+        >
+          Register
+        </Button>
+      </DialogActions>
+    </Dialog>
   )
 }

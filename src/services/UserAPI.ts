@@ -11,5 +11,17 @@ export const fetchRegisterUser = async (
 export const fetchLogin = async (
     data: LoginRequest,
 ): Promise<ApiResponse<LoginResponse>> => {
-  return callFetch("http://127.0.0.1:8080/user/login", "POST", undefined, data)
+  return {
+    traceId: "",
+    code: 0,
+    data: {
+      userId: 1,
+      token: "token",
+      platform: "PC",
+      loginTime: "string",
+      expireTime: "string"
+    }
+  }
+
+  // return callFetch("http://127.0.0.1:8080/user/login", "POST", undefined, data)
 }
