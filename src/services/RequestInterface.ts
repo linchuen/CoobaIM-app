@@ -70,6 +70,14 @@ export interface RoomUserRequest {
     userId: number;
 }
 
+export interface RoomSearchRequest {
+    /** 房間ID */
+    roomIds: number[];
+
+    /** 房間名稱 */
+    name?: string;
+}
+
 export interface SpeakRequest {
     /** 房間ID */
     roomId?: number;

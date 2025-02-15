@@ -69,6 +69,18 @@ export interface RoomResponse {
     userId: number;
 }
 
+export interface RoomInfo {
+    /** 房間ID */
+    id: number;
+
+    /** 房間名稱 */
+    name: string;
+}
+
+export interface RoomSearchResponse{
+    rooms: RoomInfo[];
+}
+
 export interface ApiResponse<T> {
     traceId: string
     code: number

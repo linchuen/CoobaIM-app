@@ -1,5 +1,5 @@
 import type { FriendRemoveRequest, FriendRequest, FriendSearchRequest } from "./RequestInterface"
-import type { ApiResponse, ApplyFriendResponse, FriendInfo, FriendSearchResponse } from "./ResponseInterface"
+import type { ApiResponse, ApplyFriendResponse, FriendSearchResponse } from "./ResponseInterface"
 import { callFetch } from "./common";
 
 export const fetchApplyFriend = async (

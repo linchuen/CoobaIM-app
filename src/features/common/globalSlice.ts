@@ -41,6 +41,7 @@ export const globalSlice = createAppSlice({
       state.user = null
     }),
     setTokenInfo: create.reducer((state, action: PayloadAction<TokenInfo>) => {
+      console.log("setTokenInfo", action.payload)
       state.tokenInfo = action.payload
     }),
     setErrorMessage: (state, action: PayloadAction<string>) => {
@@ -65,4 +66,5 @@ export const {
   setErrorDialogOpen,
 } = globalSlice.actions
 
-export const { selectErrorMessage, selectErrorDialogOpen, selectTokenInfo } = globalSlice.selectors
+export const { selectErrorMessage, selectErrorDialogOpen, selectTokenInfo } =
+  globalSlice.selectors
