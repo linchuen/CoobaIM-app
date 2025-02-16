@@ -11,12 +11,17 @@ import type {
 } from "./ResponseInterface"
 import { callFetch } from "./common"
 import config from "../app/config"
+import {FakeSuccessResponse} from "./FakeSuccessResponse";
 
 export const fetchBuildRoom = async (
   data: RoomRequest,
   token?: string,
 ): Promise<ApiResponse<BuildRoomResponse>> => {
-  return callFetch(config.apiUrl + "/room/build", "POST", token, data)
+  return config.useFake
+      ? new FakeSuccessResponse({
+          name: "Room 3",
+      })
+      : callFetch(config.apiUrl + "/room/build", "POST", token, data)
 }
 
 export const fetchDestroyRoom = async (
@@ -45,21 +50,17 @@ export const fetchSearchRoom = async (
   token?: string,
 ): Promise<ApiResponse<RoomSearchResponse>> => {
   return config.useFake
-    ? {
-        traceId: "",
-        code: 0,
-        data: {
+    ? new FakeSuccessResponse({
           rooms: [
-            {
-              id: 1,
-              name: "Room 1",
-            },
-            {
-              id: 2,
-              name: "Room 2",
-            },
+              {
+                  id: 1,
+                  name: "Room 1",
+              },
+              {
+                  id: 2,
+                  name: "Room 2",
+              },
           ],
-        },
-      }
+      })
     : callFetch(config.apiUrl + "/room/search", "POST", token, data)
 }

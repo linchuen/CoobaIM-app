@@ -6,6 +6,7 @@ import type {
 } from "./ResponseInterface"
 import { callFetch } from "./common"
 import config from "../app/config"
+import {FakeSuccessResponse} from "./FakeSuccessResponse";
 
 export const fetchRegisterUser = async (
   data: RegisterRequest,
@@ -17,16 +18,12 @@ export const fetchLogin = async (
   data: LoginRequest,
 ): Promise<ApiResponse<LoginResponse>> => {
   return config.useFake
-    ? {
-        traceId: "",
-        code: 0,
-        data: {
+    ? new FakeSuccessResponse({
           userId: 1,
           token: "token",
           platform: "PC",
           loginTime: "string",
           expireTime: "string",
-        },
-      }
+      })
     : callFetch(config.apiUrl + "/user/login", "POST", undefined, data)
 }

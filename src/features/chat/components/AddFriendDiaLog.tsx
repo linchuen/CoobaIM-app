@@ -36,7 +36,7 @@ const AddFriendDiaLog: React.FC<AddFriendDiaLogProps> = ({ open, onClose }) => {
   }
 
   const handleSubmit = async () => {
-    if (inputRef.current) {
+    if (inputRef.current && tokenInfo) {
       const userId = inputRef.current.value
       if (!isPositiveInteger(userId)) {
         setError(true)
@@ -47,7 +47,7 @@ const AddFriendDiaLog: React.FC<AddFriendDiaLogProps> = ({ open, onClose }) => {
       await handleFetch<ApplyFriendResponse>(
         dispatch,
         fetchApplyFriend({
-          applyUserId: tokenInfo?.userId ?? -1,
+          applyUserId: tokenInfo.userId,
           permitUserId: Number(userId),
         }),
         data => {
@@ -117,7 +117,7 @@ const AddFriendDiaLog: React.FC<AddFriendDiaLogProps> = ({ open, onClose }) => {
         open={openApplyAlert}
         autoHideDuration={3000}
         onClose={() => setOpenApplyAlert(false)}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
         <Alert
           onClose={() => setOpenApplyAlert(false)}
