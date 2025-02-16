@@ -13,7 +13,12 @@ import {
   IconButton,
   Dialog,
   Tabs,
-  Tab, Button,
+  Tab,
+  Button,
+  DialogTitle,
+  DialogContent,
+  TextField,
+  DialogActions,
 } from "@mui/material"
 import AddIcon from "@mui/icons-material/Add"
 import VisibilityIcon from "@mui/icons-material/Visibility"
@@ -30,12 +35,16 @@ import {
 } from "./ChatPageSlice"
 import { selectTokenInfo } from "../common/globalSlice"
 import ChatBox from "./components/ChatBox"
+import AddFriendDiaLog from "./components/AddFriendDiaLog"
+import AddRoomDiaLog from "./components/AddRoomDiaLog";
 
 const ChatPage: React.FC = () => {
   const dispatch = useAppDispatch()
   const friendInfos = useAppSelector(selectFriendInfoList)
   const roomInfos = useAppSelector(selectRoomInfoList)
   const tokenInfo = useAppSelector(selectTokenInfo)
+  const [openAddFriend, setOpenAddFriend] = useState(false)
+  const [openAddRoom, setOpenAddRoom] = useState(false)
   const [openDialog, setOpenDialog] = useState(false)
   const [tabIndex, setTabIndex] = useState(0)
 
@@ -57,10 +66,7 @@ const ChatPage: React.FC = () => {
 
   const friendApplyList = friendInfos.map(info => {
     return (
-      <ListItem
-        sx={{ marginBottom: 1 }}
-        key={"friend_" + info.id}
-      >
+      <ListItem sx={{ marginBottom: 1 }} key={"friend_" + info.id}>
         <Avatar sx={{ marginRight: 2 }}>{info.showName.charAt(0)}</Avatar>
         <ListItemText primary={info.showName} secondary={info.friendUserId} />
         <Button sx={{ bgcolor: "green", color: "white", marginRight: 1 }}>
@@ -125,7 +131,11 @@ const ChatPage: React.FC = () => {
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Typography variant="h6">Personal Chats</Typography>
           <Box>
-            <IconButton sx={{ color: "white" }} size="small">
+            <IconButton
+              sx={{ color: "white" }}
+              size="small"
+              onClick={() => setOpenAddFriend(true)}
+            >
               <AddIcon />
             </IconButton>
             <IconButton
@@ -144,7 +154,7 @@ const ChatPage: React.FC = () => {
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Typography variant="h6">Group Chats</Typography>
           <Box>
-            <IconButton sx={{ color: "white" }} size="small">
+            <IconButton sx={{ color: "white" }} size="small"  onClick={() => setOpenAddRoom(true)}>
               <AddIcon />
             </IconButton>
             <IconButton
@@ -158,6 +168,16 @@ const ChatPage: React.FC = () => {
         </Box>
         <List>{roomList.slice(0, 6)}</List>
       </Paper>
+
+      <AddFriendDiaLog
+        open={openAddFriend}
+        onClose={() => setOpenAddFriend(false)}
+      />
+
+      <AddRoomDiaLog
+          open={openAddRoom}
+          onClose={() => setOpenAddRoom(false)}
+      />
 
       {/* Dialog for viewing all contacts and chats */}
       <Dialog
