@@ -22,7 +22,11 @@ export async function callFetch(
     })
 
     if (!res.ok) {
-      throw new Error(`HTTP error! Status: ${res.status}`)
+      return {
+        traceId: "99999",
+        code: -1,
+        errorMessage: res.status,
+      }
     }
 
     return res.json()

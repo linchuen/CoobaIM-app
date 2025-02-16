@@ -1,45 +1,47 @@
 import type React from "react"
-import { useState } from "react"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import {
-  Paper,
+  Avatar,
+  Box,
+  Button,
+  Dialog,
+  Divider,
+  IconButton,
   List,
   ListItem,
   ListItemText,
-  Box,
-  Avatar,
-  Divider,
-  Typography,
-  IconButton,
-  Dialog,
-  Tabs,
+  Paper,
   Tab,
-  Button,
-  DialogTitle,
-  DialogContent,
-  TextField,
-  DialogActions,
+  Tabs,
+  Typography,
 } from "@mui/material"
 import AddIcon from "@mui/icons-material/Add"
 import VisibilityIcon from "@mui/icons-material/Visibility"
 import { Chat } from "@mui/icons-material"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
 import {
+  addFriend,
   loadChats,
+  loadFriendApply,
   loadFriends,
   loadGroups,
+  removeApply,
+  selectFriendApplyInfoList,
   selectFriendInfoList,
   selectRoomInfoList,
   setCurrentRoomId,
   setType,
 } from "./ChatPageSlice"
-import { selectTokenInfo } from "../common/globalSlice"
+import { selectTokenInfo, setTokenInfo } from "../common/globalSlice"
 import ChatBox from "./components/ChatBox"
 import AddFriendDiaLog from "./components/AddFriendDiaLog"
-import AddRoomDiaLog from "./components/AddRoomDiaLog";
+import AddRoomDiaLog from "./components/AddRoomDiaLog"
+import { handleFetch } from "../../services/common"
+import { fetchPermitFriend } from "../../services/FriendApi"
 
 const ChatPage: React.FC = () => {
   const dispatch = useAppDispatch()
+  const friendApplyInfos = useAppSelector(selectFriendApplyInfoList)
   const friendInfos = useAppSelector(selectFriendInfoList)
   const roomInfos = useAppSelector(selectRoomInfoList)
   const tokenInfo = useAppSelector(selectTokenInfo)
@@ -48,14 +50,10 @@ const ChatPage: React.FC = () => {
   const [openDialog, setOpenDialog] = useState(false)
   const [tabIndex, setTabIndex] = useState(0)
 
-  const handleOpenDialog = () => setOpenDialog(true)
-  const handleCloseDialog = () => setOpenDialog(false)
-  const handleChangeTab = (event: any, newValue: number) =>
-    setTabIndex(newValue)
-
   useEffect(() => {
     dispatch(loadFriends({ friendUserIds: [] }))
     dispatch(loadGroups({ roomIds: [] }))
+    dispatch(loadFriendApply(null))
   }, [dispatch, tokenInfo])
 
   const handleLoadChat = (roomId: number, type: string) => {
@@ -64,15 +62,51 @@ const ChatPage: React.FC = () => {
     dispatch(loadChats({ roomId: roomId }))
   }
 
-  const friendApplyList = friendInfos.map(info => {
+  const handleFriendApply = async (
+    applyUserId: number,
+    isPermit: boolean,
+    name: string,
+  ) => {
+    if (!tokenInfo) return
+
+    await handleFetch<boolean>(
+      dispatch,
+      fetchPermitFriend({
+        applyUserId: applyUserId,
+        permitUserId: tokenInfo.userId,
+        isPermit: isPermit,
+      }),
+      data => {
+        dispatch(removeApply(applyUserId))
+        if (isPermit) {
+          dispatch(addFriend({
+                id: 123,
+                userId: tokenInfo.userId,
+                friendUserId: applyUserId,
+                showName: name
+          }))
+        }
+      },
+    )
+  }
+
+  const friendApplyList = friendApplyInfos.map(info => {
     return (
       <ListItem sx={{ marginBottom: 1 }} key={"friend_" + info.id}>
-        <Avatar sx={{ marginRight: 2 }}>{info.showName.charAt(0)}</Avatar>
-        <ListItemText primary={info.showName} secondary={info.friendUserId} />
-        <Button sx={{ bgcolor: "green", color: "white", marginRight: 1 }}>
+        <Avatar sx={{ marginRight: 2 }}>{info.name.charAt(0)}</Avatar>
+        <ListItemText primary={info.name} secondary={info.applyId} />
+        <Button
+          sx={{ bgcolor: "green", color: "white", marginRight: 1 }}
+          onClick={() => handleFriendApply(info.applyId, true, info.name)}
+        >
           Accept
         </Button>
-        <Button sx={{ bgcolor: "red", color: "white" }}>Reject</Button>
+        <Button
+          sx={{ bgcolor: "red", color: "white" }}
+          onClick={() => handleFriendApply(info.applyId, false, info.name)}
+        >
+          Reject
+        </Button>
       </ListItem>
     )
   })
@@ -141,7 +175,7 @@ const ChatPage: React.FC = () => {
             <IconButton
               sx={{ color: "white" }}
               size="small"
-              onClick={handleOpenDialog}
+              onClick={() => setOpenDialog(true)}
             >
               <VisibilityIcon />
             </IconButton>
@@ -154,13 +188,17 @@ const ChatPage: React.FC = () => {
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Typography variant="h6">Group Chats</Typography>
           <Box>
-            <IconButton sx={{ color: "white" }} size="small"  onClick={() => setOpenAddRoom(true)}>
+            <IconButton
+              sx={{ color: "white" }}
+              size="small"
+              onClick={() => setOpenAddRoom(true)}
+            >
               <AddIcon />
             </IconButton>
             <IconButton
               sx={{ color: "white" }}
               size="small"
-              onClick={handleOpenDialog}
+              onClick={() => setOpenDialog(true)}
             >
               <VisibilityIcon />
             </IconButton>
@@ -174,19 +212,20 @@ const ChatPage: React.FC = () => {
         onClose={() => setOpenAddFriend(false)}
       />
 
-      <AddRoomDiaLog
-          open={openAddRoom}
-          onClose={() => setOpenAddRoom(false)}
-      />
+      <AddRoomDiaLog open={openAddRoom} onClose={() => setOpenAddRoom(false)} />
 
       {/* Dialog for viewing all contacts and chats */}
       <Dialog
         open={openDialog}
-        onClose={handleCloseDialog}
+        onClose={() => setOpenDialog(false)}
         fullWidth
         maxWidth="sm"
       >
-        <Tabs value={tabIndex} onChange={handleChangeTab} variant="fullWidth">
+        <Tabs
+          value={tabIndex}
+          onChange={(event: any, newValue: number) => setTabIndex(newValue)}
+          variant="fullWidth"
+        >
           <Tab label="我的好友" />
           <Tab label="我的聊天室" />
         </Tabs>

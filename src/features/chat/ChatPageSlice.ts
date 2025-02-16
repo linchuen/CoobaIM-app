@@ -1,9 +1,13 @@
 import type {
   ChatInfo,
+  FriendApplyInfo,
   FriendInfo,
   RoomInfo,
 } from "../../services/ResponseInterface"
-import { fetchSearchFriend } from "../../services/FriendApi"
+import {
+  fetchSearchFriend,
+  fetchSearchFriendApply,
+} from "../../services/FriendApi"
 import { createAppSlice } from "../../app/createAppSlice"
 import { fetchSearchRoom } from "../../services/RoomApi"
 import { selectTokenInfo } from "../common/globalSlice"
@@ -27,6 +31,7 @@ type NewMessageState = {
 }
 
 type FriendState = {
+  friendApplyInfoList: FriendApplyInfo[]
   friendInfoList: FriendInfo[]
   roomInfoList: RoomInfo[]
   chatInfoList: ChatInfo[]
@@ -36,6 +41,7 @@ type FriendState = {
 }
 
 const initialState: FriendState = {
+  friendApplyInfoList: [],
   friendInfoList: [],
   roomInfoList: [],
   chatInfoList: [],
@@ -53,6 +59,17 @@ export const chatSlice = createAppSlice({
     }),
     setCurrentRoomId: create.reducer((state, action: PayloadAction<number>) => {
       state.currentRoomId = action.payload
+    }),
+    removeApply: create.reducer((state, action: PayloadAction<number>) => {
+      state.friendApplyInfoList = state.friendApplyInfoList.filter(
+        info => info.applyId !== action.payload,
+      )
+    }),
+    addFriend: create.reducer((state, action: PayloadAction<FriendInfo>) => {
+      state.friendInfoList.push(action.payload)
+    }),
+    addRoom: create.reducer((state, action: PayloadAction<RoomInfo>) => {
+      state.roomInfoList.push(action.payload)
     }),
     sendMessage: create.asyncThunk(
       async (request: SpeakRequest, { getState }): Promise<NewMessageState> => {
@@ -160,11 +177,33 @@ export const chatSlice = createAppSlice({
         },
       },
     ),
+    loadFriendApply: create.asyncThunk(
+      async (request: null, { getState }) => {
+        const state = getState() as RootState
+        const tokenInfo = selectTokenInfo(state)
+        const response = await fetchSearchFriendApply(request, tokenInfo?.token)
+        return response.data?.applicants
+      },
+      {
+        pending: state => {
+          state.status = "loading"
+        },
+        fulfilled: (state, action) => {
+          state.status = "idle"
+          state.friendApplyInfoList = action.payload ?? []
+          console.log("loadFriendApply", action.payload)
+        },
+        rejected: state => {
+          state.status = "failed"
+        },
+      },
+    ),
   }),
   selectors: {
     selectFriendInfoList: state => state.friendInfoList,
     selectRoomInfoList: state => state.roomInfoList,
     selectChatInfoList: state => state.chatInfoList,
+    selectFriendApplyInfoList: state => state.friendApplyInfoList,
     selectStatus: state => state.status,
     selectCurrentRoomId: state => state.currentRoomId,
   },
@@ -174,15 +213,20 @@ export const {
   loadFriends,
   loadGroups,
   loadChats,
+  loadFriendApply,
   setType,
   setCurrentRoomId,
   sendMessage,
+  addRoom,
+  addFriend,
+  removeApply,
 } = chatSlice.actions
 
 export const {
   selectFriendInfoList,
   selectRoomInfoList,
   selectChatInfoList,
+  selectFriendApplyInfoList,
   selectStatus,
   selectCurrentRoomId,
 } = chatSlice.selectors

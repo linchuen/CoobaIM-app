@@ -13,6 +13,16 @@ export interface FriendInfo {
   showName: string
 }
 
+export interface FriendApplySearchResponse {
+  applicants: FriendApplyInfo[]
+}
+
+export interface FriendApplyInfo {
+  id: number
+  applyId: number
+  name: string
+}
+
 export interface BuildRoomResponse {
   roomId: number
 }
