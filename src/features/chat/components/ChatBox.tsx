@@ -1,26 +1,28 @@
-import type React from "react";
-import {useCallback, useEffect} from "react"
+import type React from "react"
+import { useCallback, useEffect, useState } from "react"
 import { useRef } from "react"
 import {
-  AppBar,
-  Toolbar,
-  IconButton,
-  InputBase,
-  Paper,
-  Box,
-  Typography,
-  Button,
-  TextField,
+    AppBar,
+    Toolbar,
+    IconButton,
+    InputBase,
+    Paper,
+    Box,
+    Typography,
+    Button,
+    TextField,
+    Alert, Snackbar,
 } from "@mui/material"
 import {
   Search,
-  GroupAdd,
   AttachFile,
   InsertEmoticon,
   Image,
   VideoCall,
   Call,
+  DateRange,
 } from "@mui/icons-material"
+
 import { useAppDispatch, useAppSelector } from "../../../app/hooks"
 import {
   selectChatInfoList,
@@ -36,6 +38,7 @@ const ChatBox: React.FC = () => {
   const chatInfos = useAppSelector(selectChatInfoList)
   const tokenInfo = useAppSelector(selectTokenInfo)
   const currentRoomId = useAppSelector(selectCurrentRoomId)
+  const [open, setOpen] = useState(false)
 
   const handleSendMessage = () => {
     if (inputRef.current) {
@@ -52,7 +55,7 @@ const ChatBox: React.FC = () => {
     if (!chatContainerRef.current) return
 
     if (chatContainerRef.current.scrollTop === 0) {
-        alert("已經是最上方")
+      setOpen(true)
     }
   }, [dispatch, currentRoomId])
 
@@ -122,7 +125,7 @@ const ChatBox: React.FC = () => {
             <Search />
           </IconButton>
           <IconButton sx={{ color: "white" }}>
-            <GroupAdd />
+            <DateRange />
           </IconButton>
         </Toolbar>
       </AppBar>
@@ -144,6 +147,17 @@ const ChatBox: React.FC = () => {
         }}
       >
         {messages}
+        {/* Snackbar 提示 */}
+        <Snackbar
+          open={open}
+          autoHideDuration={3000}
+          onClose={() => setOpen(false)}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        >
+          <Alert onClose={() => setOpen(false)} severity="info">
+            已經是最上方
+          </Alert>
+        </Snackbar>
       </Box>
 
       {/* Input Area */}
