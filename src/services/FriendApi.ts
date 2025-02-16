@@ -15,7 +15,13 @@ export const fetchApplyFriend = async (
   data: FriendRequest,
   token?: string,
 ): Promise<ApiResponse<ApplyFriendResponse>> => {
-  return callFetch(config.apiUrl + "/friend/apply", "POST", token, data)
+  return config.useFake
+    ? {
+        traceId: "",
+        code: 0,
+        data: { applyId: 123 },
+      }
+    : callFetch(config.apiUrl + "/friend/apply", "POST", token, data)
 }
 
 export const fetchPermitFriend = async (
