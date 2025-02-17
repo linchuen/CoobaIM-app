@@ -2,6 +2,10 @@ export interface ApplyFriendResponse {
   applyId: number
 }
 
+export interface PermitFriendResponse {
+  roomId: number
+}
+
 export interface FriendSearchResponse {
   friends: FriendInfo[]
 }
@@ -11,6 +15,7 @@ export interface FriendInfo {
   userId: number
   friendUserId: number
   showName: string
+  roomId: number
 }
 
 export interface FriendApplySearchResponse {

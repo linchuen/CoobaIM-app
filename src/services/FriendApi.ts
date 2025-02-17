@@ -8,6 +8,7 @@ import type {
   ApplyFriendResponse,
   FriendApplySearchResponse,
   FriendSearchResponse,
+  PermitFriendResponse,
 } from "./ResponseInterface"
 import { callFetch } from "./common"
 import config from "../app/config"
@@ -25,9 +26,9 @@ export const fetchApplyFriend = async (
 export const fetchPermitFriend = async (
   data: FriendRequest,
   token?: string,
-): Promise<ApiResponse<boolean>> => {
+): Promise<ApiResponse<PermitFriendResponse>> => {
   return config.useFake
-    ? new FakeSuccessResponse(true)
+    ? new FakeSuccessResponse({ roomId: 456 })
     : callFetch(config.apiUrl + "/friend/permit", "POST", token, data)
 }
 
@@ -44,21 +45,21 @@ export const fetchSearchFriend = async (
 ): Promise<ApiResponse<FriendSearchResponse>> => {
   return config.useFake
     ? new FakeSuccessResponse({
-        friends: [
-          {
-            id: 1,
-            userId: 1,
-            friendUserId: 2,
-            showName: "Alice",
-          },
-          {
-            id: 2,
-            userId: 1,
-            friendUserId: 3,
-            showName: "Cat",
-          },
-        ],
-      })
+      friends: [
+        {
+          id: 1,
+          userId: 1,
+          friendUserId: 2,
+          showName: "Alice",
+        },
+        {
+          id: 2,
+          userId: 1,
+          friendUserId: 3,
+          showName: "Cat",
+        },
+      ],
+    })
     : callFetch(config.apiUrl + "/friend/search", "POST", token, data)
 }
 
@@ -68,13 +69,13 @@ export const fetchSearchFriendApply = async (
 ): Promise<ApiResponse<FriendApplySearchResponse>> => {
   return config.useFake
     ? new FakeSuccessResponse({
-        applicants: [
-          {
-            id: 1,
-            applyUserId: 4,
-            name: "Tom",
-          },
-        ],
-      })
+      applicants: [
+        {
+          id: 1,
+          applyUserId: 4,
+          name: "Tom",
+        },
+      ],
+    })
     : callFetch(config.apiUrl + "/friend/apply/search", "GET", token, data)
 }

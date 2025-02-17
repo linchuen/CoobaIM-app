@@ -38,6 +38,7 @@ import AddFriendDiaLog from "./components/AddFriendDiaLog"
 import AddRoomDiaLog from "./components/AddRoomDiaLog"
 import { handleFetch } from "../../services/common"
 import { fetchPermitFriend } from "../../services/FriendApi"
+import { PermitFriendResponse } from "../../services/ResponseInterface"
 
 const ChatPage: React.FC = () => {
   const dispatch = useAppDispatch()
@@ -69,7 +70,7 @@ const ChatPage: React.FC = () => {
   ) => {
     if (!tokenInfo) return
 
-    await handleFetch<boolean>(
+    await handleFetch<PermitFriendResponse>(
       dispatch,
       fetchPermitFriend({
         applyUserId: applyUserId,
@@ -83,7 +84,8 @@ const ChatPage: React.FC = () => {
                 id: 123,
                 userId: tokenInfo.userId,
                 friendUserId: applyUserId,
-                showName: name
+                showName: name,
+                roomId: data.roomId
           }))
         }
       },
@@ -116,7 +118,7 @@ const ChatPage: React.FC = () => {
       <ListItem
         sx={{ marginBottom: 1 }}
         key={"friend_" + info.id}
-        onClick={() => handleLoadChat(1, "user")}
+        onClick={() => handleLoadChat(info.roomId, "user")}
       >
         <Avatar sx={{ marginRight: 2 }}>{info.showName.charAt(0)}</Avatar>
         <ListItemText primary={info.showName} secondary={info.friendUserId} />
@@ -128,7 +130,7 @@ const ChatPage: React.FC = () => {
     return (
       <ListItem
         key={"room_" + info.id}
-        onClick={() => handleLoadChat(1, "room")}
+        onClick={() => handleLoadChat(info.id, "room")}
       >
         <Avatar sx={{ marginRight: 2, bgcolor: "#3f51b5" }}>
           <Chat />
