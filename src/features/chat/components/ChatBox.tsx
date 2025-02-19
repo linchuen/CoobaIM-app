@@ -2,16 +2,17 @@ import type React from "react"
 import { useCallback, useEffect, useState } from "react"
 import { useRef } from "react"
 import {
-    AppBar,
-    Toolbar,
-    IconButton,
-    InputBase,
-    Paper,
-    Box,
-    Typography,
-    Button,
-    TextField,
-    Alert, Snackbar,
+  AppBar,
+  Toolbar,
+  IconButton,
+  InputBase,
+  Paper,
+  Box,
+  Typography,
+  Button,
+  TextField,
+  Alert,
+  Snackbar,
 } from "@mui/material"
 import {
   Search,
@@ -41,6 +42,8 @@ const ChatBox: React.FC = () => {
   const [open, setOpen] = useState(false)
 
   const handleSendMessage = () => {
+    if (currentRoomId === 0) return
+
     if (inputRef.current) {
       dispatch(
         sendMessage({

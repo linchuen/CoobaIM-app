@@ -74,6 +74,7 @@ export interface ChatInfo {
   userId: number
   message: string
   type: string
+  success: boolean | undefined
 }
 
 export interface ChatLoadResponse {
