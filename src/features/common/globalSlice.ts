@@ -1,5 +1,8 @@
 import type { PayloadAction } from "@reduxjs/toolkit"
 import { createAppSlice } from "../../app/createAppSlice"
+import { Client } from "@stomp/stompjs"
+import { connectWebsokcet } from "../../services/websocketApi"
+import config from "../../app/config"
 
 interface User {
   id: number
@@ -19,6 +22,7 @@ interface TokenInfo {
 interface GlobalState {
   user: User | null
   tokenInfo: TokenInfo | null
+  websocket: Client | null
   errorMessage: string
   errorDialogOpen: boolean
 }
@@ -26,6 +30,7 @@ interface GlobalState {
 const initialState: GlobalState = {
   user: null,
   tokenInfo: null,
+  websocket: null,
   errorMessage: "",
   errorDialogOpen: false,
 }
@@ -44,6 +49,13 @@ export const globalSlice = createAppSlice({
       console.log("setTokenInfo", action.payload)
       state.tokenInfo = action.payload
     }),
+    setWebsocketClient: create.reducer((state, action: PayloadAction<string>) => {
+      console.log("setWebsocketClient", action.payload)
+
+      if(!config.useFake){
+        state.websocket = connectWebsokcet(action.payload)
+      }
+    }),
     setErrorMessage: (state, action: PayloadAction<string>) => {
       state.errorMessage = action.payload
     },
@@ -55,6 +67,7 @@ export const globalSlice = createAppSlice({
     selectErrorMessage: state => state.errorMessage,
     selectErrorDialogOpen: state => state.errorDialogOpen,
     selectTokenInfo: state => state.tokenInfo,
+    selectWebsocketClient: state => state.websocket,
   },
 })
 
@@ -62,9 +75,10 @@ export const {
   setUser,
   clearUser,
   setTokenInfo,
+  setWebsocketClient,
   setErrorMessage,
   setErrorDialogOpen,
 } = globalSlice.actions
 
-export const { selectErrorMessage, selectErrorDialogOpen, selectTokenInfo } =
+export const { selectErrorMessage, selectErrorDialogOpen, selectTokenInfo, selectWebsocketClient } =
   globalSlice.selectors

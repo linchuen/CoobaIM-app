@@ -14,12 +14,10 @@ import { useNavigate } from "react-router"
 import { RegisterDiaLog } from "./components/RegisterDiaLog"
 import { ForgetPasswordDialog } from "./components/ForgetPasswordDialog"
 import { fetchLogin } from "../../services/UserAPI"
-import { setTokenInfo } from "../common/globalSlice"
+import { setTokenInfo, setWebsocketClient } from "../common/globalSlice"
 import { useAppDispatch } from "../../app/hooks"
 import { handleFetch } from "../../services/common"
 import type { LoginResponse } from "../../services/ResponseInterface"
-import SockJS from 'sockjs-client';
-import { Client, Stomp } from '@stomp/stompjs';
 
 const LoginRegisterPage: React.FC = () => {
   const navigate = useNavigate()
@@ -37,34 +35,8 @@ const LoginRegisterPage: React.FC = () => {
         password: password,
       }),
       data => {
-        const socket = new SockJS('http://localhost:8080/ws'); // 連接到 Spring Boot WebSocket 端點
-        const stompClient = new Client({
-            webSocketFactory: () => socket,
-            reconnectDelay: 5000, // 重新連接間隔（5 秒）
-        });
-        
-        // 連接 WebSocket
-        stompClient.onConnect = () => {
-            console.log('Connected to WebSocket');
-        
-            // 訂閱 "/topic/greetings"
-            stompClient.subscribe('/topic/greetings', (message) => {
-                console.log('收到訊息:', message.body);
-            });
-        
-            // 發送測試消息
-            stompClient.publish({ destination: '/app/hello', body: 'John Doe' });
-        };
-        
-        // 監聽錯誤
-        stompClient.onStompError = (frame) => {
-            console.error('STOMP Error:', frame);
-        };
-        
-        // 啟動 STOMP 客戶端
-        stompClient.activate();
-
         dispatch(setTokenInfo(data))
+        dispatch(setWebsocketClient("/ws"))
         navigate("/chat")
       },
     )
