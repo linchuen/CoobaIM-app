@@ -1,35 +1,8 @@
-import type { ChatLoadRequest, SpeakRequest } from "./RequestInterface"
+import type { ChatLoadRequest } from "./RequestInterface"
 import type { ApiResponse, ChatLoadResponse } from "./ResponseInterface"
 import { callFetch } from "./common"
 import config from "../app/config"
 import { FakeSuccessResponse } from "./FakeSuccessResponse"
-
-export const fetchSpeakToUser = async (
-  data: SpeakRequest,
-  token?: string,
-): Promise<ApiResponse<boolean>> => {
-  return config.useFake
-    ? new FakeSuccessResponse(true)
-    : callFetch(config.apiUrl + "/chat/user", "POST", token, data)
-}
-
-export const fetchSpeakToRoom = async (
-  data: SpeakRequest,
-  token?: string,
-): Promise<ApiResponse<boolean>> => {
-  return config.useFake
-    ? new FakeSuccessResponse(true)
-    : callFetch(config.apiUrl + "/chat/room", "POST", token, data)
-}
-
-export const fetchSpeakToAll = async (
-  data: SpeakRequest,
-  token?: string,
-): Promise<ApiResponse<boolean>> => {
-  return config.useFake
-    ? new FakeSuccessResponse(true)
-    : callFetch(config.apiUrl + "/chat/all", "POST", token, data)
-}
 
 export const fetchLoadChat = async (
   data: ChatLoadRequest,

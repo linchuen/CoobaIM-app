@@ -23,6 +23,7 @@ import {
   Call,
   DateRange,
 } from "@mui/icons-material"
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 
 import { useAppDispatch, useAppSelector } from "../../../app/hooks"
 import {
@@ -77,30 +78,34 @@ const ChatBox: React.FC = () => {
   const userId = tokenInfo?.userId
 
   let messages = chatInfos.map(chat => {
-    const isSelf = chat.userId !== userId
+    const isSelf = chat.userId === userId
     return (
       <Box
         key={chat.id}
         display="flex"
         flexDirection="column"
-        alignItems={isSelf ? "flex-start" : "flex-end"}
+        alignItems={isSelf ? "flex-end" : "flex-start" }
         sx={{ gap: 0.5 }}
       >
-        <Typography variant="caption" color="#b9bbbe">
-          {chat.name}
-        </Typography>
-        <Paper
-          sx={{
-            padding: 1.5,
-            borderRadius: 2,
-            maxWidth: "60%",
-            bgcolor: isSelf ? "#282c34" : "#3f51b5",
-            color: isSelf ? "#b9bbbe" : "white",
-            boxShadow: 2,
-          }}
-        >
-          {chat.message}
-        </Paper>
+          <Box display="flex" alignItems="center" sx={{ gap: 0.5 }}>
+              {chat.success === false && isSelf && (
+                  <ErrorOutlineIcon sx={{ color: "red", fontSize: 18 }} />
+              )}
+              <Paper
+                  sx={{
+                      padding: 1.5,
+                      borderRadius: 2,
+                      maxWidth: "300px",
+                      bgcolor: isSelf ? "#282c34" : "#3f51b5",
+                      color: isSelf ? "#b9bbbe" : "white",
+                      wordBreak: "break-word", // 確保長字串能夠換行
+                      overflowWrap: "break-word",
+                      boxShadow: 2,
+                  }}
+              >
+                  {chat.message}
+              </Paper>
+          </Box>
       </Box>
     )
   })

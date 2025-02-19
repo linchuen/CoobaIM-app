@@ -13,9 +13,7 @@ import { fetchSearchRoom } from "../../services/RoomApi"
 import { selectTokenInfo, selectWebsocketClient } from "../common/globalSlice"
 import type { RootState } from "../../app/store"
 import {
-  fetchLoadChat,
-  fetchSpeakToRoom,
-  fetchSpeakToUser,
+  fetchLoadChat
 } from "../../services/MessageApi"
 import type {
   ChatLoadRequest,
@@ -111,14 +109,14 @@ export const chatSlice = createAppSlice({
         }
 
         return {
-            id: Math.floor(Math.random() * 100000000),
-            name: "Bob",
-            roomId: request.roomId,
-            userId: tokenInfo?.userId ?? 1,
-            message: request.message,
-            type: "text",
-            success: success
-          }
+          id: Math.floor(Math.random() * 100000000),
+          name: tokenInfo?.name ?? "",
+          roomId: request.roomId,
+          userId: tokenInfo?.userId ?? 1,
+          message: request.message,
+          type: "text",
+          success: success,
+        }
       },
       {
         pending: state => {
@@ -163,15 +161,14 @@ export const chatSlice = createAppSlice({
             const roomId = friendInfo.roomId
             if (state.roomSubscribeSet.has(roomId)) return
 
-            const topic = "/topic/group/" + roomId;
+            const topic = "/topic/group/" + roomId
             stompClient.subscribe(topic, (message: IMessage) => {
-                const arr = state.roomChatMap.get(roomId) || []
-                const newChat = JSON.parse(message.body) as ChatInfo
-                arr.push(newChat)
+              const arr = state.roomChatMap.get(roomId) || []
+              const newChat = JSON.parse(message.body) as ChatInfo
+              arr.push(newChat)
 
-                state.roomChatMap.set(roomId, arr.slice(-100))
-              },
-            )
+              state.roomChatMap.set(roomId, arr.slice(-100))
+            })
           })
         },
         rejected: state => {
@@ -206,15 +203,14 @@ export const chatSlice = createAppSlice({
             const roomId = roomInfo.id
             if (state.roomSubscribeSet.has(roomId)) return
 
-            const topic = "/topic/group/" + roomId;
+            const topic = "/topic/group/" + roomId
             stompClient.subscribe(topic, (message: IMessage) => {
-                const arr = state.roomChatMap.get(roomId) || []
-                const newChat = JSON.parse(message.body) as ChatInfo
-                arr.push(newChat)
+              const arr = state.roomChatMap.get(roomId) || []
+              const newChat = JSON.parse(message.body) as ChatInfo
+              arr.push(newChat)
 
-                state.roomChatMap.set(roomId, arr.slice(-100))
-              },
-            )
+              state.roomChatMap.set(roomId, arr.slice(-100))
+            })
           })
         },
         rejected: state => {

@@ -38,6 +38,7 @@ export interface DestroyRoomResponse {
 
 export interface LoginResponse {
   userId: number
+  name: string
   token: string
   platform: string
   ip?: string

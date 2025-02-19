@@ -12,6 +12,7 @@ interface User {
 
 interface TokenInfo {
   userId: number
+  name: string
   token: string
   platform: string
   ip?: string
