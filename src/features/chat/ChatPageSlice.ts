@@ -10,7 +10,7 @@ import {
 } from "../../services/FriendApi"
 import { createAppSlice } from "../../app/createAppSlice"
 import { fetchSearchRoom } from "../../services/RoomApi"
-import { selectTokenInfo } from "../common/globalSlice"
+import { selectTokenInfo, selectWebsocketClient } from "../common/globalSlice"
 import type { RootState } from "../../app/store"
 import {
   fetchLoadChat,
@@ -35,6 +35,7 @@ type FriendState = {
   friendInfoList: FriendInfo[]
   roomInfoList: RoomInfo[]
   chatInfoList: ChatInfo[]
+  roomChatMap: Map<number, ChatInfo[]>
   status: string
   type: string
   currentRoomId: number
@@ -45,6 +46,7 @@ const initialState: FriendState = {
   friendInfoList: [],
   roomInfoList: [],
   chatInfoList: [],
+  roomChatMap: new Map(),
   status: "",
   type: "",
   currentRoomId: 0,
@@ -118,6 +120,7 @@ export const chatSlice = createAppSlice({
       async (request: FriendSearchRequest, { getState }) => {
         const state = getState() as RootState
         const tokenInfo = selectTokenInfo(state)
+        const stompClient = selectWebsocketClient(state)
         const response = await fetchSearchFriend(request, tokenInfo?.token)
         return response.data?.friends
       },
@@ -129,6 +132,17 @@ export const chatSlice = createAppSlice({
           state.status = "idle"
           state.friendInfoList = action.payload ?? []
           console.log("loadFriends", action.payload)
+
+          state.friendInfoList.forEach((friendInfo) => {
+            const roomId = friendInfo.roomId
+            stompClient.subscribe("/topic/group/" + roomId, (message: string) => {
+              const arr = state.roomChatMap.get(roomId) || [];
+              const newChat = JSON.parse(message) as ChatInfo
+              arr.push(newChat);
+
+              state.roomChatMap.set(roomId, arr.slice(-100));
+            })
+          })
         },
         rejected: state => {
           state.status = "failed"
@@ -138,6 +152,7 @@ export const chatSlice = createAppSlice({
     loadGroups: create.asyncThunk(
       async (request: RoomSearchRequest, { getState }) => {
         const state = getState() as RootState
+        const stompClient = selectWebsocketClient(state)
         const tokenInfo = selectTokenInfo(state)
         const response = await fetchSearchRoom(request, tokenInfo?.token)
         return response.data?.rooms
@@ -150,6 +165,17 @@ export const chatSlice = createAppSlice({
           state.status = "idle"
           state.roomInfoList = action.payload ?? []
           console.log("loadGroups", action.payload)
+
+          state.roomInfoList.forEach((roomInfo) => {
+            const roomId = roomInfo.id
+            stompClient.subscribe("/topic/group/" + roomId, (message: string) => {
+              const arr = state.roomChatMap.get(roomId) || [];
+              const newChat = JSON.parse(message) as ChatInfo
+              arr.push(newChat);
+
+              state.roomChatMap.set(roomId, arr.slice(-100));
+            })
+          })
         },
         rejected: state => {
           state.status = "failed"
