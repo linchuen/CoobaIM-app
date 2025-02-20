@@ -51,12 +51,14 @@ export const fetchSearchFriend = async (
           userId: 1,
           friendUserId: 2,
           showName: "Alice",
+          roomId: 10
         },
         {
           id: 2,
           userId: 1,
           friendUserId: 3,
           showName: "Cat",
+          roomId: 11
         },
       ],
     })

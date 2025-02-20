@@ -28,8 +28,6 @@ import {
   removeApply,
   selectFriendApplyInfoList,
   selectFriendInfoList,
-  selectRoomChatLoaded,
-  selectRoomChatMap,
   selectRoomInfoList,
   setCurrentRoomId,
   setType,
@@ -47,8 +45,6 @@ const ChatPage: React.FC = () => {
   const friendApplyInfos = useAppSelector(selectFriendApplyInfoList)
   const friendInfos = useAppSelector(selectFriendInfoList)
   const roomInfos = useAppSelector(selectRoomInfoList)
-  const roomChats = useAppSelector(selectRoomChatMap)
-  const roomChatLoaded = useAppSelector(selectRoomChatLoaded)
   const tokenInfo = useAppSelector(selectTokenInfo)
   const [openAddFriend, setOpenAddFriend] = useState(false)
   const [openAddRoom, setOpenAddRoom] = useState(false)
@@ -64,14 +60,7 @@ const ChatPage: React.FC = () => {
   const handleLoadChat = (roomId: number, type: string) => {
     dispatch(setType(type))
     dispatch(setCurrentRoomId(roomId))
-
-    const isLoaded = roomChatLoaded.has(roomId)
-    if (isLoaded) return
-
-    const roomChat = roomChats.get(roomId)
-    if (!roomChat || roomChat.length < 100) {
-      dispatch(loadChats({ roomId: roomId }))
-    }
+    dispatch(loadChats({ roomId: roomId }))
   }
 
   const handleFriendApply = async (

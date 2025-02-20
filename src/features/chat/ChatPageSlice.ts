@@ -21,6 +21,7 @@ import type {
 } from "../../services/RequestInterface"
 import type { PayloadAction } from "@reduxjs/toolkit"
 import type { Client, IMessage } from "@stomp/stompjs"
+import { useAppSelector } from "../../app/hooks"
 
 type FriendsState = {
   friends: FriendInfo[]
@@ -139,6 +140,7 @@ export const chatSlice = createAppSlice({
           state.chatInfoList.push(chatInfo)
           const chatInfoList = state.roomChatMap[chatInfo.roomId] ?? []
           chatInfoList.push(chatInfo)
+          console.log("After sending message", state.roomChatMap)
         },
         rejected: state => {
           state.status = "failed"
@@ -236,6 +238,19 @@ export const chatSlice = createAppSlice({
       async (request: ChatLoadRequest, { getState }): Promise<ChatState> => {
         const state = getState() as RootState
         const tokenInfo = selectTokenInfo(state)
+        const roomChatLoaded = selectRoomChatLoaded(state)
+        const roomChats = selectRoomChatMap(state)
+        const roomChat = roomChats[request.roomId]
+
+        const isLoaded = roomChatLoaded.includes(request.roomId)
+        const isMessageFull = roomChat && roomChat.length >= 100
+        if (isLoaded || isMessageFull) {
+          return {
+            chats: roomChat,
+            roomId: request.roomId,
+          }
+        }
+
         const response = await fetchLoadChat(request, tokenInfo?.token)
         return {
           chats: response.data?.chats ?? [],
