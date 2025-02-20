@@ -42,9 +42,9 @@ type FriendState = {
   friendInfoList: FriendInfo[]
   roomInfoList: RoomInfo[]
   chatInfoList: ChatInfo[]
-  roomChatMap: Map<number, ChatInfo[]>
-  roomSubscribeSet: Set<number>
-  roomChatLoaded: Set<number>
+  roomChatMap: Record<number, ChatInfo[]>
+  roomSubscribeSet: number[]
+  roomChatLoaded: number[]
   status: string
   type: string
   currentRoomId: number
@@ -55,9 +55,9 @@ const initialState: FriendState = {
   friendInfoList: [],
   roomInfoList: [],
   chatInfoList: [],
-  roomChatMap: new Map<number, ChatInfo[]>(),
-  roomSubscribeSet: new Set<number>(),
-  roomChatLoaded: new Set<number>(),
+  roomChatMap: {},
+  roomSubscribeSet: [],
+  roomChatLoaded: [],
   status: "",
   type: "",
   currentRoomId: 0,
@@ -97,7 +97,7 @@ export const chatSlice = createAppSlice({
     }),
     setRoomChatLoaded: create.reducer(
       (state, action: PayloadAction<number>) => {
-        state.roomChatLoaded.add(action.payload)
+        state.roomChatLoaded.push(action.payload)
       },
     ),
     sendMessage: create.asyncThunk(
@@ -132,9 +132,13 @@ export const chatSlice = createAppSlice({
         pending: state => {
           state.status = "loading"
         },
-        fulfilled: (state, action) => {
+        fulfilled: (state, action: PayloadAction<ChatInfo>) => {
           state.status = "idle"
-          state.chatInfoList.push(action.payload)
+          const chatInfo = action.payload
+
+          state.chatInfoList.push(chatInfo)
+          const chatInfoList = state.roomChatMap[chatInfo.roomId] ?? []
+          chatInfoList.push(chatInfo)
         },
         rejected: state => {
           state.status = "failed"
@@ -169,15 +173,15 @@ export const chatSlice = createAppSlice({
 
           state.friendInfoList.forEach(friendInfo => {
             const roomId = friendInfo.roomId
-            if (state.roomSubscribeSet.has(roomId)) return
+            if (state.roomSubscribeSet.includes(roomId)) return
 
             const topic = "/topic/group/" + roomId
             stompClient.subscribe(topic, (message: IMessage) => {
-              const arr = state.roomChatMap.get(roomId) || []
+              const arr = state.roomChatMap[roomId] ?? []
               const newChat = JSON.parse(message.body) as ChatInfo
               arr.push(newChat)
 
-              state.roomChatMap.set(roomId, arr.slice(-100))
+              state.roomChatMap[roomId] = arr.slice(-100)
             })
           })
         },
@@ -211,15 +215,15 @@ export const chatSlice = createAppSlice({
 
           state.roomInfoList.forEach(roomInfo => {
             const roomId = roomInfo.id
-            if (state.roomSubscribeSet.has(roomId)) return
+            if (state.roomSubscribeSet.includes(roomId)) return
 
             const topic = "/topic/group/" + roomId
             stompClient.subscribe(topic, (message: IMessage) => {
-              const arr = state.roomChatMap.get(roomId) || []
+              const arr = state.roomChatMap[roomId] ?? []
               const newChat = JSON.parse(message.body) as ChatInfo
               arr.push(newChat)
 
-              state.roomChatMap.set(roomId, arr.slice(-100))
+              state.roomChatMap[roomId] = arr.slice(-100)
             })
           })
         },
@@ -244,12 +248,12 @@ export const chatSlice = createAppSlice({
         },
         fulfilled: (state, action) => {
           state.status = "idle"
-          const chats = action.payload.chats;
-          const roomId = action.payload.roomId;
+          const chats = action.payload.chats
+          const roomId = action.payload.roomId
 
           state.chatInfoList = chats
-          state.roomChatLoaded.add(roomId)
-          state.roomChatMap.set(roomId, chats)
+          state.roomChatLoaded.push(roomId)
+          state.roomChatMap[roomId] = chats
           console.log("loadChats", action.payload)
         },
         rejected: state => {
