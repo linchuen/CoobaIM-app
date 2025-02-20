@@ -11,7 +11,6 @@ export interface FriendSearchResponse {
 }
 
 export interface FriendInfo {
-  id: number
   userId: number
   friendUserId: number
   showName: string

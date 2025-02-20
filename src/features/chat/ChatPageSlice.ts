@@ -12,9 +12,7 @@ import { createAppSlice } from "../../app/createAppSlice"
 import { fetchSearchRoom } from "../../services/RoomApi"
 import { selectTokenInfo, selectWebsocketClient } from "../common/globalSlice"
 import type { RootState } from "../../app/store"
-import {
-  fetchLoadChat
-} from "../../services/MessageApi"
+import { fetchLoadChat } from "../../services/MessageApi"
 import type {
   ChatLoadRequest,
   FriendSearchRequest,
@@ -41,6 +39,7 @@ type FriendState = {
   chatInfoList: ChatInfo[]
   roomChatMap: Map<number, ChatInfo[]>
   roomSubscribeSet: Set<number>
+  roomChatLoaded: Set<number>
   status: string
   type: string
   currentRoomId: number
@@ -53,6 +52,7 @@ const initialState: FriendState = {
   chatInfoList: [],
   roomChatMap: new Map<number, ChatInfo[]>(),
   roomSubscribeSet: new Set<number>(),
+  roomChatLoaded: new Set<number>(),
   status: "",
   type: "",
   currentRoomId: 0,
@@ -90,6 +90,11 @@ export const chatSlice = createAppSlice({
     addRoom: create.reducer((state, action: PayloadAction<RoomInfo>) => {
       state.roomInfoList.push(action.payload)
     }),
+    setRoomChatLoaded: create.reducer(
+      (state, action: PayloadAction<number>) => {
+        state.roomChatLoaded.add(action.payload)
+      },
+    ),
     sendMessage: create.asyncThunk(
       async (request: SpeakRequest, { getState }): Promise<ChatInfo> => {
         const state = getState() as RootState
@@ -265,6 +270,8 @@ export const chatSlice = createAppSlice({
     selectFriendInfoList: state => state.friendInfoList,
     selectRoomInfoList: state => state.roomInfoList,
     selectChatInfoList: state => state.chatInfoList,
+    selectRoomChatMap: state => state.roomChatMap,
+    selectRoomChatLoaded: state => state.roomChatLoaded,
     selectFriendApplyInfoList: state => state.friendApplyInfoList,
     selectStatus: state => state.status,
     selectCurrentRoomId: state => state.currentRoomId,
@@ -288,6 +295,8 @@ export const {
   selectFriendInfoList,
   selectRoomInfoList,
   selectChatInfoList,
+  selectRoomChatMap,
+  selectRoomChatLoaded,
   selectFriendApplyInfoList,
   selectStatus,
   selectCurrentRoomId,

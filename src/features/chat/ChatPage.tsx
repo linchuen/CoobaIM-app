@@ -28,6 +28,8 @@ import {
   removeApply,
   selectFriendApplyInfoList,
   selectFriendInfoList,
+  selectRoomChatLoaded,
+  selectRoomChatMap,
   selectRoomInfoList,
   setCurrentRoomId,
   setType,
@@ -45,6 +47,8 @@ const ChatPage: React.FC = () => {
   const friendApplyInfos = useAppSelector(selectFriendApplyInfoList)
   const friendInfos = useAppSelector(selectFriendInfoList)
   const roomInfos = useAppSelector(selectRoomInfoList)
+  const roomChats = useAppSelector(selectRoomChatMap)
+  const roomChatLoaded = useAppSelector(selectRoomChatLoaded)
   const tokenInfo = useAppSelector(selectTokenInfo)
   const [openAddFriend, setOpenAddFriend] = useState(false)
   const [openAddRoom, setOpenAddRoom] = useState(false)
@@ -60,7 +64,14 @@ const ChatPage: React.FC = () => {
   const handleLoadChat = (roomId: number, type: string) => {
     dispatch(setType(type))
     dispatch(setCurrentRoomId(roomId))
-    dispatch(loadChats({ roomId: roomId }))
+
+    const isLoaded = roomChatLoaded.has(roomId)
+    if (isLoaded) return
+
+    const roomChat = roomChats.get(roomId)
+    if (!roomChat || roomChat.length < 100) {
+      dispatch(loadChats({ roomId: roomId }))
+    }
   }
 
   const handleFriendApply = async (
@@ -80,13 +91,14 @@ const ChatPage: React.FC = () => {
       data => {
         dispatch(removeApply(applyUserId))
         if (isPermit) {
-          dispatch(addFriend({
-                id: 123,
-                userId: tokenInfo.userId,
-                friendUserId: applyUserId,
-                showName: name,
-                roomId: data.roomId
-          }))
+          dispatch(
+            addFriend({
+              userId: tokenInfo.userId,
+              friendUserId: applyUserId,
+              showName: name,
+              roomId: data.roomId,
+            }),
+          )
         }
       },
     )
@@ -117,7 +129,7 @@ const ChatPage: React.FC = () => {
     return (
       <ListItem
         sx={{ marginBottom: 1 }}
-        key={"friend_" + info.id}
+        key={"friend_" + info.friendUserId}
         onClick={() => handleLoadChat(info.roomId, "user")}
       >
         <Avatar sx={{ marginRight: 2 }}>{info.showName.charAt(0)}</Avatar>

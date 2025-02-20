@@ -54,5 +54,5 @@ export interface SpeakRequest {
 }
 
 export interface ChatLoadRequest {
-    roomId?: number;
+    roomId: number;
 }

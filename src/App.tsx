@@ -12,6 +12,7 @@ const App = () => {
     if(config.useFake){
         dispatch(setTokenInfo({
             userId: 1,
+            name: "Bob",
             token: "token",
             platform: "PC",
             loginTime: "string",
