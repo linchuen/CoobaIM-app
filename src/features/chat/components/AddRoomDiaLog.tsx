@@ -19,7 +19,7 @@ import type React from "react"
 import { useRef, useState } from "react"
 import { fetchBuildRoom } from "../../../services/RoomApi"
 import { useAppDispatch, useAppSelector } from "../../../app/hooks"
-import { selectTokenInfo } from "../../common/globalSlice"
+import { selectTokenInfo } from "../../globalSlice"
 import { handleFetch } from "../../../services/common"
 import type {
   BuildRoomResponse,

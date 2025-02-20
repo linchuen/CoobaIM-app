@@ -14,7 +14,7 @@ import type React from "react"
 import { useRef, useState } from "react"
 import { handleFetch } from "../../../services/common"
 import type { ApplyFriendResponse } from "../../../services/ResponseInterface"
-import { selectTokenInfo } from "../../common/globalSlice"
+import { selectTokenInfo } from "../../globalSlice"
 import { fetchApplyFriend } from "../../../services/FriendApi"
 import { useAppDispatch, useAppSelector } from "../../../app/hooks"
 

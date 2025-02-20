@@ -10,7 +10,7 @@ import {
 } from "../../services/FriendApi"
 import { createAppSlice } from "../../app/createAppSlice"
 import { fetchSearchRoom } from "../../services/RoomApi"
-import { selectTokenInfo, selectWebsocketClient } from "../common/globalSlice"
+import { selectTokenInfo, selectWebsocketClient } from "../globalSlice"
 import type { RootState } from "../../app/store"
 import { fetchLoadChat } from "../../services/MessageApi"
 import type {
@@ -30,6 +30,11 @@ type FriendsState = {
 type RoomsState = {
   rooms: RoomInfo[]
   websocket: Client | null
+}
+
+type ChatState = {
+  chats: ChatInfo[]
+  roomId: number
 }
 
 type FriendState = {
@@ -224,11 +229,14 @@ export const chatSlice = createAppSlice({
       },
     ),
     loadChats: create.asyncThunk(
-      async (request: ChatLoadRequest, { getState }) => {
+      async (request: ChatLoadRequest, { getState }): Promise<ChatState> => {
         const state = getState() as RootState
         const tokenInfo = selectTokenInfo(state)
         const response = await fetchLoadChat(request, tokenInfo?.token)
-        return response.data?.chats
+        return {
+          chats: response.data?.chats ?? [],
+          roomId: request.roomId,
+        }
       },
       {
         pending: state => {
@@ -236,7 +244,12 @@ export const chatSlice = createAppSlice({
         },
         fulfilled: (state, action) => {
           state.status = "idle"
-          state.chatInfoList = action.payload ?? []
+          const chats = action.payload.chats;
+          const roomId = action.payload.roomId;
+
+          state.chatInfoList = chats
+          state.roomChatLoaded.add(roomId)
+          state.roomChatMap.set(roomId, chats)
           console.log("loadChats", action.payload)
         },
         rejected: state => {

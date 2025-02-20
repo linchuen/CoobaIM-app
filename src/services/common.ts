@@ -1,7 +1,7 @@
 import {
   setErrorDialogOpen,
   setErrorMessage,
-} from "../features/common/globalSlice"
+} from "../features/globalSlice"
 import type { ApiResponse } from "./ResponseInterface"
 import type { AppDispatch } from "../app/store"
 

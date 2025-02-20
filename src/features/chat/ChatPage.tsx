@@ -34,7 +34,7 @@ import {
   setCurrentRoomId,
   setType,
 } from "./ChatPageSlice"
-import { selectTokenInfo, setTokenInfo } from "../common/globalSlice"
+import { selectTokenInfo, setTokenInfo } from "../globalSlice"
 import ChatBox from "./components/ChatBox"
 import AddFriendDiaLog from "./components/AddFriendDiaLog"
 import AddRoomDiaLog from "./components/AddRoomDiaLog"

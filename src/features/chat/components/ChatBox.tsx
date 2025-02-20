@@ -31,7 +31,7 @@ import {
   selectCurrentRoomId,
   sendMessage,
 } from "../ChatPageSlice"
-import { selectTokenInfo } from "../../common/globalSlice"
+import { selectTokenInfo } from "../../globalSlice"
 
 const ChatBox: React.FC = () => {
   const dispatch = useAppDispatch()

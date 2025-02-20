@@ -12,7 +12,7 @@ import { fetchRegisterUser } from "../../../services/UserAPI"
 import { useAppDispatch } from "../../../app/hooks"
 import {
   setUser,
-} from "../../common/globalSlice"
+} from "../../globalSlice"
 import { handleFetch } from "../../../services/common"
 import type {
   RegisterResponse,

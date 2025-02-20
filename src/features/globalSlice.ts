@@ -1,8 +1,8 @@
 import type { PayloadAction } from "@reduxjs/toolkit"
-import { createAppSlice } from "../../app/createAppSlice"
-import { Client } from "@stomp/stompjs"
-import { connectWebsokcet } from "../../services/websocketApi"
-import config from "../../app/config"
+import { createAppSlice } from "../app/createAppSlice"
+import type { Client } from "@stomp/stompjs"
+import { connectWebsocket } from "../services/websocketApi"
+import config from "../app/config"
 
 interface User {
   id: number
@@ -54,7 +54,7 @@ export const globalSlice = createAppSlice({
       console.log("setWebsocketClient", action.payload)
 
       if(!config.useFake){
-        state.websocket = connectWebsokcet(action.payload)
+        state.websocket = connectWebsocket(action.payload)
       }
     }),
     setErrorMessage: (state, action: PayloadAction<string>) => {

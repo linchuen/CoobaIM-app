@@ -2,7 +2,7 @@ import type { Action, ThunkAction } from "@reduxjs/toolkit"
 import { combineSlices, configureStore } from "@reduxjs/toolkit"
 import { setupListeners } from "@reduxjs/toolkit/query"
 import { counterSlice } from "../features/counter/counterSlice"
-import { globalSlice } from "../features/common/globalSlice"
+import { globalSlice } from "../features/globalSlice"
 import { chatSlice } from "../features/chat/ChatPageSlice"
 
 // `combineSlices` automatically combines the reducers using

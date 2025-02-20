@@ -2,7 +2,7 @@ import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
 import config from '../app/config';
 
-export function connectWebsokcet(endpoint: string, onConnect?: () => void, onDisconnect?: () => void): Client {
+export function connectWebsocket(endpoint: string, onConnect?: () => void, onDisconnect?: () => void): Client {
     const socket = new SockJS(config.apiUrl + endpoint);
     const stompClient = new Client({
         webSocketFactory: () => socket,

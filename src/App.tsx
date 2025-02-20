@@ -4,7 +4,7 @@ import LoginRegisterPage from "./features/login/LoginRegisterPage"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 import { ErrorDialog } from "./components/ErrorDialog"
 import config from "./app/config";
-import {setTokenInfo} from "./features/common/globalSlice";
+import {setTokenInfo} from "./features/globalSlice";
 import {useAppDispatch} from "./app/hooks";
 
 const App = () => {

@@ -5,7 +5,7 @@ import DialogContent from "@mui/material/DialogContent"
 import DialogActions from "@mui/material/DialogActions"
 import Button from "@mui/material/Button"
 import { useAppDispatch, useAppSelector } from "../app/hooks"
-import { selectErrorMessage, selectErrorDialogOpen, setErrorDialogOpen } from "../features/common/globalSlice"
+import { selectErrorMessage, selectErrorDialogOpen, setErrorDialogOpen } from "../features/globalSlice"
 
 export const ErrorDialog: React.FC = () => {
   const dispatch = useAppDispatch()
