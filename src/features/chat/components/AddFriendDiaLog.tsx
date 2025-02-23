@@ -49,7 +49,7 @@ const AddFriendDiaLog: React.FC<AddFriendDiaLogProps> = ({ open, onClose }) => {
         fetchApplyFriend({
           applyUserId: tokenInfo.userId,
           permitUserId: Number(userId),
-        }),
+        }, tokenInfo.token),
         data => {
           setError(false)
           setHelperText("")

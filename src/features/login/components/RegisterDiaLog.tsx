@@ -50,6 +50,7 @@ export const RegisterDiaLog: React.FC<RegisterDialogProps> = ({
             email: email,
           }),
         )
+        onClose()
       },
     )
 

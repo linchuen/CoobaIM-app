@@ -12,25 +12,30 @@ export async function callFetch(
   data: any,
 ) {
   try {
+    const body = JSON.stringify(data)
+    console.log("fetch", url, body)
     const res = await fetch(url, {
       method: method,
       headers: {
         "Content-Type": "application/json",
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
-      body: JSON.stringify(data),
+      body: data === null ? null : body,
     })
 
     if (!res.ok) {
+      console.error("fetch response", url, res.status)
       return {
         traceId: "99999",
         code: -1,
         errorMessage: res.status,
       }
     }
-
-    return res.json()
+    const response = res.json()
+    console.log("fetch response", url, response)
+    return response;
   } catch (e: any) {
+    console.error("fetch response", url, e.message)
     return {
       traceId: "99999",
       code: -1,

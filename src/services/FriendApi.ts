@@ -16,7 +16,7 @@ import { FakeSuccessResponse } from "./FakeSuccessResponse"
 
 export const fetchApplyFriend = async (
   data: FriendRequest,
-  token?: string,
+  token: string,
 ): Promise<ApiResponse<ApplyFriendResponse>> => {
   return config.useFake
     ? new FakeSuccessResponse({ applyId: 123 })
@@ -25,7 +25,7 @@ export const fetchApplyFriend = async (
 
 export const fetchPermitFriend = async (
   data: FriendRequest,
-  token?: string,
+  token: string,
 ): Promise<ApiResponse<PermitFriendResponse>> => {
   return config.useFake
     ? new FakeSuccessResponse({ roomId: 456 })
@@ -34,14 +34,14 @@ export const fetchPermitFriend = async (
 
 export const fetchRemoveFriend = async (
   data: FriendRemoveRequest,
-  token?: string,
+  token: string,
 ): Promise<ApiResponse<boolean>> => {
   return callFetch(config.apiUrl + "/friend/remove", "DELETE", token, data)
 }
 
 export const fetchSearchFriend = async (
   data: FriendSearchRequest,
-  token?: string,
+  token: string,
 ): Promise<ApiResponse<FriendSearchResponse>> => {
   return config.useFake
     ? new FakeSuccessResponse({
@@ -67,7 +67,7 @@ export const fetchSearchFriend = async (
 
 export const fetchSearchFriendApply = async (
   data?: null,
-  token?: string,
+  token: string,
 ): Promise<ApiResponse<FriendApplySearchResponse>> => {
   return config.useFake
     ? new FakeSuccessResponse({
@@ -79,5 +79,5 @@ export const fetchSearchFriendApply = async (
         },
       ],
     })
-    : callFetch(config.apiUrl + "/friend/apply/search", "GET", token, data)
+    : callFetch(config.apiUrl + "/friend/apply/search", "POST", token, data)
 }

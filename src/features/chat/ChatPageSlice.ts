@@ -21,7 +21,6 @@ import type {
 } from "../../services/RequestInterface"
 import type { PayloadAction } from "@reduxjs/toolkit"
 import type { Client, IMessage } from "@stomp/stompjs"
-import { useAppSelector } from "../../app/hooks"
 
 type FriendsState = {
   friends: FriendInfo[]
@@ -113,7 +112,7 @@ export const chatSlice = createAppSlice({
         if (publishType && stompClient) {
           stompClient.publish({
             destination: publishType,
-            body: "Hello world",
+            body: JSON.stringify(request),
             skipContentLengthHeader: true,
           })
           success = false
@@ -140,7 +139,6 @@ export const chatSlice = createAppSlice({
           state.chatInfoList.push(chatInfo)
           const chatInfoList = state.roomChatMap[chatInfo.roomId] ?? []
           chatInfoList.push(chatInfo)
-          console.log("After sending message", state.roomChatMap)
         },
         rejected: state => {
           state.status = "failed"
@@ -155,7 +153,7 @@ export const chatSlice = createAppSlice({
         const state = getState() as RootState
         const tokenInfo = selectTokenInfo(state)
         const stompClient = selectWebsocketClient(state)
-        const response = await fetchSearchFriend(request, tokenInfo?.token)
+        const response = await fetchSearchFriend(request, tokenInfo?.token ?? "")
         return {
           friends: response.data?.friends ?? [],
           websocket: stompClient,
@@ -210,7 +208,6 @@ export const chatSlice = createAppSlice({
         fulfilled: (state, action) => {
           state.status = "idle"
           state.roomInfoList = action.payload.rooms
-          console.log("loadGroups", action.payload)
 
           const stompClient = action.payload.websocket
           if (!stompClient) return
@@ -269,7 +266,6 @@ export const chatSlice = createAppSlice({
           state.chatInfoList = chats
           state.roomChatLoaded.push(roomId)
           state.roomChatMap[roomId] = chats
-          console.log("loadChats", action.payload)
         },
         rejected: state => {
           state.status = "failed"
@@ -280,7 +276,7 @@ export const chatSlice = createAppSlice({
       async (request: null, { getState }) => {
         const state = getState() as RootState
         const tokenInfo = selectTokenInfo(state)
-        const response = await fetchSearchFriendApply(request, tokenInfo?.token)
+        const response = await fetchSearchFriendApply(request, tokenInfo?.token ?? "")
         return response.data?.applicants
       },
       {
@@ -290,7 +286,6 @@ export const chatSlice = createAppSlice({
         fulfilled: (state, action) => {
           state.status = "idle"
           state.friendApplyInfoList = action.payload ?? []
-          console.log("loadFriendApply", action.payload)
         },
         rejected: state => {
           state.status = "failed"

@@ -76,7 +76,7 @@ const ChatPage: React.FC = () => {
         applyUserId: applyUserId,
         permitUserId: tokenInfo.userId,
         isPermit: isPermit,
-      }),
+      }, tokenInfo.token),
       data => {
         dispatch(removeApply(applyUserId))
         if (isPermit) {
