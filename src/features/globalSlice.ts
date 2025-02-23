@@ -1,7 +1,6 @@
 import type { PayloadAction } from "@reduxjs/toolkit"
 import { createAppSlice } from "../app/createAppSlice"
-import type { Client } from "@stomp/stompjs"
-import { connectWebsocket } from "../services/websocketApi"
+import { WebSocketManager } from "../services/websocketApi"
 import config from "../app/config"
 
 interface User {
@@ -23,7 +22,6 @@ interface TokenInfo {
 interface GlobalState {
   user: User | null
   tokenInfo: TokenInfo | null
-  websocket: Client | null
   errorMessage: string
   errorDialogOpen: boolean
 }
@@ -31,7 +29,6 @@ interface GlobalState {
 const initialState: GlobalState = {
   user: null,
   tokenInfo: null,
-  websocket: null,
   errorMessage: "",
   errorDialogOpen: false,
 }
@@ -53,8 +50,8 @@ export const globalSlice = createAppSlice({
     setWebsocketClient: create.reducer((state, action: PayloadAction<string>) => {
       console.log("setWebsocketClient", action.payload)
 
-      if(!config.useFake){
-        state.websocket = connectWebsocket(action.payload)
+      if (!config.useFake) {
+        WebSocketManager.getInstance(action.payload)
       }
     }),
     setErrorMessage: (state, action: PayloadAction<string>) => {
@@ -68,7 +65,6 @@ export const globalSlice = createAppSlice({
     selectErrorMessage: state => state.errorMessage,
     selectErrorDialogOpen: state => state.errorDialogOpen,
     selectTokenInfo: state => state.tokenInfo,
-    selectWebsocketClient: state => state.websocket,
   },
 })
 
@@ -81,5 +77,5 @@ export const {
   setErrorDialogOpen,
 } = globalSlice.actions
 
-export const { selectErrorMessage, selectErrorDialogOpen, selectTokenInfo, selectWebsocketClient } =
+export const { selectErrorMessage, selectErrorDialogOpen, selectTokenInfo } =
   globalSlice.selectors

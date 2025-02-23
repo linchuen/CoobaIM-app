@@ -10,7 +10,7 @@ import {
 } from "../../services/FriendApi"
 import { createAppSlice } from "../../app/createAppSlice"
 import { fetchSearchRoom } from "../../services/RoomApi"
-import { selectTokenInfo, selectWebsocketClient } from "../globalSlice"
+import { selectTokenInfo } from "../globalSlice"
 import type { RootState } from "../../app/store"
 import { fetchLoadChat } from "../../services/MessageApi"
 import type {
@@ -20,17 +20,9 @@ import type {
   SpeakRequest,
 } from "../../services/RequestInterface"
 import type { PayloadAction } from "@reduxjs/toolkit"
-import type { Client, IMessage } from "@stomp/stompjs"
-
-type FriendsState = {
-  friends: FriendInfo[]
-  websocket: Client | null
-}
-
-type RoomsState = {
-  rooms: RoomInfo[]
-  websocket: Client | null
-}
+import type { IMessage } from "@stomp/stompjs"
+import { WebSocketManager } from "../../services/websocketApi"
+import config from "../../app/config"
 
 type ChatState = {
   chats: ChatInfo[]
@@ -104,14 +96,14 @@ export const chatSlice = createAppSlice({
       async (request: SpeakRequest, { getState }): Promise<ChatInfo> => {
         const state = getState() as RootState
         const tokenInfo = selectTokenInfo(state)
-        const stompClient = selectWebsocketClient(state)
         const chatType = state.chat.type
+        const publishType = getPublishType(chatType)
         let success
 
-        const publishType = getPublishType(chatType)
-        if (publishType && stompClient) {
-          stompClient.publish({
-            destination: publishType,
+        if (publishType && !config.useFake) {
+          const stompClient = WebSocketManager.getInstance()
+          stompClient.sendMessage(publishType, {
+
             body: JSON.stringify(request),
             skipContentLengthHeader: true,
           })
@@ -146,18 +138,11 @@ export const chatSlice = createAppSlice({
       },
     ),
     loadFriends: create.asyncThunk(
-      async (
-        request: FriendSearchRequest,
-        { getState },
-      ): Promise<FriendsState> => {
+      async (request: FriendSearchRequest, { getState },) => {
         const state = getState() as RootState
         const tokenInfo = selectTokenInfo(state)
-        const stompClient = selectWebsocketClient(state)
         const response = await fetchSearchFriend(request, tokenInfo?.token ?? "")
-        return {
-          friends: response.data?.friends ?? [],
-          websocket: stompClient,
-        }
+        return response.data?.friends ?? []
       },
       {
         pending: state => {
@@ -165,11 +150,11 @@ export const chatSlice = createAppSlice({
         },
         fulfilled: (state, action) => {
           state.status = "idle"
-          state.friendInfoList = action.payload.friends
-          console.log("loadFriends", action.payload.friends)
+          state.friendInfoList = action.payload
+          console.log("loadFriends", action.payload)
 
-          const stompClient = action.payload.websocket
-          if (!stompClient) return
+          if (config.useFake) return
+          const stompClient = WebSocketManager.getInstance()
 
           state.friendInfoList.forEach(friendInfo => {
             const roomId = friendInfo.roomId
@@ -191,15 +176,11 @@ export const chatSlice = createAppSlice({
       },
     ),
     loadGroups: create.asyncThunk(
-      async (request: RoomSearchRequest, { getState }): Promise<RoomsState> => {
+      async (request: RoomSearchRequest, { getState }) => {
         const state = getState() as RootState
-        const stompClient = selectWebsocketClient(state)
         const tokenInfo = selectTokenInfo(state)
         const response = await fetchSearchRoom(request, tokenInfo?.token)
-        return {
-          rooms: response.data?.rooms ?? [],
-          websocket: stompClient,
-        }
+        return response.data?.rooms ?? []
       },
       {
         pending: state => {
@@ -207,10 +188,10 @@ export const chatSlice = createAppSlice({
         },
         fulfilled: (state, action) => {
           state.status = "idle"
-          state.roomInfoList = action.payload.rooms
+          state.roomInfoList = action.payload
 
-          const stompClient = action.payload.websocket
-          if (!stompClient) return
+          if (config.useFake) return
+          const stompClient = WebSocketManager.getInstance()
 
           state.roomInfoList.forEach(roomInfo => {
             const roomId = roomInfo.id
