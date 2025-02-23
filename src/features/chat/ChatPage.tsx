@@ -39,6 +39,8 @@ import AddRoomDiaLog from "./components/AddRoomDiaLog"
 import { handleFetch } from "../../services/common"
 import { fetchPermitFriend } from "../../services/FriendApi"
 import type { PermitFriendResponse } from "../../services/ResponseInterface"
+import { WebSocketManager } from "../../services/websocketApi"
+
 
 const ChatPage: React.FC = () => {
   const dispatch = useAppDispatch()

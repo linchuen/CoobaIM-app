@@ -102,8 +102,8 @@ export const chatSlice = createAppSlice({
 
         if (publishType && !config.useFake) {
           const stompClient = WebSocketManager.getInstance()
-          stompClient.sendMessage(publishType, JSON.stringify(request))
-          success = false
+          stompClient.sendMessage(publishType, request)
+          success = true
         }
 
         return {

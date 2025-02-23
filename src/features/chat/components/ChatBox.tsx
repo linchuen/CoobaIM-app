@@ -31,6 +31,7 @@ import {
   sendMessage,
 } from "../ChatPageSlice"
 import { selectTokenInfo } from "../../globalSlice"
+import { WebSocketManager } from "../../../services/websocketApi"
 
 const ChatBox: React.FC = () => {
   const dispatch = useAppDispatch()
@@ -51,6 +52,9 @@ const ChatBox: React.FC = () => {
           message: inputRef.current.value,
         }),
       )
+      const webSocket = WebSocketManager.getInstance()
+      webSocket.subscribe("/topic/broadcast", (message) => console.log(message))
+      webSocket.sendMessage("/app/sendToAll", { roomId: 1, message: "Hello" })
     }
   }
 
@@ -83,28 +87,28 @@ const ChatBox: React.FC = () => {
         key={chat.id}
         display="flex"
         flexDirection="column"
-        alignItems={isSelf ? "flex-end" : "flex-start" }
+        alignItems={isSelf ? "flex-end" : "flex-start"}
         sx={{ gap: 0.5 }}
       >
-          <Box display="flex" alignItems="center" sx={{ gap: 0.5 }}>
-              {chat.success === false && isSelf && (
-                  <ErrorOutlineIcon sx={{ color: "red", fontSize: 18 }} />
-              )}
-              <Paper
-                  sx={{
-                      padding: 1.5,
-                      borderRadius: 2,
-                      maxWidth: "300px",
-                      bgcolor: isSelf ? "#282c34" : "#3f51b5",
-                      color: isSelf ? "#b9bbbe" : "white",
-                      wordBreak: "break-word", // 確保長字串能夠換行
-                      overflowWrap: "break-word",
-                      boxShadow: 2,
-                  }}
-              >
-                  {chat.message}
-              </Paper>
-          </Box>
+        <Box display="flex" alignItems="center" sx={{ gap: 0.5 }}>
+          {chat.success === false && isSelf && (
+            <ErrorOutlineIcon sx={{ color: "red", fontSize: 18 }} />
+          )}
+          <Paper
+            sx={{
+              padding: 1.5,
+              borderRadius: 2,
+              maxWidth: "300px",
+              bgcolor: isSelf ? "#282c34" : "#3f51b5",
+              color: isSelf ? "#b9bbbe" : "white",
+              wordBreak: "break-word", // 確保長字串能夠換行
+              overflowWrap: "break-word",
+              boxShadow: 2,
+            }}
+          >
+            {chat.message}
+          </Paper>
+        </Box>
       </Box>
     )
   })
