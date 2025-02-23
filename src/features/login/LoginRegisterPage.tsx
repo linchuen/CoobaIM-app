@@ -14,7 +14,7 @@ import { useNavigate } from "react-router"
 import { RegisterDiaLog } from "./components/RegisterDiaLog"
 import { ForgetPasswordDialog } from "./components/ForgetPasswordDialog"
 import { fetchLogin } from "../../services/UserAPI"
-import { setTokenInfo, setWebsocketClient } from "../globalSlice"
+import { setTokenInfo, initWebsocketClient } from "../globalSlice"
 import { useAppDispatch } from "../../app/hooks"
 import { handleFetch } from "../../services/common"
 import type { LoginResponse } from "../../services/ResponseInterface"
@@ -36,7 +36,7 @@ const LoginRegisterPage: React.FC = () => {
       }),
       data => {
         dispatch(setTokenInfo(data))
-        dispatch(setWebsocketClient("/ws"))
+        dispatch(initWebsocketClient("/ws"))
         navigate("/chat")
       },
     )

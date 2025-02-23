@@ -22,6 +22,7 @@ interface TokenInfo {
 interface GlobalState {
   user: User | null
   tokenInfo: TokenInfo | null
+  isLogin: boolean
   errorMessage: string
   errorDialogOpen: boolean
 }
@@ -29,6 +30,7 @@ interface GlobalState {
 const initialState: GlobalState = {
   user: null,
   tokenInfo: null,
+  isLogin: false,
   errorMessage: "",
   errorDialogOpen: false,
 }
@@ -47,12 +49,14 @@ export const globalSlice = createAppSlice({
       console.log("setTokenInfo", action.payload)
       state.tokenInfo = action.payload
     }),
-    setWebsocketClient: create.reducer((state, action: PayloadAction<string>) => {
+    initWebsocketClient: create.reducer((state, action: PayloadAction<string>) => {
       console.log("setWebsocketClient", action.payload)
-
+      state.isLogin = false
       if (!config.useFake) {
-        WebSocketManager.getInstance(action.payload)
+        const webSocket = WebSocketManager.getInstance(action.payload)
+        webSocket.connect()
       }
+      state.isLogin = true
     }),
     setErrorMessage: (state, action: PayloadAction<string>) => {
       state.errorMessage = action.payload
@@ -65,6 +69,7 @@ export const globalSlice = createAppSlice({
     selectErrorMessage: state => state.errorMessage,
     selectErrorDialogOpen: state => state.errorDialogOpen,
     selectTokenInfo: state => state.tokenInfo,
+    selectIsLogin: state => state.isLogin,
   },
 })
 
@@ -72,10 +77,10 @@ export const {
   setUser,
   clearUser,
   setTokenInfo,
-  setWebsocketClient,
+  initWebsocketClient,
   setErrorMessage,
   setErrorDialogOpen,
 } = globalSlice.actions
 
-export const { selectErrorMessage, selectErrorDialogOpen, selectTokenInfo } =
+export const { selectErrorMessage, selectErrorDialogOpen, selectTokenInfo, selectIsLogin } =
   globalSlice.selectors

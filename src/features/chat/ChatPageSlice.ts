@@ -102,11 +102,7 @@ export const chatSlice = createAppSlice({
 
         if (publishType && !config.useFake) {
           const stompClient = WebSocketManager.getInstance()
-          stompClient.sendMessage(publishType, {
-
-            body: JSON.stringify(request),
-            skipContentLengthHeader: true,
-          })
+          stompClient.sendMessage(publishType, JSON.stringify(request))
           success = false
         }
 
@@ -151,7 +147,6 @@ export const chatSlice = createAppSlice({
         fulfilled: (state, action) => {
           state.status = "idle"
           state.friendInfoList = action.payload
-          console.log("loadFriends", action.payload)
 
           if (config.useFake) return
           const stompClient = WebSocketManager.getInstance()

@@ -13,7 +13,6 @@ export async function callFetch(
 ) {
   try {
     const body = JSON.stringify(data)
-    console.log("fetch", url, body)
     const res = await fetch(url, {
       method: method,
       headers: {
@@ -24,7 +23,7 @@ export async function callFetch(
     })
 
     if (!res.ok) {
-      console.error("fetch response", url, res.status)
+      console.error("fetch %s error %s", url, res.status)
       return {
         traceId: "99999",
         code: -1,
@@ -32,10 +31,10 @@ export async function callFetch(
       }
     }
     const response = res.json()
-    console.log("fetch response", url, response)
+    console.log("fetch %s body %s %s", url, body, response)
     return response;
   } catch (e: any) {
-    console.error("fetch response", url, e.message)
+    console.error("fetch %s error %s", url, e.message)
     return {
       traceId: "99999",
       code: -1,

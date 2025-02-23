@@ -8,7 +8,6 @@ import {
   InputBase,
   Paper,
   Box,
-  Typography,
   Button,
   TextField,
   Alert,

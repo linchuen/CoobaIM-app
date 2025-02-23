@@ -32,7 +32,7 @@ import {
   setCurrentRoomId,
   setType,
 } from "./ChatPageSlice"
-import { selectTokenInfo, setTokenInfo } from "../globalSlice"
+import { selectIsLogin, selectTokenInfo } from "../globalSlice"
 import ChatBox from "./components/ChatBox"
 import AddFriendDiaLog from "./components/AddFriendDiaLog"
 import AddRoomDiaLog from "./components/AddRoomDiaLog"
@@ -46,6 +46,7 @@ const ChatPage: React.FC = () => {
   const friendInfos = useAppSelector(selectFriendInfoList)
   const roomInfos = useAppSelector(selectRoomInfoList)
   const tokenInfo = useAppSelector(selectTokenInfo)
+  const isLogin = useAppSelector(selectIsLogin)
   const [openAddFriend, setOpenAddFriend] = useState(false)
   const [openAddRoom, setOpenAddRoom] = useState(false)
   const [openDialog, setOpenDialog] = useState(false)
@@ -55,7 +56,7 @@ const ChatPage: React.FC = () => {
     dispatch(loadFriends({ friendUserIds: [] }))
     dispatch(loadGroups({ roomIds: [] }))
     dispatch(loadFriendApply(null))
-  }, [dispatch, tokenInfo])
+  }, [dispatch, isLogin])
 
   const handleLoadChat = (roomId: number, type: string) => {
     dispatch(setType(type))
