@@ -40,6 +40,7 @@ import { handleFetch } from "../../services/common"
 import { fetchPermitFriend } from "../../services/FriendApi"
 import type { PermitFriendResponse } from "../../services/ResponseInterface"
 import { WebSocketManager } from "../../services/websocketApi"
+import config from "../../app/config"
 
 
 const ChatPage: React.FC = () => {
@@ -55,9 +56,11 @@ const ChatPage: React.FC = () => {
   const [tabIndex, setTabIndex] = useState(0)
 
   useEffect(() => {
-    dispatch(loadFriends({ friendUserIds: [] }))
-    dispatch(loadGroups({ roomIds: [] }))
-    dispatch(loadFriendApply(null))
+    if (isLogin || config.useFake) {
+      dispatch(loadFriends({ friendUserIds: [] }))
+      dispatch(loadGroups({ roomIds: [] }))
+      dispatch(loadFriendApply(null))
+    }
   }, [dispatch, isLogin])
 
   const handleLoadChat = (roomId: number, type: string) => {

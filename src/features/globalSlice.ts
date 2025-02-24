@@ -1,7 +1,5 @@
 import type { PayloadAction } from "@reduxjs/toolkit"
 import { createAppSlice } from "../app/createAppSlice"
-import { WebSocketManager } from "../services/websocketApi"
-import config from "../app/config"
 
 interface User {
   id: number
@@ -49,14 +47,8 @@ export const globalSlice = createAppSlice({
       console.log("setTokenInfo", action.payload)
       state.tokenInfo = action.payload
     }),
-    initWebsocketClient: create.reducer((state, action: PayloadAction<string>) => {
-      console.log("setWebsocketClient", action.payload)
-      state.isLogin = false
-      if (!config.useFake) {
-        const webSocket = WebSocketManager.getInstance(action.payload)
-        webSocket.connect()
-      }
-      state.isLogin = true
+    setIsLogin: create.reducer((state, action: PayloadAction<boolean>) => {
+      state.isLogin = action.payload
     }),
     setErrorMessage: (state, action: PayloadAction<string>) => {
       state.errorMessage = action.payload
@@ -77,7 +69,7 @@ export const {
   setUser,
   clearUser,
   setTokenInfo,
-  initWebsocketClient,
+  setIsLogin,
   setErrorMessage,
   setErrorDialogOpen,
 } = globalSlice.actions

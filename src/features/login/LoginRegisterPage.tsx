@@ -14,10 +14,12 @@ import { useNavigate } from "react-router"
 import { RegisterDiaLog } from "./components/RegisterDiaLog"
 import { ForgetPasswordDialog } from "./components/ForgetPasswordDialog"
 import { fetchLogin } from "../../services/UserAPI"
-import { setTokenInfo, initWebsocketClient } from "../globalSlice"
+import { setIsLogin, setTokenInfo } from "../globalSlice"
 import { useAppDispatch } from "../../app/hooks"
 import { handleFetch } from "../../services/common"
 import type { LoginResponse } from "../../services/ResponseInterface"
+import config from "../../app/config"
+import { WebSocketManager } from "../../services/websocketApi"
 
 const LoginRegisterPage: React.FC = () => {
   const navigate = useNavigate()
@@ -36,7 +38,11 @@ const LoginRegisterPage: React.FC = () => {
       }),
       data => {
         dispatch(setTokenInfo(data))
-        dispatch(initWebsocketClient("/ws"))
+        if (!config.useFake) {
+          const webSocket = WebSocketManager.getInstance()
+          webSocket.connect(data.token)
+          dispatch(setIsLogin(true))
+        }
         navigate("/chat")
       },
     )

@@ -21,7 +21,7 @@ export class WebSocketManager {
         return WebSocketManager.instance;
     }
 
-    public connect(onConnect?: () => void, onDisconnect?: () => void): void {
+    public connect(token: string, onConnect?: () => void, onDisconnect?: () => void): void {
         this.onConnectCallback = onConnect;
         this.onDisconnectCallback = onDisconnect;
 
@@ -29,6 +29,9 @@ export class WebSocketManager {
         this.stompClient = new Client({
             webSocketFactory: () => socket,
             reconnectDelay: 5000, // 自動重連間隔（5秒）
+            connectHeaders:{
+                Authorization: `Bearer ${token}`
+            }
         });
 
         this.stompClient.onConnect = () => {
