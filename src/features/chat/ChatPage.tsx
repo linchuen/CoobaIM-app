@@ -67,6 +67,7 @@ const ChatPage: React.FC = () => {
     dispatch(setType(type))
     dispatch(setCurrentRoomId(roomId))
     dispatch(loadChats({ roomId: roomId }))
+    WebSocketManager.getInstance().subscribe("/topic/broadcast", (message) => console.log(message.body))
   }
 
   const handleFriendApply = async (

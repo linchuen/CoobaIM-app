@@ -50,6 +50,7 @@ export interface RoomSearchRequest {
 
 export interface SpeakRequest {
     roomId: number;
+    userId: number,
     message: string;
 }
 

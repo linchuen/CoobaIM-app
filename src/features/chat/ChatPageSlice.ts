@@ -58,9 +58,9 @@ const initialState: FriendState = {
 function getPublishType(chatType: string): string {
   switch (chatType) {
     case "user":
-      return "app/sendToUser"
+      return "/app/sendToUser"
     case "room":
-      return "app/sendToRoom"
+      return "/app/sendToRoom"
     default:
       return ""
   }
@@ -155,7 +155,7 @@ export const chatSlice = createAppSlice({
             const roomId = friendInfo.roomId
             if (state.roomSubscribeSet.includes(roomId)) return
 
-            const topic = "/topic/group/" + roomId
+            const topic = "/group/" + roomId
             stompClient.subscribe(topic, (message: IMessage) => {
               const arr = state.roomChatMap[roomId] ?? []
               const newChat = JSON.parse(message.body) as ChatInfo

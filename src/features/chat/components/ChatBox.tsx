@@ -45,16 +45,17 @@ const ChatBox: React.FC = () => {
   const handleSendMessage = () => {
     if (currentRoomId === 0) return
 
-    if (inputRef.current) {
+    if (inputRef.current && tokenInfo) {
       dispatch(
         sendMessage({
           roomId: currentRoomId,
           message: inputRef.current.value,
+          userId: tokenInfo.userId
         }),
       )
       const webSocket = WebSocketManager.getInstance()
-      webSocket.subscribe("/topic/broadcast", (message) => console.log(message))
-      webSocket.sendMessage("/app/sendToAll", { roomId: 1, message: "Hello" })
+  
+      webSocket.sendMessage("/app/sendToAll", { roomId: currentRoomId, message: "Hello", userId: tokenInfo.userId })
     }
   }
 
