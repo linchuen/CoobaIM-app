@@ -38,11 +38,7 @@ const LoginRegisterPage: React.FC = () => {
       }),
       data => {
         dispatch(setTokenInfo(data))
-        if (!config.useFake) {
-          const webSocket = WebSocketManager.getInstance()
-          webSocket.connect(data.token)
-          dispatch(setIsLogin(true))
-        }
+        dispatch(setIsLogin(true))
         navigate("/chat")
       },
     )

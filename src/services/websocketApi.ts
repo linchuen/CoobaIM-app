@@ -25,6 +25,13 @@ export class WebSocketManager {
         this.onConnectCallback = onConnect;
         this.onDisconnectCallback = onDisconnect;
 
+        if(config.useFake){
+            if (this.onConnectCallback) {
+                this.onConnectCallback();
+            }
+            return
+        }
+
         const socket = new SockJS(config.apiUrl + this.endpoint);
         this.stompClient = new Client({
             webSocketFactory: () => socket,

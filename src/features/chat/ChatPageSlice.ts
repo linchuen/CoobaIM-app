@@ -92,6 +92,55 @@ export const chatSlice = createAppSlice({
         state.roomChatLoaded.push(action.payload)
       },
     ),
+    subscribeFriends: create.reducer(
+      (state, action) => {
+        if (config.useFake) return
+
+        const stompClient = WebSocketManager.getInstance()
+
+        state.friendInfoList.forEach(friendInfo => {
+          const roomId = friendInfo.roomId
+          if (state.roomSubscribeSet.includes(roomId)) return
+
+          const topic = "/group/" + roomId
+          stompClient.subscribe(topic, (message: IMessage) => {
+            const arr = state.roomChatMap[roomId] ?? []
+            const newChat = JSON.parse(message.body) as ChatInfo
+            arr.push(newChat)
+
+            state.roomChatMap[roomId] = arr.slice(-100)
+
+            if(state.currentRoomId === roomId){
+              state.chatInfoList.push(newChat)
+            }
+          })
+        })
+      },
+    ),
+    subscribeGroups: create.reducer(
+      (state, action) => {
+        if (config.useFake) return
+
+        const stompClient = WebSocketManager.getInstance()
+        state.roomInfoList.forEach(roomInfo => {
+          const roomId = roomInfo.id
+          if (state.roomSubscribeSet.includes(roomId)) return
+
+          const topic = "/group/" + roomId
+          stompClient.subscribe(topic, (message: IMessage) => {
+            const arr = state.roomChatMap[roomId] ?? []
+            const newChat = JSON.parse(message.body) as ChatInfo
+            arr.push(newChat)
+
+            state.roomChatMap[roomId] = arr.slice(-100)
+
+            if(state.currentRoomId === roomId){
+              state.chatInfoList.push(newChat)
+            }
+          })
+        })
+      },
+    ),
     sendMessage: create.asyncThunk(
       async (request: SpeakRequest, { getState }): Promise<ChatInfo> => {
         const state = getState() as RootState
@@ -147,23 +196,6 @@ export const chatSlice = createAppSlice({
         fulfilled: (state, action) => {
           state.status = "idle"
           state.friendInfoList = action.payload
-
-          if (config.useFake) return
-          const stompClient = WebSocketManager.getInstance()
-
-          state.friendInfoList.forEach(friendInfo => {
-            const roomId = friendInfo.roomId
-            if (state.roomSubscribeSet.includes(roomId)) return
-
-            const topic = "/group/" + roomId
-            stompClient.subscribe(topic, (message: IMessage) => {
-              const arr = state.roomChatMap[roomId] ?? []
-              const newChat = JSON.parse(message.body) as ChatInfo
-              arr.push(newChat)
-
-              state.roomChatMap[roomId] = arr.slice(-100)
-            })
-          })
         },
         rejected: state => {
           state.status = "failed"
@@ -184,23 +216,26 @@ export const chatSlice = createAppSlice({
         fulfilled: (state, action) => {
           state.status = "idle"
           state.roomInfoList = action.payload
-
-          if (config.useFake) return
-          const stompClient = WebSocketManager.getInstance()
-
-          state.roomInfoList.forEach(roomInfo => {
-            const roomId = roomInfo.id
-            if (state.roomSubscribeSet.includes(roomId)) return
-
-            const topic = "/topic/group/" + roomId
-            stompClient.subscribe(topic, (message: IMessage) => {
-              const arr = state.roomChatMap[roomId] ?? []
-              const newChat = JSON.parse(message.body) as ChatInfo
-              arr.push(newChat)
-
-              state.roomChatMap[roomId] = arr.slice(-100)
-            })
-          })
+        },
+        rejected: state => {
+          state.status = "failed"
+        },
+      },
+    ),
+    loadFriendApply: create.asyncThunk(
+      async (request: null, { getState }) => {
+        const state = getState() as RootState
+        const tokenInfo = selectTokenInfo(state)
+        const response = await fetchSearchFriendApply(request, tokenInfo?.token ?? "")
+        return response.data?.applicants
+      },
+      {
+        pending: state => {
+          state.status = "loading"
+        },
+        fulfilled: (state, action) => {
+          state.status = "idle"
+          state.friendApplyInfoList = action.payload ?? []
         },
         rejected: state => {
           state.status = "failed"
@@ -248,26 +283,6 @@ export const chatSlice = createAppSlice({
         },
       },
     ),
-    loadFriendApply: create.asyncThunk(
-      async (request: null, { getState }) => {
-        const state = getState() as RootState
-        const tokenInfo = selectTokenInfo(state)
-        const response = await fetchSearchFriendApply(request, tokenInfo?.token ?? "")
-        return response.data?.applicants
-      },
-      {
-        pending: state => {
-          state.status = "loading"
-        },
-        fulfilled: (state, action) => {
-          state.status = "idle"
-          state.friendApplyInfoList = action.payload ?? []
-        },
-        rejected: state => {
-          state.status = "failed"
-        },
-      },
-    ),
   }),
   selectors: {
     selectFriendInfoList: state => state.friendInfoList,
@@ -284,8 +299,10 @@ export const chatSlice = createAppSlice({
 export const {
   loadFriends,
   loadGroups,
-  loadChats,
   loadFriendApply,
+  loadChats,
+  subscribeFriends,
+  subscribeGroups,
   setType,
   setCurrentRoomId,
   sendMessage,

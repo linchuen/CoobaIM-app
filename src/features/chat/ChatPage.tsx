@@ -31,8 +31,9 @@ import {
   selectRoomInfoList,
   setCurrentRoomId,
   setType,
+  subscribeFriends,
 } from "./ChatPageSlice"
-import { selectIsLogin, selectTokenInfo } from "../globalSlice"
+import { selectTokenInfo } from "../globalSlice"
 import ChatBox from "./components/ChatBox"
 import AddFriendDiaLog from "./components/AddFriendDiaLog"
 import AddRoomDiaLog from "./components/AddRoomDiaLog"
@@ -40,7 +41,6 @@ import { handleFetch } from "../../services/common"
 import { fetchPermitFriend } from "../../services/FriendApi"
 import type { PermitFriendResponse } from "../../services/ResponseInterface"
 import { WebSocketManager } from "../../services/websocketApi"
-import config from "../../app/config"
 
 
 const ChatPage: React.FC = () => {
@@ -49,19 +49,33 @@ const ChatPage: React.FC = () => {
   const friendInfos = useAppSelector(selectFriendInfoList)
   const roomInfos = useAppSelector(selectRoomInfoList)
   const tokenInfo = useAppSelector(selectTokenInfo)
-  const isLogin = useAppSelector(selectIsLogin)
   const [openAddFriend, setOpenAddFriend] = useState(false)
   const [openAddRoom, setOpenAddRoom] = useState(false)
   const [openDialog, setOpenDialog] = useState(false)
   const [tabIndex, setTabIndex] = useState(0)
 
   useEffect(() => {
-    if (isLogin || config.useFake) {
+    const loadData = () => {
       dispatch(loadFriends({ friendUserIds: [] }))
       dispatch(loadGroups({ roomIds: [] }))
       dispatch(loadFriendApply(null))
     }
-  }, [dispatch, isLogin])
+
+    if (tokenInfo) {
+      const webSocket = WebSocketManager.getInstance()
+      webSocket.connect(tokenInfo.token, () => loadData())
+
+    }
+  }, [dispatch, tokenInfo])
+
+  useEffect(() => {
+    dispatch(subscribeFriends())
+  }, [dispatch, friendInfos])
+
+  useEffect(() => {
+    dispatch(subscribeGroups())
+  }, [dispatch, roomInfos])
+
 
   const handleLoadChat = (roomId: number, type: string) => {
     dispatch(setType(type))
@@ -250,3 +264,8 @@ const ChatPage: React.FC = () => {
 }
 
 export default ChatPage
+
+function subscribeGroups(): any {
+  throw new Error("Function not implemented.")
+}
+
