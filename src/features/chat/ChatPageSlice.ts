@@ -104,13 +104,14 @@ export const chatSlice = createAppSlice({
 
           const topic = "/group/" + roomId
           stompClient.subscribe(topic, (message: IMessage) => {
+            console.log("room: %s received message %s", state.currentRoomId, message.body)
             const arr = state.roomChatMap[roomId] ?? []
             const newChat = JSON.parse(message.body) as ChatInfo
             arr.push(newChat)
 
             state.roomChatMap[roomId] = arr.slice(-100)
 
-            if(state.currentRoomId === roomId){
+            if (state.currentRoomId === roomId) {
               state.chatInfoList.push(newChat)
             }
           })
@@ -128,13 +129,14 @@ export const chatSlice = createAppSlice({
 
           const topic = "/group/" + roomId
           stompClient.subscribe(topic, (message: IMessage) => {
+            console.log("room: %s received message %s", state.currentRoomId, message.body)
             const arr = state.roomChatMap[roomId] ?? []
             const newChat = JSON.parse(message.body) as ChatInfo
             arr.push(newChat)
 
             state.roomChatMap[roomId] = arr.slice(-100)
 
-            if(state.currentRoomId === roomId){
+            if (state.currentRoomId === roomId) {
               state.chatInfoList.push(newChat)
             }
           })

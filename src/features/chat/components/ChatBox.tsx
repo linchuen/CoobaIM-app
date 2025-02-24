@@ -53,9 +53,6 @@ const ChatBox: React.FC = () => {
           userId: tokenInfo.userId
         }),
       )
-      const webSocket = WebSocketManager.getInstance()
-  
-      webSocket.sendMessage("/app/sendToAll", { roomId: currentRoomId, message: "Hello", userId: tokenInfo.userId })
     }
   }
 
