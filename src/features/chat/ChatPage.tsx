@@ -32,6 +32,7 @@ import {
   setCurrentRoomId,
   setType,
   subscribeFriends,
+  subscribeGroups,
 } from "./ChatPageSlice"
 import { selectTokenInfo } from "../globalSlice"
 import ChatBox from "./components/ChatBox"
@@ -55,24 +56,27 @@ const ChatPage: React.FC = () => {
   const [tabIndex, setTabIndex] = useState(0)
 
   useEffect(() => {
-    const loadData = () => {
+    const loadData = (webSocket : WebSocketManager) => {
       dispatch(loadFriends({ friendUserIds: [] }))
       dispatch(loadGroups({ roomIds: [] }))
       dispatch(loadFriendApply(null))
+      webSocket.subscribe("/topic/broadcast", (message) => console.log(message.body))
     }
 
     if (tokenInfo) {
       const webSocket = WebSocketManager.getInstance()
-      webSocket.connect(tokenInfo.token, () => loadData())
+      webSocket.connect(tokenInfo.token, () => loadData(webSocket))
 
     }
   }, [dispatch, tokenInfo])
 
   useEffect(() => {
+    if (friendInfos.length === 0) return
     dispatch(subscribeFriends())
   }, [dispatch, friendInfos])
 
   useEffect(() => {
+    if (roomInfos.length === 0) return
     dispatch(subscribeGroups())
   }, [dispatch, roomInfos])
 
@@ -81,7 +85,6 @@ const ChatPage: React.FC = () => {
     dispatch(setType(type))
     dispatch(setCurrentRoomId(roomId))
     dispatch(loadChats({ roomId: roomId }))
-    WebSocketManager.getInstance().subscribe("/topic/broadcast", (message) => console.log(message.body))
   }
 
   const handleFriendApply = async (
@@ -264,8 +267,4 @@ const ChatPage: React.FC = () => {
 }
 
 export default ChatPage
-
-function subscribeGroups(): any {
-  throw new Error("Function not implemented.")
-}
 

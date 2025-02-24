@@ -93,7 +93,7 @@ export const chatSlice = createAppSlice({
       },
     ),
     subscribeFriends: create.reducer(
-      (state, action) => {
+      (state) => {
         if (config.useFake) return
 
         const stompClient = WebSocketManager.getInstance()
@@ -118,7 +118,7 @@ export const chatSlice = createAppSlice({
       },
     ),
     subscribeGroups: create.reducer(
-      (state, action) => {
+      (state) => {
         if (config.useFake) return
 
         const stompClient = WebSocketManager.getInstance()
