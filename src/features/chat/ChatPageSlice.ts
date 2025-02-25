@@ -27,6 +27,7 @@ import config from "../../app/config"
 type MessageState = {
   message: IMessage
   roomId: number
+  userId: number
 }
 
 type ChatState = {
@@ -99,7 +100,7 @@ export const chatSlice = createAppSlice({
     ),
     subscribeGroups: create.reducer(
       (state, action: PayloadAction<MessageState>) => {
-
+        const userId = action.payload.userId
         const roomId = action.payload.roomId
         const message = action.payload.message
 
@@ -110,7 +111,7 @@ export const chatSlice = createAppSlice({
 
         state.roomChatMap[roomId] = arr.slice(-100)
 
-        if (state.currentRoomId === roomId) {
+        if (state.currentRoomId === roomId && userId !== newChat.userId) {
           state.chatInfoList.push(newChat)
         }
         state.roomSubscribeSet.push(roomId)
@@ -141,9 +142,7 @@ export const chatSlice = createAppSlice({
         }
       },
       {
-        pending: state => {
-          state.status = "loading"
-        },
+        pending: () => { },
         fulfilled: (state, action: PayloadAction<ChatInfo>) => {
           state.status = "idle"
           const chatInfo = action.payload
@@ -152,9 +151,7 @@ export const chatSlice = createAppSlice({
           const chatInfoList = state.roomChatMap[chatInfo.roomId] ?? []
           chatInfoList.push(chatInfo)
         },
-        rejected: state => {
-          state.status = "failed"
-        },
+        rejected: () => { },
       },
     ),
     loadFriends: create.asyncThunk(
@@ -165,16 +162,12 @@ export const chatSlice = createAppSlice({
         return response.data?.friends ?? []
       },
       {
-        pending: state => {
-          state.status = "loading"
-        },
+        pending: () => { },
         fulfilled: (state, action) => {
           state.status = "idle"
           state.friendInfoList = action.payload
         },
-        rejected: state => {
-          state.status = "failed"
-        },
+        rejected: () => { },
       },
     ),
     loadGroups: create.asyncThunk(
@@ -185,16 +178,12 @@ export const chatSlice = createAppSlice({
         return response.data?.rooms ?? []
       },
       {
-        pending: state => {
-          state.status = "loading"
-        },
+        pending: () => { },
         fulfilled: (state, action) => {
           state.status = "idle"
           state.roomInfoList = action.payload
         },
-        rejected: state => {
-          state.status = "failed"
-        },
+        rejected: () => { },
       },
     ),
     loadFriendApply: create.asyncThunk(
@@ -205,16 +194,12 @@ export const chatSlice = createAppSlice({
         return response.data?.applicants
       },
       {
-        pending: state => {
-          state.status = "loading"
-        },
+        pending: () => { },
         fulfilled: (state, action) => {
           state.status = "idle"
           state.friendApplyInfoList = action.payload ?? []
         },
-        rejected: state => {
-          state.status = "failed"
-        },
+        rejected: () => { },
       },
     ),
     loadChats: create.asyncThunk(
@@ -241,9 +226,7 @@ export const chatSlice = createAppSlice({
         }
       },
       {
-        pending: state => {
-          state.status = "loading"
-        },
+        pending: () => { },
         fulfilled: (state, action) => {
           state.status = "idle"
           const chats = action.payload.chats
@@ -253,9 +236,7 @@ export const chatSlice = createAppSlice({
           state.roomChatLoaded.push(roomId)
           state.roomChatMap[roomId] = chats
         },
-        rejected: state => {
-          state.status = "failed"
-        },
+        rejected: () => { },
       },
     ),
   }),
@@ -277,7 +258,6 @@ export const {
   loadGroups,
   loadFriendApply,
   loadChats,
-  subscribeFriends,
   subscribeGroups,
   setType,
   setCurrentRoomId,

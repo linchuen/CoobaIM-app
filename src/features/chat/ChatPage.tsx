@@ -40,7 +40,7 @@ import AddFriendDiaLog from "./components/AddFriendDiaLog"
 import AddRoomDiaLog from "./components/AddRoomDiaLog"
 import { handleFetch } from "../../services/common"
 import { fetchPermitFriend } from "../../services/FriendApi"
-import type { ChatInfo, PermitFriendResponse } from "../../services/ResponseInterface"
+import type { PermitFriendResponse } from "../../services/ResponseInterface"
 import { WebSocketManager } from "../../services/websocketApi"
 import type { IMessage } from "@stomp/stompjs"
 
@@ -67,12 +67,11 @@ const ChatPage: React.FC = () => {
     if (tokenInfo) {
       const webSocket = WebSocketManager.getInstance()
       webSocket.connect(tokenInfo.token, () => loadData())
-
     }
   }, [dispatch, tokenInfo])
 
   useEffect(() => {
-    if (friendInfos.length === 0) return
+    if (friendInfos.length === 0 || !tokenInfo) return
 
     const stompClient = WebSocketManager.getInstance()
     friendInfos.forEach(friendInfo => {
@@ -80,14 +79,14 @@ const ChatPage: React.FC = () => {
       if (roomSubscribeSet.includes(roomId)) return
 
       stompClient.subscribe(("/group/" + roomId), (message: IMessage) => {
-        dispatch(subscribeGroups({ roomId: roomId, message: message }))
+        dispatch(subscribeGroups({ userId: tokenInfo.userId, roomId: roomId, message: message }))
       })
     })
 
-  }, [dispatch, friendInfos, roomSubscribeSet])
+  }, [dispatch, friendInfos, roomSubscribeSet, tokenInfo])
 
   useEffect(() => {
-    if (roomInfos.length === 0) return
+    if (roomInfos.length === 0 || !tokenInfo) return
 
     const stompClient = WebSocketManager.getInstance()
     roomInfos.forEach(roomInfo => {
@@ -95,10 +94,11 @@ const ChatPage: React.FC = () => {
       if (roomSubscribeSet.includes(roomId)) return
 
       stompClient.subscribe(("/group/" + roomId), (message: IMessage) => {
-        dispatch(subscribeGroups({ roomId: roomId, message: message }))
+        dispatch(subscribeGroups({ userId: tokenInfo.userId, roomId: roomId, message: message }))
       })
     })
-  }, [dispatch, roomInfos, roomSubscribeSet])
+
+  }, [dispatch, roomInfos, roomSubscribeSet, tokenInfo])
 
 
   const handleLoadChat = (roomId: number, type: string) => {

@@ -18,8 +18,6 @@ import { setIsLogin, setTokenInfo } from "../globalSlice"
 import { useAppDispatch } from "../../app/hooks"
 import { handleFetch } from "../../services/common"
 import type { LoginResponse } from "../../services/ResponseInterface"
-import config from "../../app/config"
-import { WebSocketManager } from "../../services/websocketApi"
 
 const LoginRegisterPage: React.FC = () => {
   const navigate = useNavigate()
