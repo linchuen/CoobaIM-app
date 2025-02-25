@@ -25,7 +25,7 @@ export class WebSocketManager {
         this.onConnectCallback = onConnect;
         this.onDisconnectCallback = onDisconnect;
 
-        if(config.useFake){
+        if (config.useFake) {
             if (this.onConnectCallback) {
                 this.onConnectCallback();
             }
@@ -36,7 +36,7 @@ export class WebSocketManager {
         this.stompClient = new Client({
             webSocketFactory: () => socket,
             reconnectDelay: 5000, // 自動重連間隔（5秒）
-            connectHeaders:{
+            connectHeaders: {
                 Authorization: `Bearer ${token}`
             }
         });
@@ -70,6 +70,8 @@ export class WebSocketManager {
     }
 
     public subscribe(destination: string, callback: (message: IMessage) => void): void {
+        if (config.useFake) return
+
         if (!this.stompClient || !this.stompClient.connected) {
             console.warn("⚠️ WebSocket is not connected. Cannot subscribe.");
             return;
@@ -80,6 +82,8 @@ export class WebSocketManager {
     }
 
     public sendMessage(destination: string, message: any): void {
+        if (config.useFake) return
+        
         if (!this.stompClient || !this.stompClient.connected) {
             console.warn("⚠️ WebSocket is not connected. Cannot send message.");
             return;

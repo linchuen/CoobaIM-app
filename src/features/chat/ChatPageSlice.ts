@@ -24,6 +24,11 @@ import type { IMessage } from "@stomp/stompjs"
 import { WebSocketManager } from "../../services/websocketApi"
 import config from "../../app/config"
 
+type MessageState = {
+  message: IMessage
+  roomId: number
+}
+
 type ChatState = {
   chats: ChatInfo[]
   roomId: number
@@ -92,55 +97,23 @@ export const chatSlice = createAppSlice({
         state.roomChatLoaded.push(action.payload)
       },
     ),
-    subscribeFriends: create.reducer(
-      (state) => {
-        if (config.useFake) return
-
-        const stompClient = WebSocketManager.getInstance()
-
-        state.friendInfoList.forEach(friendInfo => {
-          const roomId = friendInfo.roomId
-          if (state.roomSubscribeSet.includes(roomId)) return
-
-          const topic = "/group/" + roomId
-          stompClient.subscribe(topic, (message: IMessage) => {
-            console.log("room: %s received message %s", state.currentRoomId, message.body)
-            const arr = state.roomChatMap[roomId] ?? []
-            const newChat = JSON.parse(message.body) as ChatInfo
-            arr.push(newChat)
-
-            state.roomChatMap[roomId] = arr.slice(-100)
-
-            if (state.currentRoomId === roomId) {
-              state.chatInfoList.push(newChat)
-            }
-          })
-        })
-      },
-    ),
     subscribeGroups: create.reducer(
-      (state) => {
-        if (config.useFake) return
+      (state, action: PayloadAction<MessageState>) => {
 
-        const stompClient = WebSocketManager.getInstance()
-        state.roomInfoList.forEach(roomInfo => {
-          const roomId = roomInfo.id
-          if (state.roomSubscribeSet.includes(roomId)) return
+        const roomId = action.payload.roomId
+        const message = action.payload.message
 
-          const topic = "/group/" + roomId
-          stompClient.subscribe(topic, (message: IMessage) => {
-            console.log("room: %s received message %s", state.currentRoomId, message.body)
-            const arr = state.roomChatMap[roomId] ?? []
-            const newChat = JSON.parse(message.body) as ChatInfo
-            arr.push(newChat)
+        console.log("room: %s received message %s", roomId, message.body)
+        const arr = state.roomChatMap[roomId] ?? []
+        const newChat = JSON.parse(message.body) as ChatInfo
+        arr.push(newChat)
 
-            state.roomChatMap[roomId] = arr.slice(-100)
+        state.roomChatMap[roomId] = arr.slice(-100)
 
-            if (state.currentRoomId === roomId) {
-              state.chatInfoList.push(newChat)
-            }
-          })
-        })
+        if (state.currentRoomId === roomId) {
+          state.chatInfoList.push(newChat)
+        }
+        state.roomSubscribeSet.push(roomId)
       },
     ),
     sendMessage: create.asyncThunk(
@@ -292,6 +265,7 @@ export const chatSlice = createAppSlice({
     selectChatInfoList: state => state.chatInfoList,
     selectRoomChatMap: state => state.roomChatMap,
     selectRoomChatLoaded: state => state.roomChatLoaded,
+    selectRoomSubscribeSet: state => state.roomSubscribeSet,
     selectFriendApplyInfoList: state => state.friendApplyInfoList,
     selectStatus: state => state.status,
     selectCurrentRoomId: state => state.currentRoomId,
@@ -319,6 +293,7 @@ export const {
   selectChatInfoList,
   selectRoomChatMap,
   selectRoomChatLoaded,
+  selectRoomSubscribeSet,
   selectFriendApplyInfoList,
   selectStatus,
   selectCurrentRoomId,

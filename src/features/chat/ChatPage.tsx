@@ -29,9 +29,9 @@ import {
   selectFriendApplyInfoList,
   selectFriendInfoList,
   selectRoomInfoList,
+  selectRoomSubscribeSet,
   setCurrentRoomId,
   setType,
-  subscribeFriends,
   subscribeGroups,
 } from "./ChatPageSlice"
 import { selectTokenInfo } from "../globalSlice"
@@ -40,8 +40,9 @@ import AddFriendDiaLog from "./components/AddFriendDiaLog"
 import AddRoomDiaLog from "./components/AddRoomDiaLog"
 import { handleFetch } from "../../services/common"
 import { fetchPermitFriend } from "../../services/FriendApi"
-import type { PermitFriendResponse } from "../../services/ResponseInterface"
+import type { ChatInfo, PermitFriendResponse } from "../../services/ResponseInterface"
 import { WebSocketManager } from "../../services/websocketApi"
+import type { IMessage } from "@stomp/stompjs"
 
 
 const ChatPage: React.FC = () => {
@@ -49,6 +50,7 @@ const ChatPage: React.FC = () => {
   const friendApplyInfos = useAppSelector(selectFriendApplyInfoList)
   const friendInfos = useAppSelector(selectFriendInfoList)
   const roomInfos = useAppSelector(selectRoomInfoList)
+  const roomSubscribeSet = useAppSelector(selectRoomSubscribeSet)
   const tokenInfo = useAppSelector(selectTokenInfo)
   const [openAddFriend, setOpenAddFriend] = useState(false)
   const [openAddRoom, setOpenAddRoom] = useState(false)
@@ -71,13 +73,32 @@ const ChatPage: React.FC = () => {
 
   useEffect(() => {
     if (friendInfos.length === 0) return
-    dispatch(subscribeFriends())
-  }, [dispatch, friendInfos])
+
+    const stompClient = WebSocketManager.getInstance()
+    friendInfos.forEach(friendInfo => {
+      const roomId = friendInfo.roomId
+      if (roomSubscribeSet.includes(roomId)) return
+
+      stompClient.subscribe(("/group/" + roomId), (message: IMessage) => {
+        dispatch(subscribeGroups({ roomId: roomId, message: message }))
+      })
+    })
+
+  }, [dispatch, friendInfos, roomSubscribeSet])
 
   useEffect(() => {
     if (roomInfos.length === 0) return
-    dispatch(subscribeGroups())
-  }, [dispatch, roomInfos])
+
+    const stompClient = WebSocketManager.getInstance()
+    roomInfos.forEach(roomInfo => {
+      const roomId = roomInfo.id
+      if (roomSubscribeSet.includes(roomId)) return
+
+      stompClient.subscribe(("/group/" + roomId), (message: IMessage) => {
+        dispatch(subscribeGroups({ roomId: roomId, message: message }))
+      })
+    })
+  }, [dispatch, roomInfos, roomSubscribeSet])
 
 
   const handleLoadChat = (roomId: number, type: string) => {
