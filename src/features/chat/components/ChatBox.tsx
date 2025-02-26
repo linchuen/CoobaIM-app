@@ -31,7 +31,6 @@ import {
   sendMessage,
 } from "../ChatPageSlice"
 import { selectTokenInfo } from "../../globalSlice"
-import { WebSocketManager } from "../../../services/websocketApi"
 
 const ChatBox: React.FC = () => {
   const dispatch = useAppDispatch()
@@ -53,7 +52,9 @@ const ChatBox: React.FC = () => {
           userId: tokenInfo.userId
         }),
       )
+      inputRef.current.value = ""
     }
+
   }
 
   const handleScroll = useCallback(() => {
@@ -206,6 +207,12 @@ const ChatBox: React.FC = () => {
             bgcolor: "#0d1117",
             borderRadius: 2,
             input: { color: "white" },
+          }}
+          onKeyDown={(event) => {
+            if (event.key === "Enter") {
+              event.preventDefault();
+              handleSendMessage()
+            }
           }}
         />
         <Button

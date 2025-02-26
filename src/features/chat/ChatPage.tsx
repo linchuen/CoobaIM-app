@@ -58,15 +58,18 @@ const ChatPage: React.FC = () => {
   const [tabIndex, setTabIndex] = useState(0)
 
   useEffect(() => {
-    const loadData = () => {
+    const loadData = (webSocket: WebSocketManager) => {
       dispatch(loadFriends({ friendUserIds: [] }))
       dispatch(loadGroups({ roomIds: [] }))
       dispatch(loadFriendApply(null))
+
+      webSocket.subscribe("addRoom")
+      webSocket.subscribe("friendPermit")
     }
 
     if (tokenInfo) {
       const webSocket = WebSocketManager.getInstance()
-      webSocket.connect(tokenInfo.token, () => loadData())
+      webSocket.connect(tokenInfo.token, () => loadData(webSocket))
     }
   }, [dispatch, tokenInfo])
 
