@@ -21,6 +21,7 @@ import { Chat } from "@mui/icons-material"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
 import {
   addFriend,
+  addRoom,
   loadChats,
   loadFriendApply,
   loadFriends,
@@ -40,7 +41,7 @@ import AddFriendDiaLog from "./components/AddFriendDiaLog"
 import AddRoomDiaLog from "./components/AddRoomDiaLog"
 import { handleFetch } from "../../services/common"
 import { fetchPermitFriend } from "../../services/FriendApi"
-import type { PermitFriendResponse } from "../../services/ResponseInterface"
+import type { FriendInfo, PermitFriendResponse, RoomInfo } from "../../services/ResponseInterface"
 import { WebSocketManager } from "../../services/websocketApi"
 import type { IMessage } from "@stomp/stompjs"
 
@@ -58,18 +59,26 @@ const ChatPage: React.FC = () => {
   const [tabIndex, setTabIndex] = useState(0)
 
   useEffect(() => {
+    const addFriendEvent = (message: IMessage) => {
+      const newFriend = JSON.parse(message.body) as FriendInfo
+      dispatch(addFriend(newFriend))
+    }
+    const addRoomEvent = (message: IMessage) => {
+      const newRoom = JSON.parse(message.body) as RoomInfo
+      dispatch(addRoom(newRoom))
+    }
     const loadData = (webSocket: WebSocketManager) => {
       dispatch(loadFriends({ friendUserIds: [] }))
       dispatch(loadGroups({ roomIds: [] }))
       dispatch(loadFriendApply(null))
 
-      webSocket.subscribe("addRoom")
-      webSocket.subscribe("friendPermit")
+      webSocket.subscribe("/user/queue/friend_apply", addFriendEvent)
+      webSocket.subscribe("/user/queue/room_add", addRoomEvent)
     }
 
     if (tokenInfo) {
       const webSocket = WebSocketManager.getInstance()
-      webSocket.connect(tokenInfo.token, () => loadData(webSocket))
+      webSocket.connect(tokenInfo.userId, tokenInfo.token, () => loadData(webSocket))
     }
   }, [dispatch, tokenInfo])
 

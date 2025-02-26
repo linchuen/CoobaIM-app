@@ -21,7 +21,7 @@ export class WebSocketManager {
         return WebSocketManager.instance;
     }
 
-    public connect(token: string, onConnect?: () => void, onDisconnect?: () => void): void {
+    public connect(userId: number, token: string, onConnect?: () => void, onDisconnect?: () => void): void {
         this.onConnectCallback = onConnect;
         this.onDisconnectCallback = onDisconnect;
 
@@ -32,7 +32,7 @@ export class WebSocketManager {
             return
         }
 
-        const socket = new SockJS(config.apiUrl + this.endpoint);
+        const socket = new SockJS(config.apiUrl + this.endpoint + "?" + userId);
         this.stompClient = new Client({
             webSocketFactory: () => socket,
             reconnectDelay: 5000, // 自動重連間隔（5秒）
@@ -83,7 +83,7 @@ export class WebSocketManager {
 
     public sendMessage(destination: string, message: any): void {
         if (config.useFake) return
-        
+
         if (!this.stompClient || !this.stompClient.connected) {
             console.warn("⚠️ WebSocket is not connected. Cannot send message.");
             return;
