@@ -43,6 +43,7 @@ type FriendState = {
   roomChatMap: Record<number, ChatInfo[]>
   roomSubscribeSet: number[]
   roomChatLoaded: number[]
+  eventSubscribeSet: string[]
   status: string
   type: string
   currentRoomId: number
@@ -56,6 +57,7 @@ const initialState: FriendState = {
   roomChatMap: {},
   roomSubscribeSet: [],
   roomChatLoaded: [],
+  eventSubscribeSet: [],
   status: "",
   type: "",
   currentRoomId: 0,
@@ -99,6 +101,11 @@ export const chatSlice = createAppSlice({
     setRoomChatLoaded: create.reducer(
       (state, action: PayloadAction<number>) => {
         state.roomChatLoaded.push(action.payload)
+      },
+    ),
+    addSubscribeEvent: create.reducer(
+      (state, action: PayloadAction<string>) => {
+        state.eventSubscribeSet.push(action.payload)
       },
     ),
     subscribeGroups: create.reducer(
@@ -251,6 +258,7 @@ export const chatSlice = createAppSlice({
     selectRoomChatLoaded: state => state.roomChatLoaded,
     selectRoomSubscribeSet: state => state.roomSubscribeSet,
     selectFriendApplyInfoList: state => state.friendApplyInfoList,
+    selectEventSubscribeSet: state => state.eventSubscribeSet,
     selectStatus: state => state.status,
     selectCurrentRoomId: state => state.currentRoomId,
   },
@@ -268,6 +276,7 @@ export const {
   addRoom,
   addFriend,
   addFriendApply,
+  addSubscribeEvent,
   removeFriendApply,
 } = chatSlice.actions
 
@@ -279,6 +288,7 @@ export const {
   selectRoomChatLoaded,
   selectRoomSubscribeSet,
   selectFriendApplyInfoList,
+  selectEventSubscribeSet,
   selectStatus,
   selectCurrentRoomId,
 } = chatSlice.selectors
