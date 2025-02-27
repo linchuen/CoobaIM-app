@@ -21,12 +21,12 @@ import { Chat } from "@mui/icons-material"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
 import {
   addFriend,
-  addRoom,
+  addFriendApply,
   loadChats,
   loadFriendApply,
   loadFriends,
   loadGroups,
-  removeApply,
+  removeFriendApply,
   selectFriendApplyInfoList,
   selectFriendInfoList,
   selectRoomInfoList,
@@ -41,7 +41,7 @@ import AddFriendDiaLog from "./components/AddFriendDiaLog"
 import AddRoomDiaLog from "./components/AddRoomDiaLog"
 import { handleFetch } from "../../services/common"
 import { fetchPermitFriend } from "../../services/FriendApi"
-import type { FriendInfo, PermitFriendResponse, RoomInfo } from "../../services/ResponseInterface"
+import type { FriendApplyInfo, FriendInfo, PermitFriendResponse, RoomInfo } from "../../services/ResponseInterface"
 import { WebSocketManager } from "../../services/websocketApi"
 import type { IMessage } from "@stomp/stompjs"
 
@@ -59,21 +59,21 @@ const ChatPage: React.FC = () => {
   const [tabIndex, setTabIndex] = useState(0)
 
   useEffect(() => {
+    const addFriendApplyEvent = (message: IMessage) => {
+      const newFriendApply = JSON.parse(message.body) as FriendApplyInfo
+      dispatch(addFriendApply(newFriendApply))
+    }
     const addFriendEvent = (message: IMessage) => {
       const newFriend = JSON.parse(message.body) as FriendInfo
       dispatch(addFriend(newFriend))
-    }
-    const addRoomEvent = (message: IMessage) => {
-      const newRoom = JSON.parse(message.body) as RoomInfo
-      dispatch(addRoom(newRoom))
     }
     const loadData = (webSocket: WebSocketManager) => {
       dispatch(loadFriends({ friendUserIds: [] }))
       dispatch(loadGroups({ roomIds: [] }))
       dispatch(loadFriendApply(null))
 
-      webSocket.subscribe("/user/queue/friend_apply", addFriendEvent)
-      webSocket.subscribe("/user/queue/room_add", addRoomEvent)
+      webSocket.subscribe("/user/queue/friend_apply", addFriendApplyEvent)
+      webSocket.subscribe("/user/queue/friend_add", addFriendEvent)
     }
 
     if (tokenInfo) {
@@ -134,7 +134,7 @@ const ChatPage: React.FC = () => {
         isPermit: isPermit,
       }, tokenInfo.token),
       data => {
-        dispatch(removeApply(applyUserId))
+        dispatch(removeFriendApply(applyUserId))
         if (isPermit) {
           dispatch(
             addFriend({

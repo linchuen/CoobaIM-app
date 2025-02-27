@@ -82,7 +82,10 @@ export const chatSlice = createAppSlice({
     setCurrentRoomId: create.reducer((state, action: PayloadAction<number>) => {
       state.currentRoomId = action.payload
     }),
-    removeApply: create.reducer((state, action: PayloadAction<number>) => {
+    addFriendApply: create.reducer((state, action: PayloadAction<FriendApplyInfo>) => {
+      state.friendApplyInfoList.push(action.payload)
+    }),
+    removeFriendApply: create.reducer((state, action: PayloadAction<number>) => {
       state.friendApplyInfoList = state.friendApplyInfoList.filter(
         info => info.applyId !== action.payload,
       )
@@ -264,7 +267,8 @@ export const {
   sendMessage,
   addRoom,
   addFriend,
-  removeApply,
+  addFriendApply,
+  removeFriendApply,
 } = chatSlice.actions
 
 export const {
