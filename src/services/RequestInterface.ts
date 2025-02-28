@@ -36,6 +36,7 @@ export interface RegisterRequest {
 export interface RoomRequest {
     roomId?: number;
     name?: string;
+    userIds?: number[];
 }
 
 export interface RoomUserRequest {

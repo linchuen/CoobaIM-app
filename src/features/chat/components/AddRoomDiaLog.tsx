@@ -24,21 +24,21 @@ import { handleFetch } from "../../../services/common"
 import type {
   BuildRoomResponse,
 } from "../../../services/ResponseInterface"
-import {addRoom} from "../ChatPageSlice";
+import { addRoom, selectFriendInfoList } from "../ChatPageSlice";
 
 interface AddRoomDiaLogProps {
   open: boolean
   onClose: () => void
 }
 
-const friends = ["Alice", "Bob", "Charlie", "David", "Emma"]
 
 const AddRoomDiaLog: React.FC<AddRoomDiaLogProps> = ({ open, onClose }) => {
   const dispatch = useAppDispatch()
   const inputRef = useRef<HTMLInputElement>(null)
   const tokenInfo = useAppSelector(selectTokenInfo)
+  const friendInfoList = useAppSelector(selectFriendInfoList)
   const [openCreateAlert, setOpenCreateAlert] = useState(false)
-  const [selectedFriends, setSelectedFriends] = useState<string[]>([])
+  const [selectedFriends, setSelectedFriends] = useState<number[]>([])
 
   const handleCreateRoom = async () => {
     if (inputRef.current && tokenInfo) {
@@ -48,6 +48,7 @@ const AddRoomDiaLog: React.FC<AddRoomDiaLogProps> = ({ open, onClose }) => {
         dispatch,
         fetchBuildRoom({
           name: roomName,
+          userIds: selectedFriends
         }),
         data => {
           dispatch(addRoom({
@@ -55,13 +56,14 @@ const AddRoomDiaLog: React.FC<AddRoomDiaLogProps> = ({ open, onClose }) => {
             name: roomName,
           }))
           setOpenCreateAlert(true)
+          setSelectedFriends([])
           onClose()
         },
       )
     }
   }
 
-  const handleToggle = (friend: string) => {
+  const handleToggle = (friend: number) => {
     setSelectedFriends(prev =>
       prev.includes(friend)
         ? prev.filter(f => f !== friend)
@@ -116,10 +118,10 @@ const AddRoomDiaLog: React.FC<AddRoomDiaLogProps> = ({ open, onClose }) => {
           {/* 好友列表 */}
           <Typography variant="h6">選擇好友：</Typography>
           <List sx={{ columns: { xs: 1, sm: 2, md: 3 }, gap: 1 }}>
-            {friends.map(friend => (
-              <ListItem key={friend} onClick={() => handleToggle(friend)}>
-                <Checkbox checked={selectedFriends.includes(friend)} />
-                <ListItemText primary={friend} />
+            {friendInfoList.map(info => (
+              <ListItem key={info.friendUserId} onClick={() => handleToggle(info.friendUserId)}>
+                <Checkbox checked={selectedFriends.includes(info.friendUserId)} />
+                <ListItemText primary={info.showName} />
               </ListItem>
             ))}
           </List>

@@ -75,7 +75,7 @@ const FloatingModal: React.FC = () => {
           </Box>
           <Box sx={{ display: "flex", justifyContent: "space-between", mt: 3 }}>
             <Button variant="contained" color="primary" onClick={addFriendApplyEvent}>送出好友</Button>
-            <Button variant="contained" color="secondary" onClick={addFriendEvent}>送出好友</Button>
+            <Button variant="contained" color="secondary" onClick={addFriendEvent}>添加好友</Button>
             <Button variant="contained" color="warning">添加成員</Button>
           </Box>
         </Paper>

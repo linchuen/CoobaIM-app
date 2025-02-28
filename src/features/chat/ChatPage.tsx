@@ -22,6 +22,7 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks"
 import {
   addFriend,
   addFriendApply,
+  addRoom,
   loadChats,
   loadFriendApply,
   loadFriends,
@@ -67,6 +68,10 @@ const ChatPage: React.FC = () => {
       const newFriend = JSON.parse(message.body) as FriendInfo
       dispatch(addFriend(newFriend))
     }
+    const addRoomEvent = (message: IMessage) => {
+      const newRoom = JSON.parse(message.body) as RoomInfo
+      dispatch(addRoom(newRoom))
+    }
     const loadData = (webSocket: WebSocketManager) => {
       dispatch(loadFriends({ friendUserIds: [] }))
       dispatch(loadGroups({ roomIds: [] }))
@@ -74,6 +79,7 @@ const ChatPage: React.FC = () => {
 
       webSocket.subscribe("/user/queue/friend_apply", addFriendApplyEvent)
       webSocket.subscribe("/user/queue/friend_add", addFriendEvent)
+      webSocket.subscribe("/user/queue/room_add", addRoomEvent)
     }
 
     if (tokenInfo) {
