@@ -49,11 +49,11 @@ const AddRoomDiaLog: React.FC<AddRoomDiaLogProps> = ({ open, onClose }) => {
         fetchBuildRoom({
           name: roomName,
           userIds: selectedFriends
-        }),
+        }, tokenInfo.token),
         data => {
           dispatch(addRoom({
             id: data.roomId,
-            name: roomName,
+            name: roomName
           }))
           setOpenCreateAlert(true)
           setSelectedFriends([])

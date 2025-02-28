@@ -22,6 +22,7 @@ import {
   Call,
   DateRange,
 } from "@mui/icons-material"
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 
 import { useAppDispatch, useAppSelector } from "../../../app/hooks"
@@ -136,6 +137,9 @@ const ChatBox: React.FC = () => {
           </IconButton>
           <IconButton sx={{ color: "white" }}>
             <DateRange />
+          </IconButton>
+          <IconButton sx={{ color: "white" }}>
+            <PersonAddIcon />
           </IconButton>
         </Toolbar>
       </AppBar>

@@ -1,5 +1,5 @@
 import type React from "react"
-import { useState } from "react"
+import { useRef } from "react"
 import {
   Button,
   Dialog,
@@ -10,15 +10,11 @@ import {
 } from "@mui/material"
 import { fetchRegisterUser } from "../../../services/UserAPI"
 import { useAppDispatch } from "../../../app/hooks"
-import {
-  setUser,
-} from "../../globalSlice"
 import { handleFetch } from "../../../services/common"
 import type {
   RegisterResponse,
 } from "../../../services/ResponseInterface"
 
-// 使用 React.FC 來定義函數式組件
 interface RegisterDialogProps {
   open: boolean
   onClose: () => void
@@ -29,30 +25,25 @@ export const RegisterDiaLog: React.FC<RegisterDialogProps> = ({
   onClose,
 }) => {
   const dispatch = useAppDispatch()
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [name, setName] = useState("")
-  const [phone, setPhone] = useState("")
+  const email = useRef<HTMLInputElement>(null)
+  const password = useRef<HTMLInputElement>(null)
+  const name = useRef<HTMLInputElement>(null)
+  const phone = useRef<HTMLInputElement>(null)
 
-  const handleRegister = () =>
+  const handleRegister = () => {
+    if (!name.current || !email.current || !password.current) return
     handleFetch<RegisterResponse>(
       dispatch,
       fetchRegisterUser({
-        name: name,
-        email: email,
-        password: password,
+        name: name.current.value,
+        email: email.current.value,
+        password: password.current.value,
       }),
       data => {
-        dispatch(
-          setUser({
-            id: data.userId,
-            name: name,
-            email: email,
-          }),
-        )
         onClose()
       },
     )
+  }
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
@@ -64,7 +55,6 @@ export const RegisterDiaLog: React.FC<RegisterDialogProps> = ({
           variant="outlined"
           margin="normal"
           value={name}
-          onChange={e => setName(e.target.value)}
         />
         <TextField
           fullWidth
@@ -72,7 +62,6 @@ export const RegisterDiaLog: React.FC<RegisterDialogProps> = ({
           variant="outlined"
           margin="normal"
           value={email}
-          onChange={e => setEmail(e.target.value)}
         />
         <TextField
           fullWidth
@@ -80,7 +69,6 @@ export const RegisterDiaLog: React.FC<RegisterDialogProps> = ({
           variant="outlined"
           margin="normal"
           value={phone}
-          onChange={e => setPhone(e.target.value)}
         />
         <TextField
           fullWidth
@@ -89,7 +77,6 @@ export const RegisterDiaLog: React.FC<RegisterDialogProps> = ({
           variant="outlined"
           margin="normal"
           value={password}
-          onChange={e => setPassword(e.target.value)}
         />
       </DialogContent>
       <DialogActions>
