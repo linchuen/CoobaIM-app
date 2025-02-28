@@ -21,12 +21,7 @@ import { Chat } from "@mui/icons-material"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
 import {
   addFriend,
-  addFriendApply,
-  addRoom,
   loadChats,
-  loadFriendApply,
-  loadFriends,
-  loadGroups,
   removeFriendApply,
   selectFriendApplyInfoList,
   selectFriendInfoList,
@@ -40,9 +35,10 @@ import { selectTokenInfo } from "../globalSlice"
 import ChatBox from "./components/ChatBox"
 import AddFriendDiaLog from "./components/AddFriendDiaLog"
 import AddRoomDiaLog from "./components/AddRoomDiaLog"
+import WebSocket from "./components/WebSocket"
 import { handleFetch } from "../../services/common"
 import { fetchPermitFriend } from "../../services/FriendApi"
-import type { FriendApplyInfo, FriendInfo, PermitFriendResponse, RoomInfo } from "../../services/ResponseInterface"
+import type { PermitFriendResponse } from "../../services/ResponseInterface"
 import { WebSocketManager } from "../../services/websocketApi"
 import type { IMessage } from "@stomp/stompjs"
 
@@ -58,35 +54,6 @@ const ChatPage: React.FC = () => {
   const [openAddRoom, setOpenAddRoom] = useState(false)
   const [openDialog, setOpenDialog] = useState(false)
   const [tabIndex, setTabIndex] = useState(0)
-
-  useEffect(() => {
-    const addFriendApplyEvent = (message: IMessage) => {
-      const newFriendApply = JSON.parse(message.body) as FriendApplyInfo
-      dispatch(addFriendApply(newFriendApply))
-    }
-    const addFriendEvent = (message: IMessage) => {
-      const newFriend = JSON.parse(message.body) as FriendInfo
-      dispatch(addFriend(newFriend))
-    }
-    const addRoomEvent = (message: IMessage) => {
-      const newRoom = JSON.parse(message.body) as RoomInfo
-      dispatch(addRoom(newRoom))
-    }
-    const loadData = (webSocket: WebSocketManager) => {
-      dispatch(loadFriends({ friendUserIds: [] }))
-      dispatch(loadGroups({ roomIds: [] }))
-      dispatch(loadFriendApply(null))
-
-      webSocket.subscribe("/user/queue/friend_apply", addFriendApplyEvent)
-      webSocket.subscribe("/user/queue/friend_add", addFriendEvent)
-      webSocket.subscribe("/user/queue/room_add", addRoomEvent)
-    }
-
-    if (tokenInfo) {
-      const webSocket = WebSocketManager.getInstance()
-      webSocket.connect(tokenInfo.userId, tokenInfo.token, () => loadData(webSocket))
-    }
-  }, [dispatch, tokenInfo])
 
   useEffect(() => {
     if (friendInfos.length === 0 || !tokenInfo) return
@@ -204,103 +171,106 @@ const ChatPage: React.FC = () => {
   })
 
   return (
-    <Box display="flex" height="100vh" bgcolor="#0d1117" color="white">
-      {/* Chat List */}
-      <Paper
-        sx={{
-          width: 300,
-          padding: 2,
-          overflow: "auto",
-          bgcolor: "#161b22",
-          color: "white",
-          boxShadow: 3,
-          margin: 2,
-          borderRadius: 2,
-        }}
-      >
-        {/* Friend Request Box */}
-        <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Typography variant="h6">Friend Apply</Typography>
-        </Box>
-        <List>{friendApplyList}</List>
-
-        <Divider sx={{ my: 2, bgcolor: "#282c34" }} />
-
-        {/* Personal Chats Header */}
-        <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Typography variant="h6">Personal Chats</Typography>
-          <Box>
-            <IconButton
-              sx={{ color: "white" }}
-              size="small"
-              onClick={() => setOpenAddFriend(true)}
-            >
-              <AddIcon />
-            </IconButton>
-            <IconButton
-              sx={{ color: "white" }}
-              size="small"
-              onClick={() => setOpenDialog(true)}
-            >
-              <VisibilityIcon />
-            </IconButton>
-          </Box>
-        </Box>
-        <List>{friendList.slice(0, 6)}</List>
-        <Divider sx={{ my: 2, bgcolor: "#282c34" }} />
-
-        {/* Group Chats Header */}
-        <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Typography variant="h6">Group Chats</Typography>
-          <Box>
-            <IconButton
-              sx={{ color: "white" }}
-              size="small"
-              onClick={() => setOpenAddRoom(true)}
-            >
-              <AddIcon />
-            </IconButton>
-            <IconButton
-              sx={{ color: "white" }}
-              size="small"
-              onClick={() => setOpenDialog(true)}
-            >
-              <VisibilityIcon />
-            </IconButton>
-          </Box>
-        </Box>
-        <List>{roomList.slice(0, 6)}</List>
-      </Paper>
-
-      <AddFriendDiaLog
-        open={openAddFriend}
-        onClose={() => setOpenAddFriend(false)}
-      />
-
-      <AddRoomDiaLog open={openAddRoom} onClose={() => setOpenAddRoom(false)} />
-
-      {/* Dialog for viewing all contacts and chats */}
-      <Dialog
-        open={openDialog}
-        onClose={() => setOpenDialog(false)}
-        fullWidth
-        maxWidth="sm"
-      >
-        <Tabs
-          value={tabIndex}
-          onChange={(event: any, newValue: number) => setTabIndex(newValue)}
-          variant="fullWidth"
+    <>
+      <WebSocket />
+      <Box display="flex" height="100vh" bgcolor="#0d1117" color="white">
+        {/* Chat List */}
+        <Paper
+          sx={{
+            width: 300,
+            padding: 2,
+            overflow: "auto",
+            bgcolor: "#161b22",
+            color: "white",
+            boxShadow: 3,
+            margin: 2,
+            borderRadius: 2,
+          }}
         >
-          <Tab label="我的好友" />
-          <Tab label="我的聊天室" />
-        </Tabs>
-        <Box p={2}>
-          {tabIndex === 0 ? <List>{friendList}</List> : <List>{roomList}</List>}
-        </Box>
-      </Dialog>
+          {/* Friend Request Box */}
+          <Box display="flex" justifyContent="space-between" alignItems="center">
+            <Typography variant="h6">Friend Apply</Typography>
+          </Box>
+          <List>{friendApplyList}</List>
 
-      <ChatBox />
-    </Box>
+          <Divider sx={{ my: 2, bgcolor: "#282c34" }} />
+
+          {/* Personal Chats Header */}
+          <Box display="flex" justifyContent="space-between" alignItems="center">
+            <Typography variant="h6">Personal Chats</Typography>
+            <Box>
+              <IconButton
+                sx={{ color: "white" }}
+                size="small"
+                onClick={() => setOpenAddFriend(true)}
+              >
+                <AddIcon />
+              </IconButton>
+              <IconButton
+                sx={{ color: "white" }}
+                size="small"
+                onClick={() => setOpenDialog(true)}
+              >
+                <VisibilityIcon />
+              </IconButton>
+            </Box>
+          </Box>
+          <List>{friendList.slice(0, 6)}</List>
+          <Divider sx={{ my: 2, bgcolor: "#282c34" }} />
+
+          {/* Group Chats Header */}
+          <Box display="flex" justifyContent="space-between" alignItems="center">
+            <Typography variant="h6">Group Chats</Typography>
+            <Box>
+              <IconButton
+                sx={{ color: "white" }}
+                size="small"
+                onClick={() => setOpenAddRoom(true)}
+              >
+                <AddIcon />
+              </IconButton>
+              <IconButton
+                sx={{ color: "white" }}
+                size="small"
+                onClick={() => setOpenDialog(true)}
+              >
+                <VisibilityIcon />
+              </IconButton>
+            </Box>
+          </Box>
+          <List>{roomList.slice(0, 6)}</List>
+        </Paper>
+
+        <AddFriendDiaLog
+          open={openAddFriend}
+          onClose={() => setOpenAddFriend(false)}
+        />
+
+        <AddRoomDiaLog open={openAddRoom} onClose={() => setOpenAddRoom(false)} />
+
+        {/* Dialog for viewing all contacts and chats */}
+        <Dialog
+          open={openDialog}
+          onClose={() => setOpenDialog(false)}
+          fullWidth
+          maxWidth="sm"
+        >
+          <Tabs
+            value={tabIndex}
+            onChange={(event: any, newValue: number) => setTabIndex(newValue)}
+            variant="fullWidth"
+          >
+            <Tab label="我的好友" />
+            <Tab label="我的聊天室" />
+          </Tabs>
+          <Box p={2}>
+            {tabIndex === 0 ? <List>{friendList}</List> : <List>{roomList}</List>}
+          </Box>
+        </Dialog>
+
+        <ChatBox />
+      </Box>
+    </>
   )
 }
 
