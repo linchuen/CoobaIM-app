@@ -47,6 +47,7 @@ type FriendState = {
   status: string
   type: string
   currentRoomId: number
+  currentRoomName: string
 }
 
 const initialState: FriendState = {
@@ -61,6 +62,7 @@ const initialState: FriendState = {
   status: "",
   type: "",
   currentRoomId: 0,
+  currentRoomName: ""
 }
 
 function getPublishType(chatType: string): string {
@@ -83,6 +85,9 @@ export const chatSlice = createAppSlice({
     }),
     setCurrentRoomId: create.reducer((state, action: PayloadAction<number>) => {
       state.currentRoomId = action.payload
+    }),
+    setCurrentRoomName: create.reducer((state, action: PayloadAction<string>) => {
+      state.currentRoomName = action.payload
     }),
     addFriendApply: create.reducer((state, action: PayloadAction<FriendApplyInfo>) => {
       state.friendApplyInfoList.push(action.payload)
@@ -261,6 +266,7 @@ export const chatSlice = createAppSlice({
     selectEventSubscribeSet: state => state.eventSubscribeSet,
     selectStatus: state => state.status,
     selectCurrentRoomId: state => state.currentRoomId,
+    selectCurrentRoomName: state => state.currentRoomName,
   },
 })
 
@@ -272,6 +278,7 @@ export const {
   subscribeGroups,
   setType,
   setCurrentRoomId,
+  setCurrentRoomName,
   sendMessage,
   addRoom,
   addFriend,
@@ -291,4 +298,5 @@ export const {
   selectEventSubscribeSet,
   selectStatus,
   selectCurrentRoomId,
+  selectCurrentRoomName,
 } = chatSlice.selectors

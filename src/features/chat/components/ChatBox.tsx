@@ -12,6 +12,7 @@ import {
   TextField,
   Alert,
   Snackbar,
+  Typography,
 } from "@mui/material"
 import {
   Search,
@@ -21,6 +22,7 @@ import {
   VideoCall,
   Call,
   DateRange,
+  ArrowBack,
 } from "@mui/icons-material"
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
@@ -29,17 +31,21 @@ import { useAppDispatch, useAppSelector } from "../../../app/hooks"
 import {
   selectChatInfoList,
   selectCurrentRoomId,
+  selectCurrentRoomName,
   sendMessage,
 } from "../ChatPageSlice"
 import { selectTokenInfo } from "../../globalSlice"
+import { useNavigate } from "react-router-dom"
 
 const ChatBox: React.FC = () => {
+  const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const inputRef = useRef<HTMLInputElement>(null)
   const chatContainerRef = useRef<HTMLDivElement>(null)
   const chatInfos = useAppSelector(selectChatInfoList)
   const tokenInfo = useAppSelector(selectTokenInfo)
   const currentRoomId = useAppSelector(selectCurrentRoomId)
+  const roomName = useAppSelector(selectCurrentRoomName)
   const [open, setOpen] = useState(false)
 
   const handleSendMessage = () => {
@@ -121,6 +127,16 @@ const ChatBox: React.FC = () => {
         color="default"
         sx={{ mb: 1, bgcolor: "#161b22", borderRadius: 2 }}
       >
+        <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Box display="flex" alignItems="center" gap={1}>
+            <IconButton sx={{ color: "white" }} onClick={() => navigate("/")}>
+              <ArrowBack />
+            </IconButton>
+            <Typography variant="h6" color="white">
+              {roomName}
+            </Typography>
+          </Box>
+        </Toolbar>
         <Toolbar>
           <InputBase
             placeholder="Search messages..."

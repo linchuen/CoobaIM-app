@@ -28,6 +28,7 @@ import {
   selectRoomInfoList,
   selectRoomSubscribeSet,
   setCurrentRoomId,
+  setCurrentRoomName,
   setType,
   subscribeGroups,
 } from "./ChatPageSlice"
@@ -86,9 +87,10 @@ const ChatPage: React.FC = () => {
   }, [dispatch, roomInfos, roomSubscribeSet, tokenInfo])
 
 
-  const handleLoadChat = (roomId: number, type: string) => {
+  const handleLoadChat = (roomId: number, name: string, type: string) => {
     dispatch(setType(type))
     dispatch(setCurrentRoomId(roomId))
+    dispatch(setCurrentRoomName(name))
     dispatch(loadChats({ roomId: roomId }))
   }
 
@@ -148,7 +150,10 @@ const ChatPage: React.FC = () => {
       <ListItem
         sx={{ marginBottom: 1 }}
         key={"friend_" + info.friendUserId}
-        onClick={() => handleLoadChat(info.roomId, "user")}
+        onClick={() => {
+          handleLoadChat(info.roomId, info.showName, "user")
+          setOpenDialog(false)
+        }}
       >
         <Avatar sx={{ marginRight: 2 }}>{info.showName.charAt(0)}</Avatar>
         <ListItemText primary={info.showName} secondary={info.friendUserId} />
@@ -160,7 +165,10 @@ const ChatPage: React.FC = () => {
     return (
       <ListItem
         key={"room_" + info.id}
-        onClick={() => handleLoadChat(info.id, "room")}
+        onClick={() => {
+          handleLoadChat(info.id, info.name, "room")
+          setOpenDialog(false)
+        }}
       >
         <Avatar sx={{ marginRight: 2, bgcolor: "#3f51b5" }}>
           <Chat />
@@ -187,6 +195,16 @@ const ChatPage: React.FC = () => {
             borderRadius: 2,
           }}
         >
+          {/* Person Info Box */}
+          <Box display="flex" alignItems="center" mb={2}>
+            <Avatar src="/path-to-avatar.jpg" sx={{ width: 50, height: 50, mr: 2 }} />
+            <Box>
+              <Typography variant="h6">{tokenInfo?.name}</Typography>
+              <Typography variant="body2" color="gray">{tokenInfo?.userId}</Typography>
+            </Box>
+          </Box>
+          <Divider sx={{ my: 2, bgcolor: "#282c34" }} />
+
           {/* Friend Request Box */}
           <Box display="flex" justifyContent="space-between" alignItems="center">
             <Typography variant="h6">Friend Apply</Typography>
@@ -215,7 +233,7 @@ const ChatPage: React.FC = () => {
               </IconButton>
             </Box>
           </Box>
-          <List>{friendList.slice(0, 6)}</List>
+          <List>{friendList.slice(0, 4)}</List>
           <Divider sx={{ my: 2, bgcolor: "#282c34" }} />
 
           {/* Group Chats Header */}
@@ -238,7 +256,7 @@ const ChatPage: React.FC = () => {
               </IconButton>
             </Box>
           </Box>
-          <List>{roomList.slice(0, 6)}</List>
+          <List>{roomList.slice(0, 4)}</List>
         </Paper>
 
         <AddFriendDiaLog
@@ -260,8 +278,8 @@ const ChatPage: React.FC = () => {
             onChange={(event: any, newValue: number) => setTabIndex(newValue)}
             variant="fullWidth"
           >
-            <Tab label="我的好友" />
-            <Tab label="我的聊天室" />
+            <Tab label="My Friend" />
+            <Tab label="My Chat" />
           </Tabs>
           <Box p={2}>
             {tabIndex === 0 ? <List>{friendList}</List> : <List>{roomList}</List>}
