@@ -1,84 +1,61 @@
 import type React from "react";
-import { useEffect, useState } from "react";
-import type {
-  Participant,
-  RemoteParticipant,
-  RemoteTrackPublication,
-  RemoteTrack} from "livekit-client";
 import {
-  createLocalTracks,
-  Track,
-  ConnectionState,
-  Room,
-  RoomEvent
-} from "livekit-client";
+    ControlBar,
+    GridLayout,
+    LiveKitRoom,
+    ParticipantTile,
+    RoomAudioRenderer,
+    useTracks,
+} from '@livekit/components-react';
 
-const LIVEKIT_URL = "YOUR_LIVEKIT_SERVER_URL";
-const ACCESS_TOKEN = "YOUR_ACCESS_TOKEN"; // 確保你使用正確的 Access Token
+import '@livekit/components-styles';
 
-const LiveKitRoom: React.FC = () => {
-  const [room, setRoom] = useState<Room | null>(null);
-  const [participants, setParticipants] = useState<RemoteParticipant[]>([]);
+import { Track } from 'livekit-client';
 
-  useEffect(() => {
-    const connectToRoom = async () => {
-      const newRoom = new Room();
-      setRoom(newRoom);
-      
-      newRoom.on(RoomEvent.ParticipantConnected, (participant: Participant) => {
-        setParticipants((prev) => [...prev, participant as RemoteParticipant]);
-      });
+const serverUrl = '<your LiveKit server URL>';
 
-      newRoom.on(RoomEvent.ParticipantDisconnected, (participant: Participant) => {
-        setParticipants((prev) => prev.filter((p) => p.identity !== participant.identity));
-      });
 
-      await newRoom.connect(LIVEKIT_URL, ACCESS_TOKEN);
-      const tracks = await createLocalTracks({ audio: true, video: true });
-      tracks.forEach((track) => newRoom.localParticipant.publishTrack(track));
-    };
+const LiveRoom: React.FC<string> = (token: string) => {
 
-    connectToRoom();
-    return () => {
-      room?.disconnect();
-    };
-  }, []);
 
-  return (
-    <div>
-      <h2>LiveKit Room</h2>
-      <div>
-        {participants.map((participant) => (
-          <ParticipantView key={participant.identity} participant={participant} />
-        ))}
-      </div>
-    </div>
-  );
+    return (
+        <LiveKitRoom
+            video={true}
+            audio={true}
+            token={token}
+            serverUrl={serverUrl}
+            // Use the default LiveKit theme for nice styles.
+            data-lk-theme="default"
+            style={{ height: '100vh' }}
+        >
+            {/* Your custom component with basic video conferencing functionality. */}
+            <MyVideoConference />
+            {/* The RoomAudioRenderer takes care of room-wide audio for you. */}
+            <RoomAudioRenderer />
+            {/* Controls for the user to start/stop audio, video, and screen
+        share tracks and to leave the room. */}
+            <ControlBar />
+        </LiveKitRoom>
+    );
 };
 
-const ParticipantView: React.FC<{ participant: RemoteParticipant }> = ({ participant }) => {
-  const [videoTrack, setVideoTrack] = useState<RemoteTrack | null>(null);
+function MyVideoConference() {
+    // `useTracks` returns all camera and screen share tracks. If a user
+    // joins without a published camera track, a placeholder track is returned.
+    const tracks = useTracks(
+        [
+            { source: Track.Source.Camera, withPlaceholder: true },
+            { source: Track.Source.ScreenShare, withPlaceholder: false },
+        ],
+        { onlySubscribed: false },
+    );
+    return (
+        <GridLayout tracks={tracks} style={{ height: 'calc(100vh - var(--lk-control-bar-height))' }}>
+            {/* The GridLayout accepts zero or one child. The child is used
+        as a template to render all passed in tracks. */}
+            <ParticipantTile />
+        </GridLayout>
+    );
+}
 
-  useEffect(() => {
-    const handleTrackSubscribed = (track: RemoteTrackPublication, _: RemoteParticipant) => {
-      if (track.track?.kind === Track.Kind.Video) {
-        setVideoTrack(track.track);
-      }
-    };
-
-    participant.on(RoomEvent.TrackSubscribed, handleTrackSubscribed);
-
-    return () => {
-      participant.off(RoomEvent.TrackSubscribed, handleTrackSubscribed);
-    };
-  }, [participant]);
-
-  return (
-    <div>
-      <h3>{participant.identity}</h3>
-      {videoTrack && <video ref={(ref) => ref && videoTrack.attach(ref)} autoPlay />}
-    </div>
-  );
-};
-
-export default LiveKitRoom;
+export default LiveRoom;
