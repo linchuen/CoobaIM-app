@@ -16,9 +16,6 @@ import {
 } from "@mui/material"
 import {
   Search,
-  AttachFile,
-  InsertEmoticon,
-  Image,
   VideoCall,
   Call,
   DateRange,
@@ -38,8 +35,9 @@ import {
 } from "../ChatPageSlice"
 import { selectTokenInfo } from "../../globalSlice"
 import { useNavigate } from "react-router-dom"
-import UploadDialog from "./UploadFileDialog"
-import EmojiChatDialog from "./EmojiChatDialog"
+import UploadDialog from "./AddFileDialog"
+import EmojiChatDialog from "./AddEmojiDialog"
+import UploadImageDialog from "./AddPictureDialog"
 
 const ChatBox: React.FC = () => {
   const navigate = useNavigate()
@@ -52,8 +50,6 @@ const ChatBox: React.FC = () => {
   const roomName = useAppSelector(selectCurrentRoomName)
   const emoji = useAppSelector(selectEmoji)
   const [open, setOpen] = useState(false)
-  const [fileOpen, setFileOpen] = useState(false)
-  const [emojiOpen, setEmojiOpen] = useState(false)
 
   const handleSendMessage = () => {
     if (currentRoomId === 0) return
@@ -217,15 +213,9 @@ const ChatBox: React.FC = () => {
             gap: 1,
           }}
         >
-          <IconButton sx={{ color: "white" }} >
-            <Image />
-          </IconButton>
-          <IconButton sx={{ color: "white" }} onClick={() => setEmojiOpen(true)}>
-            <InsertEmoticon />
-          </IconButton>
-          <IconButton sx={{ color: "white" }} onClick={() => setFileOpen(true)}>
-            <AttachFile />
-          </IconButton>
+          <EmojiChatDialog />
+          <UploadImageDialog onUpload={() => { }} />
+          <UploadDialog />
           <IconButton sx={{ color: "white" }} >
             <VideoCall />
           </IconButton>
@@ -258,9 +248,6 @@ const ChatBox: React.FC = () => {
             Send
           </Button>
         </Paper> : <></>}
-
-      <UploadDialog open={fileOpen} onClose={() => setFileOpen(false)} />
-      <EmojiChatDialog open={emojiOpen} onClose={() => setEmojiOpen(false)} />
     </Box>
   )
 }
