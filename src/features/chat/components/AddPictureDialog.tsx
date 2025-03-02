@@ -12,14 +12,17 @@ import {
 } from "@mui/material";
 import {
     Image,
-  } from "@mui/icons-material"
+} from "@mui/icons-material"
 import { CloudUpload, Close } from "@mui/icons-material";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
+import { fetchFileUpload } from "../../../services/FileApi";
+import { selectTokenInfo } from "../../globalSlice";
+import { selectCurrentRoomId } from "../ChatPageSlice";
 
-interface UploadImageDialogProps {
-    onUpload: (file: File) => void;
-}
-
-const UploadImageDialog: React.FC<UploadImageDialogProps> = ({ onUpload }) => {
+const UploadImageDialog: React.FC = () => {
+    const dispatch = useAppDispatch()
+    const tokenInfo = useAppSelector(selectTokenInfo)
+    const currentRoomId = useAppSelector(selectCurrentRoomId)
     const [image, setImage] = useState<string | null>(null)
     const [file, setFile] = useState<File | null>(null)
     const [pictureOpen, setPictureOpen] = useState(false)
@@ -41,11 +44,12 @@ const UploadImageDialog: React.FC<UploadImageDialogProps> = ({ onUpload }) => {
         }
     };
 
-    const handleUpload = () => {
-        if (file) {
-            onUpload(file);
-            onClose();
-        }
+    const handleUpload = async () => {
+        if (!tokenInfo || !file) return;
+
+        const uploadResponse = await fetchFileUpload(currentRoomId, file, tokenInfo.token)
+        
+        onClose()
     };
 
     const onClose = () => setPictureOpen(false)

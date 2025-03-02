@@ -27,7 +27,7 @@ const UploadDialog: React.FC = () => {
 
         const uploadResponse = await fetchFileUpload(currentRoomId, file, tokenInfo.token)
         setUploadedFileName(uploadResponse.data?.fileName ?? "")
-
+        onClose()
     };
 
     const onClose = () => setFileOpen(false)

@@ -214,7 +214,7 @@ const ChatBox: React.FC = () => {
           }}
         >
           <EmojiChatDialog />
-          <UploadImageDialog onUpload={() => { }} />
+          <UploadImageDialog />
           <UploadDialog />
           <IconButton sx={{ color: "white" }} >
             <VideoCall />
