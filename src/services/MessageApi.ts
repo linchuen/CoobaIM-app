@@ -17,7 +17,7 @@ export const fetchLoadChat = async (
             name: "Alice",
             roomId: 1,
             message: "今天天氣很好，要不要一起去公園走走？",
-            type: "text",
+            type: "TEXT",
           },
           {
             id: 2,
@@ -25,7 +25,7 @@ export const fetchLoadChat = async (
             name: "Bob",
             roomId: 1,
             message: "好啊，順便買杯咖啡帶著！",
-            type: "text",
+            type: "TEXT",
           },
           {
             id: 3,
@@ -33,7 +33,7 @@ export const fetchLoadChat = async (
             name: "Alice",
             roomId: 1,
             message: "不錯的主意，我請客。",
-            type: "text",
+            type: "TEXT",
           },
           {
             id: 4,
@@ -41,7 +41,7 @@ export const fetchLoadChat = async (
             name: "Bob",
             roomId: 1,
             message: "那我可就不客氣了！",
-            type: "text",
+            type: "TEXT",
           },
         ],
       })

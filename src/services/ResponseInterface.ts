@@ -73,6 +73,7 @@ export interface ChatInfo {
   roomId: number
   userId: number
   message: string
+  url?: string
   type: string
   success: boolean | undefined
 }
@@ -83,7 +84,7 @@ export interface ChatLoadResponse {
 
 export interface UploadFileResponse {
   fileName: string
-  url: number
+  url: string
 }
 
 export interface ApiResponse<T> {

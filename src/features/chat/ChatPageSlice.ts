@@ -158,7 +158,8 @@ export const chatSlice = createAppSlice({
           roomId: request.roomId,
           userId: tokenInfo?.userId ?? 1,
           message: request.message,
-          type: "text",
+          url: request.url,
+          type: request.type ?? "TEXT",
           success: success,
         }
       },
@@ -167,6 +168,7 @@ export const chatSlice = createAppSlice({
         fulfilled: (state, action: PayloadAction<ChatInfo>) => {
           state.status = "idle"
           const chatInfo = action.payload
+          console.log("new chat", chatInfo)
 
           state.chatInfoList.push(chatInfo)
           const chatInfoList = state.roomChatMap[chatInfo.roomId] ?? []

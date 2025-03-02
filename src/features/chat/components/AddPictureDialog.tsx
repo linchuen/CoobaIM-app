@@ -15,9 +15,11 @@ import {
 } from "@mui/icons-material"
 import { CloudUpload, Close } from "@mui/icons-material";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import { fetchFileUpload } from "../../../services/FileApi";
 import { selectTokenInfo } from "../../globalSlice";
-import { selectCurrentRoomId } from "../ChatPageSlice";
+import { selectCurrentRoomId, sendMessage } from "../ChatPageSlice";
+import { handleFetch } from "../../../services/common";
+import type { UploadFileResponse } from "../../../services/ResponseInterface";
+import { fetchFileUpload } from "../../../services/FileApi";
 
 const UploadImageDialog: React.FC = () => {
     const dispatch = useAppDispatch()
@@ -47,8 +49,21 @@ const UploadImageDialog: React.FC = () => {
     const handleUpload = async () => {
         if (!tokenInfo || !file) return;
 
-        const uploadResponse = await fetchFileUpload(currentRoomId, file, tokenInfo.token)
-        
+        handleFetch<UploadFileResponse>(
+            dispatch,
+            fetchFileUpload(currentRoomId, file, tokenInfo.token),
+            data => {
+                dispatch(
+                    sendMessage({
+                        roomId: currentRoomId,
+                        message: data.fileName,
+                        userId: tokenInfo.userId,
+                        url: data.url,
+                        type: "IMAGE"
+                    }),
+                )
+            },
+        )
         onClose()
     };
 

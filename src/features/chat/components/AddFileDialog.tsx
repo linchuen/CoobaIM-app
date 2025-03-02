@@ -4,8 +4,10 @@ import { Dialog, DialogTitle, DialogActions, Button, LinearProgress, Typography,
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { fetchFileUpload } from "../../../services/FileApi";
 import { selectTokenInfo } from "../../globalSlice";
-import { selectCurrentRoomId } from "../ChatPageSlice";
+import { selectCurrentRoomId, sendMessage } from "../ChatPageSlice";
 import { AttachFile } from "@mui/icons-material";
+import { handleFetch } from "../../../services/common";
+import type { UploadFileResponse } from "../../../services/ResponseInterface";
 
 const UploadDialog: React.FC = () => {
     const dispatch = useAppDispatch()
@@ -25,8 +27,22 @@ const UploadDialog: React.FC = () => {
     const handleUpload = async () => {
         if (!tokenInfo || !file) return;
 
-        const uploadResponse = await fetchFileUpload(currentRoomId, file, tokenInfo.token)
-        setUploadedFileName(uploadResponse.data?.fileName ?? "")
+        handleFetch<UploadFileResponse>(
+            dispatch,
+            fetchFileUpload(currentRoomId, file, tokenInfo.token),
+            data => {
+                dispatch(
+                    sendMessage({
+                        roomId: currentRoomId,
+                        message: data.fileName,
+                        userId: tokenInfo.userId,
+                        url: data.url,
+                        type: "FILE"
+                    }),
+                )
+                setUploadedFileName(data.fileName ?? "")
+            },
+        )
         onClose()
     };
 

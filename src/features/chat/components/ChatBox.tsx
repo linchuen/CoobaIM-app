@@ -22,11 +22,8 @@ import {
   ArrowBack,
 } from "@mui/icons-material"
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
-
 import { useAppDispatch, useAppSelector } from "../../../app/hooks"
 import {
-  selectChatInfoList,
   selectCurrentRoomId,
   selectCurrentRoomName,
   selectEmoji,
@@ -38,13 +35,13 @@ import { useNavigate } from "react-router-dom"
 import UploadDialog from "./AddFileDialog"
 import EmojiChatDialog from "./AddEmojiDialog"
 import UploadImageDialog from "./AddPictureDialog"
+import ChatMessages from "./ChatMessages"
 
 const ChatBox: React.FC = () => {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const inputRef = useRef<HTMLInputElement>(null)
   const chatContainerRef = useRef<HTMLDivElement>(null)
-  const chatInfos = useAppSelector(selectChatInfoList)
   const tokenInfo = useAppSelector(selectTokenInfo)
   const currentRoomId = useAppSelector(selectCurrentRoomId)
   const roomName = useAppSelector(selectCurrentRoomName)
@@ -67,6 +64,13 @@ const ChatBox: React.FC = () => {
 
   }
 
+  useEffect(() => {
+    if (inputRef.current && tokenInfo && emoji !== "") {
+      inputRef.current.value += emoji
+      dispatch(setEmoji(""))
+    }
+  }, [dispatch, emoji, tokenInfo])
+
   const handleScroll = useCallback(() => {
     if (!chatContainerRef.current) return
 
@@ -74,13 +78,6 @@ const ChatBox: React.FC = () => {
       setOpen(true)
     }
   }, [dispatch, currentRoomId])
-
-  useEffect(() => {
-    if (inputRef.current && tokenInfo && emoji !== "") {
-      inputRef.current.value += emoji
-      dispatch(setEmoji(""))
-    }
-  }, [dispatch, emoji, tokenInfo])
 
   useEffect(() => {
     const chatContainer = chatContainerRef.current
@@ -93,41 +90,6 @@ const ChatBox: React.FC = () => {
       }
     }
   }, [handleScroll])
-
-  const userId = tokenInfo?.userId
-
-  let messages = chatInfos.map(chat => {
-    const isSelf = chat.userId === userId
-    return (
-      <Box
-        key={chat.id}
-        display="flex"
-        flexDirection="column"
-        alignItems={isSelf ? "flex-end" : "flex-start"}
-        sx={{ gap: 0.5 }}
-      >
-        <Box display="flex" alignItems="center" sx={{ gap: 0.5 }}>
-          {chat.success === false && isSelf && (
-            <ErrorOutlineIcon sx={{ color: "red", fontSize: 18 }} />
-          )}
-          <Paper
-            sx={{
-              padding: 1.5,
-              borderRadius: 2,
-              maxWidth: "300px",
-              bgcolor: isSelf ? "#282c34" : "#3f51b5",
-              color: isSelf ? "#b9bbbe" : "white",
-              wordBreak: "break-word", // 確保長字串能夠換行
-              overflowWrap: "break-word",
-              boxShadow: 2,
-            }}
-          >
-            {chat.message}
-          </Paper>
-        </Box>
-      </Box>
-    )
-  })
 
   return (
     <Box flex={1} display="flex" flexDirection="column" padding={2}>
@@ -186,7 +148,8 @@ const ChatBox: React.FC = () => {
           scrollbarWidth: "none",
         }}
       >
-        {messages}
+        <ChatMessages />
+
         {/* Snackbar 提示 */}
         <Snackbar
           open={open}
