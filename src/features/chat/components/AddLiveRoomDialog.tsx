@@ -11,31 +11,52 @@ import {
 import '@livekit/components-styles';
 
 import { Track } from 'livekit-client';
+import { Call, VideoCall } from "@mui/icons-material";
+import { Dialog, IconButton } from "@mui/material";
+import { useState } from "react";
 
 const serverUrl = '<your LiveKit server URL>';
 
 
-const LiveRoom: React.FC<string> = (token: string) => {
+const LiveRoomDialoag: React.FC = () => {
+    const [open, setOpen] = useState(false)
+    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJsaXZla2l0X2FwaV9rZXkiLCJleHAiOjE3NDA5NTY4OTgsInN1YiI6IjEiLCJqdGkiOiIxIiwibmFtZSI6InRlc3QiLCJtZXRhZGF0YSI6IiIsInZpZGVvIjp7InJvb21Kb2luIjp0cnVlLCJyb29tIjoidGVzdCJ9LCJzaXAiOnt9fQ.2o2DGSX9JxwHmnyx_JI8p3I9KM4nWtl4b4CqsXELv60"
 
-
+    const onClose = () => setOpen(false)
     return (
-        <LiveKitRoom
-            video={true}
-            audio={true}
-            token={token}
-            serverUrl={serverUrl}
-            // Use the default LiveKit theme for nice styles.
-            data-lk-theme="default"
-            style={{ height: '100vh' }}
-        >
-            {/* Your custom component with basic video conferencing functionality. */}
-            <MyVideoConference />
-            {/* The RoomAudioRenderer takes care of room-wide audio for you. */}
-            <RoomAudioRenderer />
-            {/* Controls for the user to start/stop audio, video, and screen
+        <>
+            <IconButton sx={{ color: "white" }} onClick={() => setOpen(true)}>
+                <VideoCall />
+            </IconButton>
+            <IconButton sx={{ color: "white" }}>
+                <Call />
+            </IconButton>
+            <Dialog
+                open={open}
+                onClose={onClose}
+                fullWidth
+                maxWidth="sm"
+            >
+                <LiveKitRoom
+                    video={true}
+                    audio={true}
+                    token={token}
+                    serverUrl={"http:127.0.0.1:7880"}
+                    // Use the default LiveKit theme for nice styles.
+                    data-lk-theme="default"
+                    style={{ height: '100vh' }}
+                >
+                    {/* Your custom component with basic video conferencing functionality. */}
+                    <MyVideoConference />
+                    {/* The RoomAudioRenderer takes care of room-wide audio for you. */}
+                    <RoomAudioRenderer />
+                    {/* Controls for the user to start/stop audio, video, and screen
         share tracks and to leave the room. */}
-            <ControlBar />
-        </LiveKitRoom>
+                    <ControlBar />
+                </LiveKitRoom>
+            </Dialog>
+
+        </>
     );
 };
 
@@ -58,4 +79,4 @@ function MyVideoConference() {
     );
 }
 
-export default LiveRoom;
+export default LiveRoomDialoag;

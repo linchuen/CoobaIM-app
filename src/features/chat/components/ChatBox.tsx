@@ -36,6 +36,7 @@ import UploadDialog from "./AddFileDialog"
 import EmojiChatDialog from "./AddEmojiDialog"
 import UploadImageDialog from "./AddPictureDialog"
 import ChatMessages from "./ChatMessages"
+import LiveRoomDialoag from "./AddLiveRoomDialog"
 
 const ChatBox: React.FC = () => {
   const navigate = useNavigate()
@@ -179,12 +180,7 @@ const ChatBox: React.FC = () => {
           <EmojiChatDialog />
           <UploadImageDialog />
           <UploadDialog />
-          <IconButton sx={{ color: "white" }} >
-            <VideoCall />
-          </IconButton>
-          <IconButton sx={{ color: "white" }}>
-            <Call />
-          </IconButton>
+          <LiveRoomDialoag />
           <TextField
             inputRef={inputRef}
             fullWidth
