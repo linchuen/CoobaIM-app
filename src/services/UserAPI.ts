@@ -11,7 +11,7 @@ import { FakeSuccessResponse } from "./FakeSuccessResponse"
 export const fetchRegisterUser = async (
   data: RegisterRequest,
 ): Promise<ApiResponse<RegisterResponse>> => {
-  return callFetch(config.apiUrl + "/user/register", "POST", undefined, data)
+  return callFetch("/user/register", "POST", undefined, data)
 }
 
 export const fetchLogin = async (
@@ -26,5 +26,5 @@ export const fetchLogin = async (
         loginTime: "string",
         expireTime: "string",
       })
-    : callFetch(config.apiUrl + "/user/login", "POST", undefined, data)
+    : callFetch("/user/login", "POST", undefined, data)
 }

@@ -32,10 +32,14 @@ import {
   selectChatInfoList,
   selectCurrentRoomId,
   selectCurrentRoomName,
+  selectEmoji,
   sendMessage,
+  setEmoji,
 } from "../ChatPageSlice"
 import { selectTokenInfo } from "../../globalSlice"
 import { useNavigate } from "react-router-dom"
+import UploadDialog from "./UploadFileDialog"
+import EmojiChatDialog from "./EmojiChatDialog"
 
 const ChatBox: React.FC = () => {
   const navigate = useNavigate()
@@ -46,7 +50,10 @@ const ChatBox: React.FC = () => {
   const tokenInfo = useAppSelector(selectTokenInfo)
   const currentRoomId = useAppSelector(selectCurrentRoomId)
   const roomName = useAppSelector(selectCurrentRoomName)
+  const emoji = useAppSelector(selectEmoji)
   const [open, setOpen] = useState(false)
+  const [fileOpen, setFileOpen] = useState(false)
+  const [emojiOpen, setEmojiOpen] = useState(false)
 
   const handleSendMessage = () => {
     if (currentRoomId === 0) return
@@ -71,6 +78,13 @@ const ChatBox: React.FC = () => {
       setOpen(true)
     }
   }, [dispatch, currentRoomId])
+
+  useEffect(() => {
+    if (inputRef.current && tokenInfo && emoji !== "") {
+      inputRef.current.value += emoji
+      dispatch(setEmoji(""))
+    }
+  }, [dispatch, emoji, tokenInfo])
 
   useEffect(() => {
     const chatContainer = chatContainerRef.current
@@ -191,58 +205,62 @@ const ChatBox: React.FC = () => {
       </Box>
 
       {/* Input Area */}
-      <Paper
-        sx={{
-          padding: 1.5,
-          display: "flex",
-          alignItems: "center",
-          bgcolor: "#161b22",
-          boxShadow: 3,
-          borderRadius: 2,
-          gap: 1,
-        }}
-      >
-        <IconButton sx={{ color: "white" }}>
-          <Image />
-        </IconButton>
-        <IconButton sx={{ color: "white" }}>
-          <InsertEmoticon />
-        </IconButton>
-        <IconButton sx={{ color: "white" }}>
-          <AttachFile />
-        </IconButton>
-        <IconButton sx={{ color: "white" }}>
-          <VideoCall />
-        </IconButton>
-        <IconButton sx={{ color: "white" }}>
-          <Call />
-        </IconButton>
-        <TextField
-          inputRef={inputRef}
-          fullWidth
-          placeholder="Type a message..."
-          variant="outlined"
-          size="small"
+      {tokenInfo ?
+        <Paper
           sx={{
-            bgcolor: "#0d1117",
+            padding: 1.5,
+            display: "flex",
+            alignItems: "center",
+            bgcolor: "#161b22",
+            boxShadow: 3,
             borderRadius: 2,
-            input: { color: "white" },
+            gap: 1,
           }}
-          onKeyDown={(event) => {
-            if (event.key === "Enter") {
-              event.preventDefault();
-              handleSendMessage()
-            }
-          }}
-        />
-        <Button
-          variant="contained"
-          sx={{ bgcolor: "#3f51b5", color: "white" }}
-          onClick={handleSendMessage}
         >
-          Send
-        </Button>
-      </Paper>
+          <IconButton sx={{ color: "white" }} >
+            <Image />
+          </IconButton>
+          <IconButton sx={{ color: "white" }} onClick={() => setEmojiOpen(true)}>
+            <InsertEmoticon />
+          </IconButton>
+          <IconButton sx={{ color: "white" }} onClick={() => setFileOpen(true)}>
+            <AttachFile />
+          </IconButton>
+          <IconButton sx={{ color: "white" }} >
+            <VideoCall />
+          </IconButton>
+          <IconButton sx={{ color: "white" }}>
+            <Call />
+          </IconButton>
+          <TextField
+            inputRef={inputRef}
+            fullWidth
+            placeholder="Type a message..."
+            variant="outlined"
+            size="small"
+            sx={{
+              bgcolor: "#0d1117",
+              borderRadius: 2,
+              input: { color: "white" },
+            }}
+            onKeyDown={(event) => {
+              if (event.key === "Enter") {
+                event.preventDefault();
+                handleSendMessage()
+              }
+            }}
+          />
+          <Button
+            variant="contained"
+            sx={{ bgcolor: "#3f51b5", color: "white" }}
+            onClick={handleSendMessage}
+          >
+            Send
+          </Button>
+        </Paper> : <></>}
+
+      <UploadDialog open={fileOpen} onClose={() => setFileOpen(false)} />
+      <EmojiChatDialog open={emojiOpen} onClose={() => setEmojiOpen(false)} />
     </Box>
   )
 }

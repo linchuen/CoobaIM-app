@@ -81,6 +81,11 @@ export interface ChatLoadResponse {
   chats: ChatInfo[]
 }
 
+export interface UploadFileResponse {
+  fileName: string
+  url: number
+}
+
 export interface ApiResponse<T> {
   traceId: string
   code: number

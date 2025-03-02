@@ -48,6 +48,7 @@ type FriendState = {
   type: string
   currentRoomId: number
   currentRoomName: string
+  emoji: string
 }
 
 const initialState: FriendState = {
@@ -62,7 +63,8 @@ const initialState: FriendState = {
   status: "",
   type: "",
   currentRoomId: 0,
-  currentRoomName: ""
+  currentRoomName: "",
+  emoji: ""
 }
 
 function getPublishType(chatType: string): string {
@@ -80,6 +82,10 @@ export const chatSlice = createAppSlice({
   name: "chat",
   initialState,
   reducers: create => ({
+    setEmoji: create.reducer((state, action: PayloadAction<string>) => {
+      console.log("emoji", action.payload)
+      state.emoji = action.payload
+    }),
     setType: create.reducer((state, action: PayloadAction<string>) => {
       state.type = action.payload
     }),
@@ -267,6 +273,7 @@ export const chatSlice = createAppSlice({
     selectStatus: state => state.status,
     selectCurrentRoomId: state => state.currentRoomId,
     selectCurrentRoomName: state => state.currentRoomName,
+    selectEmoji: state => state.emoji,
   },
 })
 
@@ -285,6 +292,7 @@ export const {
   addFriendApply,
   addSubscribeEvent,
   removeFriendApply,
+  setEmoji,
 } = chatSlice.actions
 
 export const {
@@ -299,4 +307,5 @@ export const {
   selectStatus,
   selectCurrentRoomId,
   selectCurrentRoomName,
+  selectEmoji,
 } = chatSlice.selectors

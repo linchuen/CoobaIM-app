@@ -4,6 +4,7 @@ import {
 } from "../features/globalSlice"
 import type { ApiResponse } from "./ResponseInterface"
 import type { AppDispatch } from "../app/store"
+import config from "../app/config"
 
 export async function callFetch(
   url: string,
@@ -13,7 +14,7 @@ export async function callFetch(
 ) {
   try {
     const body = JSON.stringify(data)
-    const res = await fetch(url, {
+    const res = await fetch(config.apiUrl + url, {
       method: method,
       headers: {
         "Content-Type": "application/json",

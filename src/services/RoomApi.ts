@@ -21,28 +21,28 @@ export const fetchBuildRoom = async (
       ? new FakeSuccessResponse({
           name: "Room 3",
       })
-      : callFetch(config.apiUrl + "/room/build", "POST", token, data)
+      : callFetch("/room/build", "POST", token, data)
 }
 
 export const fetchDestroyRoom = async (
   data: RoomRequest,
   token?: string,
 ): Promise<ApiResponse<DestroyRoomResponse>> => {
-  return callFetch(config.apiUrl + "/room/destroy", "DELETE", token, data)
+  return callFetch("/room/destroy", "DELETE", token, data)
 }
 
 export const fetchInviteUser = async (
   data: RoomUserRequest,
   token?: string,
 ): Promise<ApiResponse<boolean>> => {
-  return callFetch(config.apiUrl + "/room/invite", "POST", token, data)
+  return callFetch("/room/invite", "POST", token, data)
 }
 
 export const fetchEvictUser = async (
   data: RoomUserRequest,
   token?: string,
 ): Promise<ApiResponse<boolean>> => {
-  return callFetch(config.apiUrl + "/room/evict", "DELETE", token, data)
+  return callFetch("/room/evict", "DELETE", token, data)
 }
 
 export const fetchSearchRoom = async (
@@ -62,5 +62,5 @@ export const fetchSearchRoom = async (
               },
           ],
       })
-    : callFetch(config.apiUrl + "/room/search", "POST", token, data)
+    : callFetch("/room/search", "POST", token, data)
 }

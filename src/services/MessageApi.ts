@@ -45,5 +45,5 @@ export const fetchLoadChat = async (
           },
         ],
       })
-    : callFetch(config.apiUrl + "/chat/load", "POST", token, data)
+    : callFetch("/chat/load", "POST", token, data)
 }
