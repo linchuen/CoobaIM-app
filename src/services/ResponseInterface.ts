@@ -67,6 +67,17 @@ export interface RoomSearchResponse {
   rooms: RoomInfo[]
 }
 
+export interface RoomUser {
+  id: number
+  roomId: number
+  userId: number
+  showName: string
+}
+
+export interface RoomMemberResponse{
+  roomUsers: RoomUser[] 
+}
+
 export interface ChatInfo {
   id: number
   name: string

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
     Dialog,
     DialogTitle,
@@ -20,7 +20,8 @@ import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { selectTokenInfo } from "../../globalSlice";
 import { selectCurrentRoomId, selectFriendInfoList } from "../ChatPageSlice";
 import { handleFetch } from "../../../services/common";
-import { fetchInviteUser } from "../../../services/RoomApi";
+import { fetchInviteUser, fetchSearchRoomUsers } from "../../../services/RoomApi";
+import type { RoomMemberResponse} from "../../../services/ResponseInterface";
 
 
 const AddMemberDialog: React.FC = () => {
@@ -30,7 +31,25 @@ const AddMemberDialog: React.FC = () => {
     const currentRoomId = useAppSelector(selectCurrentRoomId)
     const [openCreateAlert, setOpenCreateAlert] = useState(false)
     const [open, setOpen] = useState(false)
-    const [selectedFriend, setSelectedFriend] = useState<number | null>(null); // 單選存一個
+    const [selectedFriend, setSelectedFriend] = useState<number | null>(null)
+    const [userIds, setUserIds] = useState<number[]>([])
+
+    const onOpen = () => {
+        if (!tokenInfo) return
+
+        handleFetch<RoomMemberResponse>(
+            dispatch,
+            fetchSearchRoomUsers({
+                roomId: currentRoomId,
+            }, tokenInfo.token),
+            data => {
+                const roomUsers = data.roomUsers
+                console.log(friendInfoList)
+                console.log(roomUsers)
+                setUserIds(roomUsers.map(info => info.userId))
+            })
+        setOpen(true)
+    }
 
     const onClose = () => setOpen(false)
 
@@ -44,6 +63,7 @@ const AddMemberDialog: React.FC = () => {
                 userId: selectedFriend
             }, tokenInfo.token),
             data => {
+                setOpenCreateAlert(true)
                 onClose()
             })
     }
@@ -54,7 +74,7 @@ const AddMemberDialog: React.FC = () => {
 
     return (
         <>
-            <IconButton onClick={() => setOpen(true)} sx={{ color: "white" }}>
+            <IconButton onClick={onOpen} sx={{ color: "white" }}>
                 <PersonAddIcon />
             </IconButton>
             <Dialog
@@ -85,7 +105,7 @@ const AddMemberDialog: React.FC = () => {
                     {/* 好友列表 */}
                     <Typography variant="h6">選擇好友：</Typography>
                     <List sx={{ columns: { xs: 1, sm: 2, md: 3 }, gap: 1 }}>
-                        {friendInfoList.map(info => (
+                        {friendInfoList.filter(info => !userIds.includes(info.friendUserId)).map(info => (
                             <ListItem key={info.friendUserId} onClick={() => handleToggle(info.friendUserId)}>
                                 <Checkbox checked={selectedFriend === info.friendUserId} />
                                 <ListItemText primary={info.showName} />
