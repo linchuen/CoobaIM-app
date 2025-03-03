@@ -19,20 +19,20 @@ import { handleFetch } from "../../../services/common";
 import { fetchCreateLiveRoom } from "../../../services/LiveApi";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { selectTokenInfo } from "../../globalSlice";
-import { selectCurrentRoomId, sendMessage } from "../ChatPageSlice";
+import { selectCurrentRoomId } from "../ChatPageSlice";
 import type { LiveCall } from "../../../services/ResponseInterface";
 
 const LiveRoomDialoag: React.FC = () => {
     const dispatch = useAppDispatch()
     const tokenInfo = useAppSelector(selectTokenInfo)
     const currentRoomId = useAppSelector(selectCurrentRoomId)
-    const [open, setOpen] = useState(false)
+    const [calling, setCalling] = useState(false)
     const [callOpen, setCallOpen] = useState(false)
     const [livekitToken, setLivekitToken] = useState("")
 
     const onCall = () => {
         if (!tokenInfo) return
-        setCallOpen(true)
+        setCalling(true)
         handleFetch<LiveCall>(
             dispatch,
             fetchCreateLiveRoom({ roomId: currentRoomId }, tokenInfo.token),
@@ -41,14 +41,17 @@ const LiveRoomDialoag: React.FC = () => {
             },
         )
     }
-    const onEndCall = () => setCallOpen(false)
+    const onEndCall = () => {
+        setCallOpen(false)
+        setCalling(false)
+    }
 
-    const onClose = () => setOpen(false)
+    const onClose = () => setCalling(false)
 
 
     return (
         <>
-            <IconButton sx={{ color: "white" }} onClick={() => setOpen(true)}>
+            <IconButton sx={{ color: "white" }} onClick={() => setCallOpen(true)}>
                 <VideoCall />
             </IconButton>
             <IconButton sx={{ color: "white" }}>
@@ -59,6 +62,25 @@ const LiveRoomDialoag: React.FC = () => {
                 <DialogContent>
                     請選擇您要執行的操作。
                 </DialogContent>
+                {calling ?
+                    <LiveKitRoom
+                        video={true}
+                        audio={true}
+                        token={livekitToken}
+                        serverUrl={config.livekitUrl}
+                        // Use the default LiveKit theme for nice styles.
+                        data-lk-theme="default"
+                        style={{ height: '100vh' }}
+                    >
+                        {/* Your custom component with basic video conferencing functionality. */}
+                        <MyVideoConference />
+                        {/* The RoomAudioRenderer takes care of room-wide audio for you. */}
+                        <RoomAudioRenderer />
+                        {/* Controls for the user to start/stop audio, video, and screen share tracks and to leave the room. */}
+                        <ControlBar />
+                    </LiveKitRoom>
+                    : <></>}
+
                 <DialogActions>
                     <Button onClick={onCall} color="primary" variant="contained">
                         通話
@@ -69,28 +91,11 @@ const LiveRoomDialoag: React.FC = () => {
                 </DialogActions>
             </Dialog>
             <Dialog
-                open={open}
+                open={calling}
                 onClose={onClose}
                 fullWidth
                 maxWidth="sm"
             >
-                <LiveKitRoom
-                    video={true}
-                    audio={true}
-                    token={livekitToken}
-                    serverUrl={config.livekitUrl}
-                    // Use the default LiveKit theme for nice styles.
-                    data-lk-theme="default"
-                    style={{ height: '100vh' }}
-                >
-                    {/* Your custom component with basic video conferencing functionality. */}
-                    <MyVideoConference />
-                    {/* The RoomAudioRenderer takes care of room-wide audio for you. */}
-                    <RoomAudioRenderer />
-                    {/* Controls for the user to start/stop audio, video, and screen
-        share tracks and to leave the room. */}
-                    <ControlBar />
-                </LiveKitRoom>
             </Dialog>
 
         </>
