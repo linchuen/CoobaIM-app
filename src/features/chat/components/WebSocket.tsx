@@ -23,14 +23,17 @@ const WebSocket: React.FC = () => {
     const addFriendApplyEvent = (message: IMessage) => {
       const newFriendApply = JSON.parse(message.body) as FriendApplyInfo
       dispatch(addFriendApply(newFriendApply))
+      console.log("addFriendApplyEvent", newFriendApply)
     }
     const addFriendEvent = (message: IMessage) => {
       const newFriend = JSON.parse(message.body) as FriendInfo
       dispatch(addFriend(newFriend))
+      console.log("addFriendEvent", newFriend)
     }
     const addRoomEvent = (message: IMessage) => {
       const newRoom = JSON.parse(message.body) as RoomInfo
       dispatch(addRoom(newRoom))
+      console.log("addRoomEvent", newRoom)
     }
     const addErrorEvent = (message: IMessage) => {
       console.log("error", message.body)
