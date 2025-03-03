@@ -20,7 +20,6 @@ import {
   ArrowBack,
 } from "@mui/icons-material"
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
 import {
   selectCurrentRoomId,
@@ -37,6 +36,7 @@ import UploadImageDialog from "./components/AddPictureDialog"
 import ChatMessages from "./components/ChatMessages"
 import LiveRoomDialoag from "./components/AddLiveRoomDialog"
 import AddMemberDialog from "./components/AddMemberDialog"
+import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 
 const ChatBox: React.FC = () => {
   const navigate = useNavigate()
@@ -130,6 +130,9 @@ const ChatBox: React.FC = () => {
           <AddMemberDialog />
           <IconButton sx={{ color: "white" }}>
             <PersonRemoveIcon />
+          </IconButton>
+          <IconButton sx={{ color: "white" }}>
+            <SwapHorizIcon />
           </IconButton>
         </Toolbar>
       </AppBar>
