@@ -12,17 +12,40 @@ import '@livekit/components-styles';
 
 import { Track } from 'livekit-client';
 import { Call, VideoCall } from "@mui/icons-material";
-import { Dialog, IconButton } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton } from "@mui/material";
 import { useState } from "react";
-
-const serverUrl = '<your LiveKit server URL>';
-
+import config from "../../../app/config";
+import { handleFetch } from "../../../services/common";
+import { fetchCreateLiveRoom } from "../../../services/LiveApi";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
+import { selectTokenInfo } from "../../globalSlice";
+import { selectCurrentRoomId, sendMessage } from "../ChatPageSlice";
+import type { LiveCall } from "../../../services/ResponseInterface";
 
 const LiveRoomDialoag: React.FC = () => {
+    const dispatch = useAppDispatch()
+    const tokenInfo = useAppSelector(selectTokenInfo)
+    const currentRoomId = useAppSelector(selectCurrentRoomId)
     const [open, setOpen] = useState(false)
-    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJsaXZla2l0X2FwaV9rZXkiLCJleHAiOjE3NDA5NTY4OTgsInN1YiI6IjEiLCJqdGkiOiIxIiwibmFtZSI6InRlc3QiLCJtZXRhZGF0YSI6IiIsInZpZGVvIjp7InJvb21Kb2luIjp0cnVlLCJyb29tIjoidGVzdCJ9LCJzaXAiOnt9fQ.2o2DGSX9JxwHmnyx_JI8p3I9KM4nWtl4b4CqsXELv60"
+    const [callOpen, setCallOpen] = useState(false)
+    const [livekitToken, setLivekitToken] = useState("")
+
+    const onCall = () => {
+        if (!tokenInfo) return
+        setCallOpen(true)
+        handleFetch<LiveCall>(
+            dispatch,
+            fetchCreateLiveRoom({ roomId: currentRoomId }, tokenInfo.token),
+            data => {
+                setLivekitToken(data.token)
+            },
+        )
+    }
+    const onEndCall = () => setCallOpen(false)
 
     const onClose = () => setOpen(false)
+
+
     return (
         <>
             <IconButton sx={{ color: "white" }} onClick={() => setOpen(true)}>
@@ -31,6 +54,20 @@ const LiveRoomDialoag: React.FC = () => {
             <IconButton sx={{ color: "white" }}>
                 <Call />
             </IconButton>
+            <Dialog open={callOpen} onClose={onEndCall}>
+                <DialogTitle>通話選項</DialogTitle>
+                <DialogContent>
+                    請選擇您要執行的操作。
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={onCall} color="primary" variant="contained">
+                        通話
+                    </Button>
+                    <Button onClick={onEndCall} color="secondary" variant="contained">
+                        結束通話
+                    </Button>
+                </DialogActions>
+            </Dialog>
             <Dialog
                 open={open}
                 onClose={onClose}
@@ -40,8 +77,8 @@ const LiveRoomDialoag: React.FC = () => {
                 <LiveKitRoom
                     video={true}
                     audio={true}
-                    token={token}
-                    serverUrl={"http:127.0.0.1:7880"}
+                    token={livekitToken}
+                    serverUrl={config.livekitUrl}
                     // Use the default LiveKit theme for nice styles.
                     data-lk-theme="default"
                     style={{ height: '100vh' }}

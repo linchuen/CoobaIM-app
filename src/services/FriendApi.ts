@@ -67,7 +67,7 @@ export const fetchSearchFriend = async (
 
 export const fetchSearchFriendApply = async (
   data?: null,
-  token: string,
+  token?: string,
 ): Promise<ApiResponse<FriendApplySearchResponse>> => {
   return config.useFake
     ? new FakeSuccessResponse({

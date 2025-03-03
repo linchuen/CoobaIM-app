@@ -60,3 +60,15 @@ export interface SpeakRequest {
 export interface ChatLoadRequest {
     roomId: number;
 }
+
+export interface LiveBuildRequest {
+    roomId: number;
+    passcode?: string;
+}
+
+export interface ParticipantTokenRequest {
+    name: string;
+    identity: string;
+    roomName: string;
+    passcode: string;
+}

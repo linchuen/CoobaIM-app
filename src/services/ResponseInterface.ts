@@ -87,6 +87,13 @@ export interface UploadFileResponse {
   url: string
 }
 
+export interface LiveCall {
+  roomId: number
+  roomName: string
+  passcode: string
+  token: string
+}
+
 export interface ApiResponse<T> {
   traceId: string
   code: number
