@@ -35,7 +35,7 @@ const LiveRoomDialoag: React.FC = () => {
         if (!tokenInfo) return
         handleFetch<LiveCall>(
             dispatch,
-            fetchCreateLiveRoom({ roomId: currentRoomId }, tokenInfo.token),
+            fetchCreateLiveRoom({ roomId: currentRoomId, type: video ? "video" : "call" }, tokenInfo.token),
             data => {
                 setLivekitToken(data.token)
                 setConnect(true)

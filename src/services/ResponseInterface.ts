@@ -91,7 +91,8 @@ export interface LiveCall {
   roomId: number
   roomName: string
   passcode: string
-  token: string
+  token: string,
+  type: string
 }
 
 export interface ApiResponse<T> {

@@ -64,6 +64,7 @@ export interface ChatLoadRequest {
 export interface LiveBuildRequest {
     roomId: number;
     passcode?: string;
+    type: string;
 }
 
 export interface ParticipantTokenRequest {

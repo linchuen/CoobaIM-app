@@ -9,8 +9,8 @@ import {
   loadFriends,
   loadGroups,
 } from "../ChatPageSlice"
-import { selectTokenInfo } from "../../globalSlice"
-import type { FriendApplyInfo, FriendInfo, RoomInfo } from "../../../services/ResponseInterface"
+import { selectTokenInfo, setCallDialogOpen, setErrorDialogOpen, setErrorMessage, setLiveCall } from "../../globalSlice"
+import type { FriendApplyInfo, FriendInfo, LiveCall, RoomInfo } from "../../../services/ResponseInterface"
 import { WebSocketManager } from "../../../services/websocketApi"
 import type { IMessage } from "@stomp/stompjs"
 
@@ -35,8 +35,15 @@ const WebSocket: React.FC = () => {
       dispatch(addRoom(newRoom))
       console.log("addRoomEvent", newRoom)
     }
+    const addCallEvent = (message: IMessage) => {
+      const newCall = JSON.parse(message.body) as LiveCall
+      dispatch(setCallDialogOpen(true))
+      dispatch(setLiveCall(newCall))
+      console.log("addCallEvent", newCall)
+    }
     const addErrorEvent = (message: IMessage) => {
-      console.log("error", message.body)
+      dispatch(setErrorMessage(message.body))
+      dispatch(setErrorDialogOpen(false))
     }
     const loadData = (webSocket: WebSocketManager) => {
       dispatch(loadFriends({ friendUserIds: [] }))
@@ -46,6 +53,7 @@ const WebSocket: React.FC = () => {
       webSocket.subscribe("/user/queue/friend_apply", addFriendApplyEvent)
       webSocket.subscribe("/user/queue/friend_add", addFriendEvent)
       webSocket.subscribe("/user/queue/room_add", addRoomEvent)
+      webSocket.subscribe("/user/queue/live_call", addCallEvent)
       webSocket.subscribe("/user/queue/error", addErrorEvent)
     }
 

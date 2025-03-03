@@ -7,6 +7,7 @@ import config from "./app/config";
 import { setTokenInfo } from "./features/globalSlice";
 import { useAppDispatch } from "./app/hooks";
 import FloatingModal from "./components/eventFloatDialog"
+import CallDialoag from "./components/CallDiaLog"
 
 const App = () => {
   const dispatch = useAppDispatch()
@@ -30,6 +31,7 @@ const App = () => {
       </BrowserRouter>
 
       <ErrorDialog />
+      <CallDialoag />
       {config.useFake ? <FloatingModal /> : <></>}
     </>
   )

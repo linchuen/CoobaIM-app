@@ -1,5 +1,6 @@
 import type { PayloadAction } from "@reduxjs/toolkit"
 import { createAppSlice } from "../app/createAppSlice"
+import { LiveCall } from "../services/ResponseInterface"
 
 interface User {
   id: number
@@ -23,6 +24,8 @@ interface GlobalState {
   isLogin: boolean
   errorMessage: string
   errorDialogOpen: boolean
+  callDialogOpen: boolean,
+  liveCall: LiveCall | null,
 }
 
 const initialState: GlobalState = {
@@ -31,6 +34,8 @@ const initialState: GlobalState = {
   isLogin: false,
   errorMessage: "",
   errorDialogOpen: false,
+  callDialogOpen: false,
+  liveCall: null
 }
 
 export const globalSlice = createAppSlice({
@@ -56,10 +61,18 @@ export const globalSlice = createAppSlice({
     setErrorDialogOpen: (state, action: PayloadAction<boolean>) => {
       state.errorDialogOpen = action.payload
     },
+    setCallDialogOpen: (state, action: PayloadAction<boolean>) => {
+      state.callDialogOpen = action.payload
+    },
+    setLiveCall: (state, action: PayloadAction<LiveCall>) => {
+      state.liveCall = action.payload
+    },
   }),
   selectors: {
     selectErrorMessage: state => state.errorMessage,
     selectErrorDialogOpen: state => state.errorDialogOpen,
+    selectCallDialogOpen: state => state.callDialogOpen,
+    selectLiveCall: state => state.liveCall,
     selectTokenInfo: state => state.tokenInfo,
     selectIsLogin: state => state.isLogin,
   },
@@ -72,7 +85,9 @@ export const {
   setIsLogin,
   setErrorMessage,
   setErrorDialogOpen,
+  setCallDialogOpen,
+  setLiveCall,
 } = globalSlice.actions
 
-export const { selectErrorMessage, selectErrorDialogOpen, selectTokenInfo, selectIsLogin } =
+export const { selectErrorMessage, selectErrorDialogOpen, selectCallDialogOpen, selectLiveCall, selectTokenInfo, selectIsLogin } =
   globalSlice.selectors
