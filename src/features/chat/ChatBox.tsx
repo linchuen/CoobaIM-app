@@ -16,11 +16,10 @@ import {
 } from "@mui/material"
 import {
   Search,
-  VideoCall,
-  Call,
   DateRange,
   ArrowBack,
 } from "@mui/icons-material"
+import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
 import {
@@ -37,6 +36,7 @@ import EmojiChatDialog from "./components/AddEmojiDialog"
 import UploadImageDialog from "./components/AddPictureDialog"
 import ChatMessages from "./components/ChatMessages"
 import LiveRoomDialoag from "./components/AddLiveRoomDialog"
+import AddMemberDialog from "./components/AddMemberDialog"
 
 const ChatBox: React.FC = () => {
   const navigate = useNavigate()
@@ -127,8 +127,9 @@ const ChatBox: React.FC = () => {
           <IconButton sx={{ color: "white" }}>
             <DateRange />
           </IconButton>
+          <AddMemberDialog />
           <IconButton sx={{ color: "white" }}>
-            <PersonAddIcon />
+            <PersonRemoveIcon />
           </IconButton>
         </Toolbar>
       </AppBar>
