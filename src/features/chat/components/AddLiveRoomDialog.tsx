@@ -12,8 +12,7 @@ import '@livekit/components-styles';
 
 import { Track } from 'livekit-client';
 import { Call, Phone, PhoneDisabled, VideoCall } from "@mui/icons-material";
-import type { ExtendButtonBase, IconButtonTypeMap } from "@mui/material";
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton } from "@mui/material";
+import { Button, Dialog, IconButton, styled } from "@mui/material";
 import { useState } from "react";
 import config from "../../../app/config";
 import { handleFetch } from "../../../services/common";
@@ -27,79 +26,86 @@ const LiveRoomDialoag: React.FC = () => {
     const dispatch = useAppDispatch()
     const tokenInfo = useAppSelector(selectTokenInfo)
     const currentRoomId = useAppSelector(selectCurrentRoomId)
-    const [calling, setCalling] = useState(false)
-    const [callOpen, setCallOpen] = useState(false)
+    const [open, setOpen] = useState(false)
+    const [connect, setConnect] = useState(false)
+    const [video, setVideo] = useState(false)
     const [livekitToken, setLivekitToken] = useState("")
 
     const onCall = () => {
         if (!tokenInfo) return
-        setCalling(true)
         handleFetch<LiveCall>(
             dispatch,
             fetchCreateLiveRoom({ roomId: currentRoomId }, tokenInfo.token),
             data => {
                 setLivekitToken(data.token)
+                setConnect(true)
             },
         )
     }
     const onEndCall = () => {
-        setCallOpen(false)
-        setCalling(false)
+        setOpen(false)
+        setConnect(false)
     }
 
-    const onClose = () => setCalling(false)
+    const onOpenVideo = () => {
+        setOpen(true)
+        setVideo(true)
+    }
 
+    const onOpenPhone = () => {
+        setOpen(true)
+        setVideo(false)
+    }
+
+    const onClose = () => setOpen(false)
+
+    const StyledButton = styled(IconButton)({
+        width: 50,
+        height: 50,
+        borderRadius: "50%",
+        margin: "0 12px",
+        color: "grey"
+    });
     return (
         <>
-            <IconButton sx={{ color: "white" }} onClick={() => setCallOpen(true)}>
+            <IconButton sx={{ color: "white" }} onClick={onOpenVideo}>
                 <VideoCall />
             </IconButton>
-            <IconButton sx={{ color: "white" }}>
+            <IconButton sx={{ color: "white" }} onClick={onOpenPhone}>
                 <Call />
             </IconButton>
-            <Dialog open={callOpen} onClose={onEndCall}>
-                <DialogTitle>通話選項</DialogTitle>
-                <DialogContent>
-                    請選擇您要執行的操作。
-                </DialogContent>
-                {calling ?
-                    <LiveKitRoom
-                        video={true}
-                        audio={true}
-                        token={livekitToken}
-                        serverUrl={config.livekitUrl}
-                        // Use the default LiveKit theme for nice styles.
-                        data-lk-theme="default"
-                        style={{ height: '100vh' }}
-                    >
-                        {/* Your custom component with basic video conferencing functionality. */}
-                        <MyVideoConference />
-                        {/* The RoomAudioRenderer takes care of room-wide audio for you. */}
-                        <RoomAudioRenderer />
-                        {/* Controls for the user to start/stop audio, video, and screen share tracks and to leave the room. */}
-                        <ControlBar />
-                    </LiveKitRoom>
-                    : <></>}
 
-                <DialogActions>
-                    <Button onClick={onCall}
-                        sx={{ width: 56, height: 56, borderRadius: "50%", margin: "0 12px", backgroundColor: "#a5d6a7", color: "white" }}>
-                        <Phone />
-                    </Button>
-                    <Button onClick={onEndCall}
-                        sx={{ width: 56, height: 56, borderRadius: "50%", margin: "0 12px", backgroundColor: "#ef9a9a", color: "white" }}>
-                        <PhoneDisabled />
-                    </Button>
-                </DialogActions>
-            </Dialog>
             <Dialog
-                open={calling}
+                open={open}
                 onClose={onClose}
                 fullWidth
                 maxWidth="sm"
+                style={{ height: '95vh' }}
             >
+                <LiveKitRoom
+                    video={video}
+                    audio={true}
+                    token={livekitToken}
+                    serverUrl={config.livekitUrl}
+                    // Use the default LiveKit theme for nice styles.
+                    data-lk-theme="default"
+                    connect={connect}
+                    style={{ height: '90%' }}
+                >
+                    {/* Your custom component with basic video conferencing functionality. */}
+                    <MyVideoConference />
+                    {/* The RoomAudioRenderer takes care of room-wide audio for you. */}
+                    <RoomAudioRenderer />
+                    {/* Controls for the user to start/stop audio, video, and screen share tracks and to leave the room. */}
+                    {/* <ControlBar /> */}
+                    <StyledButton onClick={onCall} sx={{ backgroundColor: "#a5d6a7" }} disabled={connect}>
+                        <Phone />
+                    </StyledButton>
+                    <StyledButton onClick={onEndCall} sx={{ backgroundColor: "#ef9a9a" }}>
+                        <PhoneDisabled />
+                    </StyledButton>
+                </LiveKitRoom>
             </Dialog>
-
         </>
     );
 };
@@ -124,7 +130,4 @@ function MyVideoConference() {
 }
 
 export default LiveRoomDialoag;
-function styled(IconButton: ExtendButtonBase<IconButtonTypeMap<{}, "button">>) {
-    throw new Error("Function not implemented.");
-}
 

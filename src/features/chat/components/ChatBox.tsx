@@ -165,7 +165,7 @@ const ChatBox: React.FC = () => {
       </Box>
 
       {/* Input Area */}
-      {tokenInfo ?
+      {currentRoomId !== 0 ?
         <Paper
           sx={{
             padding: 1.5,
