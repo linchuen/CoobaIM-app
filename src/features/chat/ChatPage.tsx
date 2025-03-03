@@ -51,8 +51,6 @@ const ChatPage: React.FC = () => {
   const roomInfos = useAppSelector(selectRoomInfoList)
   const roomSubscribeSet = useAppSelector(selectRoomSubscribeSet)
   const tokenInfo = useAppSelector(selectTokenInfo)
-  const [openAddFriend, setOpenAddFriend] = useState(false)
-  const [openAddRoom, setOpenAddRoom] = useState(false)
   const [openDialog, setOpenDialog] = useState(false)
   const [tabIndex, setTabIndex] = useState(0)
 
@@ -217,13 +215,7 @@ const ChatPage: React.FC = () => {
           <Box display="flex" justifyContent="space-between" alignItems="center">
             <Typography variant="h6">Personal Chats</Typography>
             <Box>
-              <IconButton
-                sx={{ color: "white" }}
-                size="small"
-                onClick={() => setOpenAddFriend(true)}
-              >
-                <AddIcon />
-              </IconButton>
+              <AddFriendDiaLog />
               <IconButton
                 sx={{ color: "white" }}
                 size="small"
@@ -240,13 +232,7 @@ const ChatPage: React.FC = () => {
           <Box display="flex" justifyContent="space-between" alignItems="center">
             <Typography variant="h6">Group Chats</Typography>
             <Box>
-              <IconButton
-                sx={{ color: "white" }}
-                size="small"
-                onClick={() => setOpenAddRoom(true)}
-              >
-                <AddIcon />
-              </IconButton>
+              <AddRoomDiaLog />
               <IconButton
                 sx={{ color: "white" }}
                 size="small"
@@ -258,13 +244,6 @@ const ChatPage: React.FC = () => {
           </Box>
           <List>{roomList.slice(0, 4)}</List>
         </Paper>
-
-        <AddFriendDiaLog
-          open={openAddFriend}
-          onClose={() => setOpenAddFriend(false)}
-        />
-
-        <AddRoomDiaLog open={openAddRoom} onClose={() => setOpenAddRoom(false)} />
 
         {/* Dialog for viewing all contacts and chats */}
         <Dialog

@@ -15,6 +15,7 @@ import {
   Typography,
 } from "@mui/material"
 import CloseIcon from "@mui/icons-material/Close"
+import AddIcon from "@mui/icons-material/Add"
 import type React from "react"
 import { useRef, useState } from "react"
 import { fetchBuildRoom } from "../../../services/RoomApi"
@@ -26,19 +27,16 @@ import type {
 } from "../../../services/ResponseInterface"
 import { addRoom, selectFriendInfoList } from "../ChatPageSlice";
 
-interface AddRoomDiaLogProps {
-  open: boolean
-  onClose: () => void
-}
-
-
-const AddRoomDiaLog: React.FC<AddRoomDiaLogProps> = ({ open, onClose }) => {
+const AddRoomDiaLog: React.FC = () => {
   const dispatch = useAppDispatch()
   const inputRef = useRef<HTMLInputElement>(null)
   const tokenInfo = useAppSelector(selectTokenInfo)
   const friendInfoList = useAppSelector(selectFriendInfoList)
+  const [openAddRoom, setOpenAddRoom] = useState(false)
   const [openCreateAlert, setOpenCreateAlert] = useState(false)
   const [selectedFriends, setSelectedFriends] = useState<number[]>([])
+
+  const onClose = () => setOpenAddRoom(false)
 
   const handleCreateRoom = async () => {
     if (inputRef.current && tokenInfo) {
@@ -72,11 +70,16 @@ const AddRoomDiaLog: React.FC<AddRoomDiaLogProps> = ({ open, onClose }) => {
   }
   return (
     <>
+      <IconButton
+        sx={{ color: "white" }}
+        size="small"
+        onClick={() => setOpenAddRoom(true)}
+      >
+        <AddIcon />
+      </IconButton>
       <Dialog
-        open={open}
-        onClose={() => {
-          onClose()
-        }}
+        open={openAddRoom}
+        onClose={onClose}
         fullWidth
         maxWidth="sm"
       >

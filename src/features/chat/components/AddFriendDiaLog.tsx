@@ -10,6 +10,7 @@ import {
   TextField,
 } from "@mui/material"
 import CloseIcon from "@mui/icons-material/Close"
+import AddIcon from "@mui/icons-material/Add"
 import type React from "react"
 import { useRef, useState } from "react"
 import { handleFetch } from "../../../services/common"
@@ -18,15 +19,11 @@ import { selectTokenInfo } from "../../globalSlice"
 import { fetchApplyFriend } from "../../../services/FriendApi"
 import { useAppDispatch, useAppSelector } from "../../../app/hooks"
 
-interface AddFriendDiaLogProps {
-  open: boolean
-  onClose: () => void
-}
-
-const AddFriendDiaLog: React.FC<AddFriendDiaLogProps> = ({ open, onClose }) => {
+const AddFriendDiaLog: React.FC = () => {
   const dispatch = useAppDispatch()
   const inputRef = useRef<HTMLInputElement>(null)
   const tokenInfo = useAppSelector(selectTokenInfo)
+  const [openAddFriend, setOpenAddFriend] = useState(false)
   const [openApplyAlert, setOpenApplyAlert] = useState(false)
   const [error, setError] = useState(false)
   const [helperText, setHelperText] = useState("")
@@ -34,6 +31,8 @@ const AddFriendDiaLog: React.FC<AddFriendDiaLogProps> = ({ open, onClose }) => {
   function isPositiveInteger(str: string) {
     return /^[1-9]\d*$/.test(str)
   }
+
+  const onClose = () => setOpenAddFriend(false)
 
   const handleSubmit = async () => {
     if (inputRef.current && tokenInfo) {
@@ -61,11 +60,16 @@ const AddFriendDiaLog: React.FC<AddFriendDiaLogProps> = ({ open, onClose }) => {
   }
   return (
     <>
+      <IconButton
+        sx={{ color: "white" }}
+        size="small"
+        onClick={() => setOpenAddFriend(true)}
+      >
+        <AddIcon />
+      </IconButton>
       <Dialog
-        open={open}
-        onClose={() => {
-          onClose()
-        }}
+        open={openAddFriend}
+        onClose={onClose}
         fullWidth
         maxWidth="sm"
       >
@@ -79,9 +83,7 @@ const AddFriendDiaLog: React.FC<AddFriendDiaLogProps> = ({ open, onClose }) => {
         >
           好友申請
           <IconButton
-            onClick={() => {
-              onClose()
-            }}
+            onClick={onClose}
             size="small"
           >
             <CloseIcon />
