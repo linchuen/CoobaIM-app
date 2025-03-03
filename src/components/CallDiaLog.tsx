@@ -16,6 +16,7 @@ const CallDialoag: React.FC = () => {
 
     const onCall = () => {
         setLivekitToken(liveCall?.token ?? "")
+        setConnect(true)
     }
     const onEndCall = () => {
         dispatch(setCallDialogOpen(false))

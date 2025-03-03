@@ -79,8 +79,14 @@ const LiveRoomDialoag: React.FC = () => {
                 open={open}
                 onClose={onClose}
                 fullWidth
-                maxWidth="sm"
-                style={{ height: '95vh' }}
+                maxWidth="md"
+                sx={{
+                    "& .MuiDialog-paper": {
+                        height: "90vh",
+                        display: "flex",
+                        flexDirection: "column",
+                    },
+                }}
             >
                 <LiveKitRoom
                     video={video}
@@ -90,7 +96,7 @@ const LiveRoomDialoag: React.FC = () => {
                     // Use the default LiveKit theme for nice styles.
                     data-lk-theme="default"
                     connect={connect}
-                    style={{ height: '90%' }}
+                    style={{ flex: 1, display: "flex", flexDirection: "column" }}
                 >
                     {/* Your custom component with basic video conferencing functionality. */}
                     <MyVideoConference />
@@ -98,12 +104,14 @@ const LiveRoomDialoag: React.FC = () => {
                     <RoomAudioRenderer />
                     {/* Controls for the user to start/stop audio, video, and screen share tracks and to leave the room. */}
                     {/* <ControlBar /> */}
+                    <div style={{ display: "flex", justifyContent: "center", padding: "10px" }}>
                     <StyledButton onClick={onCall} sx={{ backgroundColor: "#a5d6a7" }} disabled={connect}>
                         <Phone />
                     </StyledButton>
                     <StyledButton onClick={onEndCall} sx={{ backgroundColor: "#ef9a9a" }}>
                         <PhoneDisabled />
                     </StyledButton>
+                    </div>
                 </LiveKitRoom>
             </Dialog>
         </>
