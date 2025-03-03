@@ -11,7 +11,8 @@ import {
 import '@livekit/components-styles';
 
 import { Track } from 'livekit-client';
-import { Call, VideoCall } from "@mui/icons-material";
+import { Call, Phone, PhoneDisabled, VideoCall } from "@mui/icons-material";
+import type { ExtendButtonBase, IconButtonTypeMap } from "@mui/material";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton } from "@mui/material";
 import { useState } from "react";
 import config from "../../../app/config";
@@ -48,7 +49,6 @@ const LiveRoomDialoag: React.FC = () => {
 
     const onClose = () => setCalling(false)
 
-
     return (
         <>
             <IconButton sx={{ color: "white" }} onClick={() => setCallOpen(true)}>
@@ -82,11 +82,13 @@ const LiveRoomDialoag: React.FC = () => {
                     : <></>}
 
                 <DialogActions>
-                    <Button onClick={onCall} color="primary" variant="contained">
-                        通話
+                    <Button onClick={onCall}
+                        sx={{ width: 56, height: 56, borderRadius: "50%", margin: "0 12px", backgroundColor: "#a5d6a7", color: "white" }}>
+                        <Phone />
                     </Button>
-                    <Button onClick={onEndCall} color="secondary" variant="contained">
-                        結束通話
+                    <Button onClick={onEndCall}
+                        sx={{ width: 56, height: 56, borderRadius: "50%", margin: "0 12px", backgroundColor: "#ef9a9a", color: "white" }}>
+                        <PhoneDisabled />
                     </Button>
                 </DialogActions>
             </Dialog>
@@ -122,3 +124,7 @@ function MyVideoConference() {
 }
 
 export default LiveRoomDialoag;
+function styled(IconButton: ExtendButtonBase<IconButtonTypeMap<{}, "button">>) {
+    throw new Error("Function not implemented.");
+}
+
