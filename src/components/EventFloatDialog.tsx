@@ -5,6 +5,7 @@ import Draggable from "react-draggable";
 import { Close, ChatBubble } from "@mui/icons-material";
 import { useAppDispatch } from "../app/hooks";
 import { addFriend, addFriendApply } from "../features/chat/ChatPageSlice";
+import { setCallDialogOpen } from "../features/globalSlice";
 
 const FloatingModal: React.FC = () => {
   const dispatch = useAppDispatch()
@@ -23,6 +24,10 @@ const FloatingModal: React.FC = () => {
       showName: "test",
       roomId: Math.random() * 1000
     }))
+  }
+
+  const addPhoneEvent = () => {
+    dispatch(setCallDialogOpen(true))
   }
 
   return (
@@ -77,6 +82,7 @@ const FloatingModal: React.FC = () => {
             <Button variant="contained" color="primary" onClick={addFriendApplyEvent}>送出好友</Button>
             <Button variant="contained" color="secondary" onClick={addFriendEvent}>添加好友</Button>
             <Button variant="contained" color="warning">添加成員</Button>
+            <Button variant="contained" color="primary" onClick={addPhoneEvent}>播打電話</Button>
           </Box>
         </Paper>
       </Modal>
