@@ -33,7 +33,7 @@ import {
   subscribeGroups,
 } from "./ChatPageSlice"
 import { selectTokenInfo } from "../globalSlice"
-import ChatBox from "./components/ChatBox"
+import ChatBox from "./ChatBox"
 import AddFriendDiaLog from "./components/AddFriendDiaLog"
 import AddRoomDiaLog from "./components/AddRoomDiaLog"
 import WebSocket from "./components/WebSocket"

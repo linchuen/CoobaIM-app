@@ -22,21 +22,21 @@ import {
   ArrowBack,
 } from "@mui/icons-material"
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import { useAppDispatch, useAppSelector } from "../../../app/hooks"
+import { useAppDispatch, useAppSelector } from "../../app/hooks"
 import {
   selectCurrentRoomId,
   selectCurrentRoomName,
   selectEmoji,
   sendMessage,
   setEmoji,
-} from "../ChatPageSlice"
-import { selectTokenInfo } from "../../globalSlice"
+} from "./ChatPageSlice"
+import { selectTokenInfo } from "../globalSlice"
 import { useNavigate } from "react-router-dom"
-import UploadDialog from "./AddFileDialog"
-import EmojiChatDialog from "./AddEmojiDialog"
-import UploadImageDialog from "./AddPictureDialog"
-import ChatMessages from "./ChatMessages"
-import LiveRoomDialoag from "./AddLiveRoomDialog"
+import UploadDialog from "./components/AddFileDialog"
+import EmojiChatDialog from "./components/AddEmojiDialog"
+import UploadImageDialog from "./components/AddPictureDialog"
+import ChatMessages from "./components/ChatMessages"
+import LiveRoomDialoag from "./components/AddLiveRoomDialog"
 
 const ChatBox: React.FC = () => {
   const navigate = useNavigate()
