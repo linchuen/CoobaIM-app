@@ -18,6 +18,7 @@ import { setIsLogin, setTokenInfo } from "../globalSlice"
 import { useAppDispatch } from "../../app/hooks"
 import { handleFetch } from "../../services/common"
 import type { LoginResponse } from "../../services/ResponseInterface"
+import { reset } from "../chat/ChatPageSlice"
 
 const LoginRegisterPage: React.FC = () => {
   const navigate = useNavigate()
@@ -27,7 +28,8 @@ const LoginRegisterPage: React.FC = () => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
-  const handleLogin = () =>
+  const handleLogin = () =>{
+    dispatch(reset())
     handleFetch<LoginResponse>(
       dispatch,
       fetchLogin({
@@ -40,7 +42,7 @@ const LoginRegisterPage: React.FC = () => {
         navigate("/chat")
       },
     )
-
+  }
   return (
     <Box
       display="flex"

@@ -82,6 +82,12 @@ export const chatSlice = createAppSlice({
   name: "chat",
   initialState,
   reducers: create => ({
+    reset: create.reducer((state, action: PayloadAction<void>) => {
+      console.log("reset")
+      state.currentRoomId = 0
+      state.chatInfoList = []
+      state.currentRoomName = ""
+    }),
     setEmoji: create.reducer((state, action: PayloadAction<string>) => {
       console.log("emoji", action.payload)
       state.emoji = action.payload
@@ -295,6 +301,7 @@ export const {
   addSubscribeEvent,
   removeFriendApply,
   setEmoji,
+  reset
 } = chatSlice.actions
 
 export const {

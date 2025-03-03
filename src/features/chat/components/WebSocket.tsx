@@ -51,6 +51,7 @@ const WebSocket: React.FC = () => {
 
     if (tokenInfo) {
       const webSocket = WebSocketManager.getInstance()
+      webSocket.disconnect()
       webSocket.connect(tokenInfo.userId, tokenInfo.token, () => loadData(webSocket))
     }
   }, [dispatch, tokenInfo])
