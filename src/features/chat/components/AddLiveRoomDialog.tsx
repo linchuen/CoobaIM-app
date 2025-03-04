@@ -1,18 +1,12 @@
 import type React from "react";
 import {
-    ControlBar,
-    GridLayout,
     LiveKitRoom,
-    ParticipantTile,
-    RoomAudioRenderer,
-    useTracks,
 } from '@livekit/components-react';
 
 import '@livekit/components-styles';
 
-import { Track } from 'livekit-client';
-import { Call, Phone, PhoneDisabled, VideoCall } from "@mui/icons-material";
-import { Button, Dialog, IconButton, styled } from "@mui/material";
+import { Call, VideoCall } from "@mui/icons-material";
+import { Dialog, IconButton } from "@mui/material";
 import { useState } from "react";
 import config from "../../../app/config";
 import { handleFetch } from "../../../services/common";
@@ -21,6 +15,7 @@ import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { selectTokenInfo } from "../../globalSlice";
 import { selectCurrentRoomId } from "../ChatPageSlice";
 import type { LiveCall } from "../../../services/ResponseInterface";
+import LivekitContent from "../../../components/LivekitContent";
 
 const LiveRoomDialoag: React.FC = () => {
     const dispatch = useAppDispatch()
@@ -59,13 +54,6 @@ const LiveRoomDialoag: React.FC = () => {
 
     const onClose = () => setOpen(false)
 
-    const StyledButton = styled(IconButton)({
-        width: 50,
-        height: 50,
-        borderRadius: "50%",
-        margin: "0 12px",
-        color: "grey"
-    });
     return (
         <>
             <IconButton sx={{ color: "white" }} onClick={onOpenVideo}>
@@ -79,10 +67,10 @@ const LiveRoomDialoag: React.FC = () => {
                 open={open}
                 onClose={onClose}
                 fullWidth
-                maxWidth="md"
+                maxWidth={video ? "md" : "sm"}
                 sx={{
                     "& .MuiDialog-paper": {
-                        height: "90vh",
+                        height: video ? "90vh" : "10vh",
                         display: "flex",
                         flexDirection: "column",
                     },
@@ -98,44 +86,12 @@ const LiveRoomDialoag: React.FC = () => {
                     connect={connect}
                     style={{ flex: 1, display: "flex", flexDirection: "column" }}
                 >
-                    {/* Your custom component with basic video conferencing functionality. */}
-                    <MyVideoConference />
-                    {/* The RoomAudioRenderer takes care of room-wide audio for you. */}
-                    <RoomAudioRenderer />
-                    {/* Controls for the user to start/stop audio, video, and screen share tracks and to leave the room. */}
-                    {/* <ControlBar /> */}
-                    <div style={{ display: "flex", justifyContent: "center", padding: "10px" }}>
-                    <StyledButton onClick={onCall} sx={{ backgroundColor: "#a5d6a7" }} disabled={connect}>
-                        <Phone />
-                    </StyledButton>
-                    <StyledButton onClick={onEndCall} sx={{ backgroundColor: "#ef9a9a" }}>
-                        <PhoneDisabled />
-                    </StyledButton>
-                    </div>
+                    <LivekitContent video={video} onCall={onCall} onEndCall={onEndCall} connect={connect} />
                 </LiveKitRoom>
-            </Dialog>
+            </Dialog >
         </>
     );
 };
-
-function MyVideoConference() {
-    // `useTracks` returns all camera and screen share tracks. If a user
-    // joins without a published camera track, a placeholder track is returned.
-    const tracks = useTracks(
-        [
-            { source: Track.Source.Camera, withPlaceholder: true },
-            { source: Track.Source.ScreenShare, withPlaceholder: false },
-        ],
-        { onlySubscribed: false },
-    );
-    return (
-        <GridLayout tracks={tracks} style={{ height: 'calc(100vh - var(--lk-control-bar-height))' }}>
-            {/* The GridLayout accepts zero or one child. The child is used
-        as a template to render all passed in tracks. */}
-            <ParticipantTile />
-        </GridLayout>
-    );
-}
 
 export default LiveRoomDialoag;
 
