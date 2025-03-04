@@ -62,7 +62,6 @@ const ChatBox: React.FC = () => {
       )
       inputRef.current.value = ""
     }
-
   }
 
   useEffect(() => {
@@ -72,13 +71,20 @@ const ChatBox: React.FC = () => {
     }
   }, [dispatch, emoji, tokenInfo])
 
+  useEffect(() => {
+    const chatContainer = chatContainerRef.current;
+    if (chatContainer) {
+      chatContainer.scrollTo({ top: chatContainer.scrollHeight, behavior: "smooth" });
+    }
+  }, [currentRoomId])
+
   const handleScroll = useCallback(() => {
     if (!chatContainerRef.current) return
 
     if (chatContainerRef.current.scrollTop === 0) {
       setOpen(true)
     }
-  }, [dispatch, currentRoomId])
+  }, [])
 
   useEffect(() => {
     const chatContainer = chatContainerRef.current
