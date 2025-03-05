@@ -2,6 +2,7 @@ import SockJS from 'sockjs-client';
 import type { IMessage } from '@stomp/stompjs';
 import { Client } from '@stomp/stompjs';
 import config from '../app/config';
+import { compress, decompress } from './lz4';
 
 export class WebSocketManager {
     private static instance: WebSocketManager;
@@ -69,7 +70,7 @@ export class WebSocketManager {
         }
     }
 
-    public subscribe(destination: string, callback: (message: IMessage) => void): void {
+    public subscribe<T>(destination: string, callback: (message: T) => void): void {
         if (config.useFake) return
 
         if (!this.stompClient || !this.stompClient.connected) {
@@ -77,7 +78,21 @@ export class WebSocketManager {
             return;
         }
 
-        this.stompClient.subscribe(destination, callback);
+        this.stompClient.subscribe(destination, (message: IMessage) => {
+            try {
+                const compressedArrayBuffer = message.binaryBody;
+                const compressedData = new Uint8Array(compressedArrayBuffer);
+                const decompressedJson = decompress(compressedData);
+                const parsedMessage: T = JSON.parse(decompressedJson);
+                
+                console.log("📩 Received:", parsedMessage);
+    
+                // 调用泛型 callback
+                callback(parsedMessage);
+            } catch (error) {
+                console.error("❌ Failed to process incoming message:", error);
+            }
+        });
         console.log(`📩 Subscribed to: ${destination}`);
     }
 
@@ -89,7 +104,13 @@ export class WebSocketManager {
             return;
         }
 
-        this.stompClient.publish({ destination, body: JSON.stringify(message) });
+        const jsonString = JSON.stringify(message)
+        const compressedData = compress(jsonString);
+        this.stompClient.publish({
+            destination: destination,
+            binaryBody: compressedData,
+            headers: { "content-type": "application/lz4-json" },
+        });
         console.log(`📤 Sent message to ${destination}:`, message);
     }
 
