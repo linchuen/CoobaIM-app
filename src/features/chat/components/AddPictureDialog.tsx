@@ -13,6 +13,7 @@ import {
 import {
     Image,
 } from "@mui/icons-material"
+import { v4 as uuidv4 } from 'uuid';
 import { CloudUpload, Close } from "@mui/icons-material";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { selectTokenInfo } from "../../globalSlice";
@@ -55,6 +56,7 @@ const UploadImageDialog: React.FC = () => {
             data => {
                 dispatch(
                     sendMessage({
+                        uuid: uuidv4(),
                         roomId: currentRoomId,
                         message: data.fileName,
                         userId: tokenInfo.userId,

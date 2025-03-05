@@ -1,5 +1,6 @@
 import type React from "react";
 import { useState } from "react";
+import { v4 as uuidv4 } from 'uuid';
 import { Dialog, DialogTitle, DialogActions, Button, LinearProgress, Typography, IconButton } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { fetchFileUpload } from "../../../services/FileApi";
@@ -33,6 +34,7 @@ const UploadDialog: React.FC = () => {
             data => {
                 dispatch(
                     sendMessage({
+                        uuid: uuidv4(),
                         roomId: currentRoomId,
                         message: data.fileName,
                         userId: tokenInfo.userId,

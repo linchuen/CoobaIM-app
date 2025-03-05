@@ -28,6 +28,7 @@ import {
   sendMessage,
   setEmoji,
 } from "./ChatPageSlice"
+import { v4 as uuidv4 } from 'uuid';
 import { selectTokenInfo } from "../globalSlice"
 import { useNavigate } from "react-router-dom"
 import UploadDialog from "./components/AddFileDialog"
@@ -55,6 +56,7 @@ const ChatBox: React.FC = () => {
     if (inputRef.current && tokenInfo) {
       dispatch(
         sendMessage({
+          uuid: uuidv4(),
           roomId: currentRoomId,
           message: inputRef.current.value,
           userId: tokenInfo.userId
