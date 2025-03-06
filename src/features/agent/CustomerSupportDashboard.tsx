@@ -1,16 +1,18 @@
-import React, { useState } from "react";
-import { Box, Drawer, List, ListItem, ListItemText, Typography, Divider, Avatar, IconButton } from "@mui/material";
-import { ChevronRight, Close } from "@mui/icons-material";
+import type React from "react";
+import { useState } from "react";
+import { Box, Drawer, List, ListItem, ListItemText, Typography, Divider, Avatar, IconButton, Collapse } from "@mui/material";
+import { ChevronRight, ChevronLeft, Close, ExpandLess, ExpandMore } from "@mui/icons-material";
 
 const CustomerSupportDashboard: React.FC = () => {
   const [openDrawer, setOpenDrawer] = useState<null | "tickets" | "users" | "colleagues">(null);
+  const [openTickets, setOpenTickets] = useState(true);
 
   const toggleDrawer = (section: "tickets" | "users" | "colleagues") => {
     setOpenDrawer(openDrawer === section ? null : section);
   };
 
   return (
-    <Box display="flex" height="100vh" bgcolor="#121212" color="#fff">
+    <Box display="flex" height="100vh" bgcolor="#333" color="#fff">
       {/* Left Sidebar with Customer Info */}
       <Drawer variant="permanent" sx={{ width: 260, flexShrink: 0, bgcolor: "#1e1e1e" }}>
         <Box sx={{ width: 260, p: 2, textAlign: "center" }}>
@@ -19,13 +21,20 @@ const CustomerSupportDashboard: React.FC = () => {
           <Typography variant="body2">support@example.com</Typography>
           <Divider sx={{ my: 2 }} />
           
-          {/* 最近工單 */}
-          <ListItem onClick={() => toggleDrawer("tickets")}>
+          {/* 最近工單 - 可收合 */}
+          <ListItem onClick={() => setOpenTickets(!openTickets)}>
             <ListItemText primary="最近工單" />
-            <IconButton>
-              <ChevronRight />
-            </IconButton>
+            {openTickets ? <ExpandLess /> : <ExpandMore />}
           </ListItem>
+          <Collapse in={openTickets} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              {["工單 #12345", "工單 #12346", "工單 #12347"].map((text) => (
+                <ListItem key={text} sx={{ pl: 4 }}>
+                  <ListItemText primary={text} />
+                </ListItem>
+              ))}
+            </List>
+          </Collapse>
           <Divider />
           
           {/* 用戶列表 */}
@@ -59,9 +68,6 @@ const CustomerSupportDashboard: React.FC = () => {
             </IconButton>
           </Box>
           <List>
-            {openDrawer === "tickets" && ["工單 #12345", "工單 #12346", "工單 #12347"].map((text) => (
-              <ListItem key={text}><ListItemText primary={text} /></ListItem>
-            ))}
             {openDrawer === "users" && ["用戶 A", "用戶 B", "用戶 C"].map((text) => (
               <ListItem key={text}><ListItemText primary={text} /></ListItem>
             ))}
@@ -69,11 +75,14 @@ const CustomerSupportDashboard: React.FC = () => {
               <ListItem key={text}><ListItemText primary={text} /></ListItem>
             ))}
           </List>
+          <IconButton onClick={() => setOpenDrawer(null)} sx={{ position: "absolute", top: 8, right: 8, color: "#fff" }}>
+            <ChevronLeft />
+          </IconButton>
         </Box>
       </Drawer>
 
       {/* Chat Section */}
-      <Box flexGrow={1} p={2} display="flex" flexDirection="column" justifyContent="center" alignItems="center" bgcolor="#1e1e1e">
+      <Box flexGrow={1} p={2} display="flex" flexDirection="column" justifyContent="center" alignItems="center" bgcolor="#222">
         <Typography variant="h5">對話框</Typography>
         <Box border={1} borderColor="#333" width="80%" height="70%" p={2} borderRadius={2} bgcolor="#222">
           聊天內容...
@@ -82,7 +91,7 @@ const CustomerSupportDashboard: React.FC = () => {
 
       {/* User Info Sidebar */}
       <Drawer variant="permanent" anchor="right" sx={{ width: 260, flexShrink: 0, bgcolor: "#1e1e1e" }}>
-        <Box sx={{ width: 260, p: 2 }}>
+        <Box sx={{ width: 260, p: 2, color: "#fff" }}>
           <Typography variant="h6">用戶資訊</Typography>
           <Typography variant="body1">名稱: 用戶 A</Typography>
           <Typography variant="body1">郵箱: user@example.com</Typography>
