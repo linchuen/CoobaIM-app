@@ -20,29 +20,25 @@ const WebSocket: React.FC = () => {
   const tokenInfo = useAppSelector(selectTokenInfo)
 
   useEffect(() => {
-    const addFriendApplyEvent = (message: IMessage) => {
-      const newFriendApply = JSON.parse(message.body) as FriendApplyInfo
+    const addFriendApplyEvent = (newFriendApply: FriendApplyInfo) => {
       dispatch(addFriendApply(newFriendApply))
       console.log("addFriendApplyEvent", newFriendApply)
     }
-    const addFriendEvent = (message: IMessage) => {
-      const newFriend = JSON.parse(message.body) as FriendInfo
+    const addFriendEvent = (newFriend: FriendInfo) => {
       dispatch(addFriend(newFriend))
       console.log("addFriendEvent", newFriend)
     }
-    const addRoomEvent = (message: IMessage) => {
-      const newRoom = JSON.parse(message.body) as RoomInfo
+    const addRoomEvent = (newRoom: RoomInfo) => {
       dispatch(addRoom(newRoom))
       console.log("addRoomEvent", newRoom)
     }
-    const addCallEvent = (message: IMessage) => {
-      const newCall = JSON.parse(message.body) as LiveCall
+    const addCallEvent = (newCall: LiveCall) => {
       dispatch(setCallDialogOpen(true))
       dispatch(setLiveCall(newCall))
       console.log("addCallEvent", newCall)
     }
-    const addErrorEvent = (message: IMessage) => {
-      dispatch(setErrorMessage(message.body))
+    const addErrorEvent = (message: string) => {
+      dispatch(setErrorMessage(message))
       dispatch(setErrorDialogOpen(false))
     }
     const loadData = (webSocket: WebSocketManager) => {
@@ -50,11 +46,11 @@ const WebSocket: React.FC = () => {
       dispatch(loadGroups({ roomIds: [] }))
       dispatch(loadFriendApply(null))
 
-      webSocket.subscribe("/user/queue/friend_apply", addFriendApplyEvent)
-      webSocket.subscribe("/user/queue/friend_add", addFriendEvent)
-      webSocket.subscribe("/user/queue/room_add", addRoomEvent)
-      webSocket.subscribe("/user/queue/live_call", addCallEvent)
-      webSocket.subscribe("/user/queue/error", addErrorEvent)
+      webSocket.subscribe<FriendApplyInfo>("/user/queue/friend_apply", addFriendApplyEvent)
+      webSocket.subscribe<FriendInfo>("/user/queue/friend_add", addFriendEvent)
+      webSocket.subscribe<RoomInfo>("/user/queue/room_add", addRoomEvent)
+      webSocket.subscribe<LiveCall>("/user/queue/live_call", addCallEvent)
+      webSocket.subscribe<string>("/user/queue/error", addErrorEvent)
     }
 
     if (tokenInfo) {
