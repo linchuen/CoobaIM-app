@@ -6,8 +6,10 @@ import { ErrorDialog } from "./components/ErrorDialog"
 import config from "./app/config";
 import { setTokenInfo } from "./features/globalSlice";
 import { useAppDispatch } from "./app/hooks";
-import FloatingModal from "./components/eventFloatDialog"
+import FloatingModal from "./components/EventFloatDialog"
 import CallDialoag from "./components/CallDiaLog"
+import CustomerServiceChat from "./features/customer/CustomerServiceChat"
+import CustomerSupportDashboard from "./features/agent/CustomerSupportDashboard"
 
 const App = () => {
   const dispatch = useAppDispatch()
@@ -27,6 +29,8 @@ const App = () => {
         <Routes>
           <Route path="/" element={<LoginRegisterPage />} />
           <Route path="/chat" element={<ChatPage />} />
+          <Route path="/agent" element={<CustomerSupportDashboard />} />
+          <Route path="/customer" element={<CustomerServiceChat />} />
         </Routes>
       </BrowserRouter>
 
