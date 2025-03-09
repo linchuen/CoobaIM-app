@@ -4,7 +4,7 @@ export interface AgentCreateResponse {
     agentId: number;
     userId: number;
     isDisable: boolean;
-    createdTime: string; // LocalDateTime 轉換為 ISO 8601 字符串
+    createdTime: string;
 }
 
 
@@ -13,8 +13,8 @@ export interface Agent {
     userId: number;
     isDisable: boolean;
     isDefault: boolean;
-    createdTime: string; // LocalDateTime 轉換為 ISO 8601 格式的字符串
-    updatedTime: string; // LocalDateTime 轉換為 ISO 8601 格式的字符串
+    createdTime: string;
+    updatedTime: string;
 }
 
 export interface AgentSearchResponse {
@@ -29,7 +29,7 @@ export interface OfficialChannel {
     id: number;
     name: string;
     isPublic: boolean;
-    createdTime: string; // LocalDateTime 轉換為 ISO 8601 格式的字符串
+    createdTime: string; 
 }
 
 export interface ChannelSearchResponse {
@@ -58,10 +58,16 @@ export interface Ticket {
     agentUserId: number;
     customerUserId: number;
     isOpen: boolean;
-    createdTime: string; // LocalDateTime 轉換為 ISO 8601 格式的字符串
+    createdTime: string;
 }
 
 
 export interface CustomerTicketSearchResponse {
     tickets: Ticket[];
+}
+
+export interface TicketTransferResponse {
+    roomId: number;
+    userId: number;
+    showName: string;
 }

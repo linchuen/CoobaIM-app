@@ -8,6 +8,10 @@ export interface AgentCreateRequest {
     email: string;
 }
 
+export interface AgentDisableRequest{
+    agentUserId: number;
+}
+
 export interface AgentSearchRequest {
     agentIds?: number[];
 }
@@ -33,4 +37,9 @@ export interface CustomerEnterRequest {
 
 export interface CustomerTicketSearchRequest {
     customerUserId: number;
+}
+
+export interface TicketTransferRequest {
+    transferUserId: number;
+    roomId: number;
 }

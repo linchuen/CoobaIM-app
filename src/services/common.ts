@@ -10,17 +10,18 @@ export async function callFetch(
   url: string,
   method: "POST" | "PUT" | "DELETE" | "GET",
   token: string | undefined,
-  data: any,
+  data?: any,
 ) {
   try {
-    const body = JSON.stringify(data)
+    const body = data ? JSON.stringify(data) : null
+
     const res = await fetch(config.apiUrl + url, {
       method: method,
       headers: {
         "Content-Type": "application/json",
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
-      body: data === null ? null : body,
+      body: body,
     })
 
     if (!res.ok) {
