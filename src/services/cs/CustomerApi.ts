@@ -1,8 +1,8 @@
-import { callFetch } from "./common";
+import { callFetch } from "../common";
 import type { CustomerEnterRequest } from "./CsRequestInterface";
 import type { CustomerEnterResponse } from "./CsResponseInterface";
-import type { RegisterRequest } from "./RequestInterface";
-import type { ApiResponse, RegisterResponse, LoginResponse } from "./ResponseInterface";
+import type { RegisterRequest } from "../RequestInterface";
+import type { ApiResponse, RegisterResponse, LoginResponse } from "../ResponseInterface";
 
 
 export const fetchCreateUser = async (

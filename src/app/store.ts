@@ -4,10 +4,11 @@ import { setupListeners } from "@reduxjs/toolkit/query"
 import { counterSlice } from "../features/counter/counterSlice"
 import { globalSlice } from "../features/globalSlice"
 import { chatSlice } from "../features/chat/ChatPageSlice"
+import { customerSlice } from "../features/customer/CustomerPageSlice"
 
 // `combineSlices` automatically combines the reducers using
 // their `reducerPath`s, therefore we no longer need to call `combineReducers`.
-const rootReducer = combineSlices(counterSlice, globalSlice, chatSlice)
+const rootReducer = combineSlices(counterSlice, globalSlice, chatSlice, customerSlice)
 // Infer the `RootState` type from the root reducer
 export type RootState = ReturnType<typeof rootReducer>
 

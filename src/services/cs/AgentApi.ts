@@ -1,7 +1,7 @@
-import { callFetch } from "./common";
+import { callFetch } from "../common";
 import type { AgentCreateRequest, AgentUpdateRequest, AgentSearchRequest, CustomerTicketSearchRequest, AgentCustomerRequest, AgentDisableRequest } from "./CsRequestInterface";
 import type { AgentCreateResponse, AgentSearchResponse, CustomerSearchResponse, CustomerTicketSearchResponse } from "./CsResponseInterface";
-import type { ApiResponse } from "./ResponseInterface";
+import type { ApiResponse } from "../ResponseInterface";
 
 
 export const fetchCreateAgent = async (

@@ -1,4 +1,4 @@
-import type { ChatInfo } from "./ResponseInterface";
+import type { ChatInfo } from "../ResponseInterface";
 
 export interface AgentCreateResponse {
     agentId: number;
@@ -28,8 +28,6 @@ export interface ChannelCreateResponse {
 export interface OfficialChannel {
     id: number;
     name: string;
-    isPublic: boolean;
-    createdTime: string; 
 }
 
 export interface ChannelSearchResponse {

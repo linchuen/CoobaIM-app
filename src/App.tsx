@@ -8,8 +8,9 @@ import { setTokenInfo } from "./features/globalSlice";
 import { useAppDispatch } from "./app/hooks";
 import FloatingModal from "./components/EventFloatDialog"
 import CallDialoag from "./components/CallDiaLog"
-import CustomerServiceChat from "./features/customer/CustomerServiceChat"
+import CustomerPage from "./features/customer/CustomerPage"
 import CustomerSupportDashboard from "./features/agent/CustomerSupportDashboard"
+import CustomerChatBox from "./features/customer/CustomerChatBox"
 
 const App = () => {
   const dispatch = useAppDispatch()
@@ -30,7 +31,8 @@ const App = () => {
           <Route path="/" element={<LoginRegisterPage />} />
           <Route path="/chat" element={<ChatPage />} />
           <Route path="/agent" element={<CustomerSupportDashboard />} />
-          <Route path="/customer" element={<CustomerServiceChat />} />
+          <Route path="/customer" element={<CustomerPage />} />
+          <Route path="/customer/chat" element={<CustomerChatBox />} />
         </Routes>
       </BrowserRouter>
 

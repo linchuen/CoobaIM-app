@@ -39,7 +39,7 @@ const LoginRegisterPage: React.FC = () => {
       data => {
         dispatch(setTokenInfo(data))
         dispatch(setIsLogin(true))
-        navigate("/chat")
+        navigate("/customer")
       },
     )
   }

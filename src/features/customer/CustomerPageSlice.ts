@@ -1,12 +1,10 @@
 import type {
   ChatInfo,
-  FriendApplyInfo,
   FriendInfo,
   RoomInfo,
 } from "../../services/ResponseInterface"
 import {
   fetchSearchFriend,
-  fetchSearchFriendApply,
 } from "../../services/FriendApi"
 import { createAppSlice } from "../../app/createAppSlice"
 import { fetchSearchRoom } from "../../services/RoomApi"
@@ -23,6 +21,9 @@ import type { PayloadAction } from "@reduxjs/toolkit"
 import type { IMessage } from "@stomp/stompjs"
 import { WebSocketManager } from "../../services/websocketApi"
 import config from "../../app/config"
+import { fetchSearchChannel } from "../../services/cs/Channel"
+import type { OfficialChannel } from "../../services/cs/CsResponseInterface"
+
 
 type MessageState = {
   message: IMessage
@@ -36,7 +37,6 @@ type ChatState = {
 }
 
 type FriendState = {
-  friendApplyInfoList: FriendApplyInfo[]
   friendInfoList: FriendInfo[]
   roomInfoList: RoomInfo[]
   chatInfoList: ChatInfo[]
@@ -49,10 +49,10 @@ type FriendState = {
   currentRoomId: number
   currentRoomName: string
   emoji: string
+  channelList: OfficialChannel[]
 }
 
 const initialState: FriendState = {
-  friendApplyInfoList: [],
   friendInfoList: [],
   roomInfoList: [],
   chatInfoList: [],
@@ -64,7 +64,8 @@ const initialState: FriendState = {
   type: "",
   currentRoomId: 0,
   currentRoomName: "",
-  emoji: ""
+  emoji: "",
+  channelList: [],
 }
 
 function getPublishType(chatType: string): string {
@@ -78,7 +79,7 @@ function getPublishType(chatType: string): string {
   }
 }
 
-export const chatSlice = createAppSlice({
+export const customerSlice = createAppSlice({
   name: "chat",
   initialState,
   reducers: create => ({
@@ -101,19 +102,14 @@ export const chatSlice = createAppSlice({
     setCurrentRoomName: create.reducer((state, action: PayloadAction<string>) => {
       state.currentRoomName = action.payload
     }),
-    addFriendApply: create.reducer((state, action: PayloadAction<FriendApplyInfo>) => {
-      state.friendApplyInfoList.push(action.payload)
-    }),
-    removeFriendApply: create.reducer((state, action: PayloadAction<number>) => {
-      state.friendApplyInfoList = state.friendApplyInfoList.filter(
-        info => info.applyId !== action.payload,
-      )
-    }),
     addFriend: create.reducer((state, action: PayloadAction<FriendInfo>) => {
       state.friendInfoList.push(action.payload)
     }),
     addRoom: create.reducer((state, action: PayloadAction<RoomInfo>) => {
       state.roomInfoList.push(action.payload)
+    }),
+    addChannel: create.reducer((state, action: PayloadAction<OfficialChannel>) => {
+      state.channelList.push(action.payload)
     }),
     setRoomChatLoaded: create.reducer(
       (state, action: PayloadAction<number>) => {
@@ -216,22 +212,6 @@ export const chatSlice = createAppSlice({
         rejected: () => { },
       },
     ),
-    loadFriendApply: create.asyncThunk(
-      async (request: null, { getState }) => {
-        const state = getState() as RootState
-        const tokenInfo = selectTokenInfo(state)
-        const response = await fetchSearchFriendApply(request, tokenInfo?.token)
-        return response.data?.applicants
-      },
-      {
-        pending: () => { },
-        fulfilled: (state, action) => {
-          state.status = "idle"
-          state.friendApplyInfoList = action.payload ?? []
-        },
-        rejected: () => { },
-      },
-    ),
     loadChats: create.asyncThunk(
       async (request: ChatLoadRequest, { getState }): Promise<ChatState> => {
         const state = getState() as RootState
@@ -269,6 +249,22 @@ export const chatSlice = createAppSlice({
         rejected: () => { },
       },
     ),
+    loadChannels: create.asyncThunk(
+      async (_request: null, { getState }) => {
+        const state = getState() as RootState
+        const tokenInfo = selectTokenInfo(state)
+        const response = await fetchSearchChannel(tokenInfo?.token)
+        return response.data?.channels ?? []
+      },
+      {
+        pending: () => { },
+        fulfilled: (state, action) => {
+          state.status = "idle"
+          state.channelList = action.payload
+        },
+        rejected: () => { },
+      },
+    ),
   }),
   selectors: {
     selectFriendInfoList: state => state.friendInfoList,
@@ -277,33 +273,34 @@ export const chatSlice = createAppSlice({
     selectRoomChatMap: state => state.roomChatMap,
     selectRoomChatLoaded: state => state.roomChatLoaded,
     selectRoomSubscribeSet: state => state.roomSubscribeSet,
-    selectFriendApplyInfoList: state => state.friendApplyInfoList,
     selectEventSubscribeSet: state => state.eventSubscribeSet,
     selectStatus: state => state.status,
     selectCurrentRoomId: state => state.currentRoomId,
     selectCurrentRoomName: state => state.currentRoomName,
     selectEmoji: state => state.emoji,
+    selectChannelList: state => state.channelList,
   },
 })
 
 export const {
   loadFriends,
   loadGroups,
-  loadFriendApply,
   loadChats,
+  loadChannels,
   subscribeGroups,
   setType,
   setCurrentRoomId,
   setCurrentRoomName,
   sendMessage,
   addRoom,
+  addChannel,
   addFriend,
   addFriendApply,
   addSubscribeEvent,
   removeFriendApply,
   setEmoji,
   reset
-} = chatSlice.actions
+} = customerSlice.actions
 
 export const {
   selectFriendInfoList,
@@ -312,10 +309,10 @@ export const {
   selectRoomChatMap,
   selectRoomChatLoaded,
   selectRoomSubscribeSet,
-  selectFriendApplyInfoList,
   selectEventSubscribeSet,
   selectStatus,
   selectCurrentRoomId,
   selectCurrentRoomName,
   selectEmoji,
-} = chatSlice.selectors
+  selectChannelList,
+} = customerSlice.selectors

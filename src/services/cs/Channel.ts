@@ -1,7 +1,10 @@
-import { callFetch } from "./common";
+import config from "../../app/config";
+import { callFetch } from "../common";
+
+import { FakeSuccessResponse } from "../FakeSuccessResponse";
+import type { ApiResponse } from "../ResponseInterface";
 import type { ChannelCreateRequest, ChannelDeleteRequest } from "./CsRequestInterface";
 import type { ChannelCreateResponse, ChannelSearchResponse } from "./CsResponseInterface";
-import type { ApiResponse } from "./ResponseInterface";
 
 
 export const fetchCreateChannel = async (
@@ -21,5 +24,18 @@ export const fetchDeleteChannel = async (
 export const fetchSearchChannel = async (
   token?: string
 ): Promise<ApiResponse<ChannelSearchResponse>> => {
-  return callFetch("/channel/search", "GET", token);
+  return config.useFake
+    ? new FakeSuccessResponse({
+      channels: [
+        {
+          id: 1,
+          name: "24h客服"
+        },
+        {
+          id: 2,
+          name: "會員客服"
+        },
+      ],
+    })
+    : callFetch("/channel/search", "GET", token);
 };

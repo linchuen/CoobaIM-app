@@ -79,6 +79,7 @@ export interface RoomMemberResponse{
 }
 
 export interface ChatInfo {
+  uuid?: string,
   id: number
   name: string
   roomId: number
