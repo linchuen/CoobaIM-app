@@ -16,7 +16,7 @@ import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { WebSocketManager } from "../../services/websocketApi";
 import { selectTokenInfo } from "../globalSlice";
-import { loadChats, selectChannelList, selectFriendInfoList, selectRoomSubscribeSet, setCurrentRoomId, setCurrentRoomName, setType, subscribeGroups } from "./CustomerPageSlice";
+import { enterChannel, loadChats, selectChannelList, selectFriendInfoList, selectRoomSubscribeSet, setCurrentRoomId, setCurrentRoomName, setRoomType, subscribeGroups } from "./CustomerPageSlice";
 import CSWebSocket from "./components/CSWebSocket";
 import { useNavigate } from "react-router-dom";
 
@@ -43,15 +43,15 @@ const CustomerPage: React.FC = () => {
 
   }, [dispatch, friendInfos, roomSubscribeSet, tokenInfo])
 
-  const handleEnterChat = (channelId: number, name: string, type: string) => {
-    dispatch(setType(type))
+  const handleEnterChannel = (channelId: number, name: string, type: string) => {
+    dispatch(setRoomType(type))
     dispatch(setCurrentRoomId(channelId))
     dispatch(setCurrentRoomName(name))
-    dispatch(loadChats({ roomId: channelId }))
+    dispatch(enterChannel({ channelId: channelId }))
   }
 
   const handleLoadChat = (roomId: number, name: string, type: string) => {
-    dispatch(setType(type))
+    dispatch(setRoomType(type))
     dispatch(setCurrentRoomId(roomId))
     dispatch(setCurrentRoomName(name))
     dispatch(loadChats({ roomId: roomId }))
@@ -84,7 +84,7 @@ const CustomerPage: React.FC = () => {
         sx={{ marginBottom: 1 }}
         key={"channel_" + info.id}
         onClick={() => {
-          handleEnterChat(info.id, info.name, "user")
+          handleEnterChannel(info.id, info.name, "channel")
           navigate("/customer/chat")
         }}
       >

@@ -22,7 +22,9 @@ import type { IMessage } from "@stomp/stompjs"
 import { WebSocketManager } from "../../services/websocketApi"
 import config from "../../app/config"
 import { fetchSearchChannel } from "../../services/cs/Channel"
-import type { OfficialChannel } from "../../services/cs/CsResponseInterface"
+import type { CustomerEnterResponse, OfficialChannel, Ticket } from "../../services/cs/CsResponseInterface"
+import type { CustomerEnterRequest } from "../../services/cs/CsRequestInterface"
+import { fetchEnterRoom } from "../../services/cs/CustomerApi"
 
 
 type MessageState = {
@@ -36,6 +38,12 @@ type ChatState = {
   roomId: number
 }
 
+type ChannelState = {
+  ticket: Ticket
+  chats: ChatInfo[]
+  channelId: number
+}
+
 type ChatRoomState = {
   friendInfoList: FriendInfo[]
   roomInfoList: RoomInfo[]
@@ -43,9 +51,10 @@ type ChatRoomState = {
   roomChatMap: Record<number, ChatInfo[]>
   roomSubscribeSet: number[]
   roomChatLoaded: number[]
+  channelLoaded: Record<number, Ticket>
   eventSubscribeSet: string[]
   status: string
-  type: string
+  roomType: string
   currentRoomId: number
   currentRoomName: string
   emoji: string
@@ -59,9 +68,10 @@ const initialState: ChatRoomState = {
   roomChatMap: {},
   roomSubscribeSet: [],
   roomChatLoaded: [],
+  channelLoaded: {},
   eventSubscribeSet: [],
   status: "",
-  type: "",
+  roomType: "",
   currentRoomId: 0,
   currentRoomName: "",
   emoji: "",
@@ -93,8 +103,8 @@ export const customerSlice = createAppSlice({
       console.log("emoji", action.payload)
       state.emoji = action.payload
     }),
-    setType: create.reducer((state, action: PayloadAction<string>) => {
-      state.type = action.payload
+    setRoomType: create.reducer((state, action: PayloadAction<string>) => {
+      state.roomType = action.payload
     }),
     setCurrentRoomId: create.reducer((state, action: PayloadAction<number>) => {
       state.currentRoomId = action.payload
@@ -265,6 +275,51 @@ export const customerSlice = createAppSlice({
         rejected: () => { },
       },
     ),
+    enterChannel: create.asyncThunk(
+      async (request: CustomerEnterRequest, { getState }): Promise<ChannelState> => {
+        const state = getState() as RootState
+        const tokenInfo = selectTokenInfo(state)
+        const channelLoaded = selectChannelLoaded(state)
+        const roomChatLoaded = selectRoomChatLoaded(state)
+        const roomChats = selectRoomChatMap(state)
+        const ticket = channelLoaded[request.channelId]
+        const roomChat = roomChats[ticket.roomId]
+
+        const isLoaded = roomChatLoaded.includes(ticket.roomId)
+        const isMessageFull = roomChat && roomChat.length >= 100
+        if (isLoaded || isMessageFull) {
+          return {
+            ticket: ticket,
+            chats: roomChat,
+            channelId: request.channelId,
+          }
+        }
+
+        const response = await fetchEnterRoom(request, tokenInfo?.token)
+        if (!response.data) throw new Error(`API Error: ${response}`);
+        return {
+          ticket: response.data.ticket,
+          chats: response.data.chats,
+          channelId: request.channelId,
+        }
+      },
+      {
+        pending: () => { },
+        fulfilled: (state, action) => {
+          state.status = "idle"
+          const ticket = action.payload.ticket
+          const chats = action.payload.chats
+          const roomId = ticket.roomId
+          const channelId = action.payload.channelId
+
+          state.chatInfoList = chats
+          state.channelLoaded[channelId] = ticket
+          state.roomChatLoaded.push(roomId)
+          state.roomChatMap[roomId] = chats
+        },
+        rejected: () => { },
+      },
+    ),
   }),
   selectors: {
     selectFriendInfoList: state => state.friendInfoList,
@@ -279,6 +334,7 @@ export const customerSlice = createAppSlice({
     selectCurrentRoomName: state => state.currentRoomName,
     selectEmoji: state => state.emoji,
     selectChannelList: state => state.channelList,
+    selectChannelLoaded: state => state.channelLoaded,
   },
 })
 
@@ -288,7 +344,7 @@ export const {
   loadChats,
   loadChannels,
   subscribeGroups,
-  setType,
+  setRoomType,
   setCurrentRoomId,
   setCurrentRoomName,
   sendMessage,
@@ -297,7 +353,8 @@ export const {
   addFriend,
   addSubscribeEvent,
   setEmoji,
-  reset
+  reset,
+  enterChannel
 } = customerSlice.actions
 
 export const {
@@ -313,4 +370,5 @@ export const {
   selectCurrentRoomName,
   selectEmoji,
   selectChannelList,
+  selectChannelLoaded,
 } = customerSlice.selectors
