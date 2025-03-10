@@ -29,11 +29,13 @@ export const fetchSearchChannel = async (
       channels: [
         {
           id: 1,
-          name: "24h客服"
+          name: "24h客服",
+          isPublic: true
         },
         {
           id: 2,
-          name: "會員客服"
+          name: "會員客服",
+          isPublic: false
         },
       ],
     })
