@@ -22,9 +22,10 @@ import type { IMessage } from "@stomp/stompjs"
 import { WebSocketManager } from "../../services/websocketApi"
 import config from "../../app/config"
 import { fetchSearchChannel } from "../../services/cs/Channel"
-import type { CustomerEnterResponse, OfficialChannel, Ticket } from "../../services/cs/CsResponseInterface"
+import type { OfficialChannel, Ticket } from "../../services/cs/CsResponseInterface"
 import type { CustomerEnterRequest } from "../../services/cs/CsRequestInterface"
 import { fetchEnterRoom } from "../../services/cs/CustomerApi"
+import { ChatType } from "../../services/constant"
 
 
 type MessageState = {
@@ -54,7 +55,7 @@ type ChatRoomState = {
   channelLoaded: Record<number, Ticket>
   eventSubscribeSet: string[]
   status: string
-  roomType: string
+  chatType: ChatType
   currentRoomId: number
   currentRoomName: string
   emoji: string
@@ -71,14 +72,14 @@ const initialState: ChatRoomState = {
   channelLoaded: {},
   eventSubscribeSet: [],
   status: "",
-  roomType: "",
+  chatType: ChatType.ToNobody,
   currentRoomId: 0,
   currentRoomName: "",
   emoji: "",
   channelList: [],
 }
 
-function getPublishType(chatType: string): string {
+function getPublishType(chatType: ChatType): string {
   switch (chatType) {
     case "user":
       return "/app/sendToUser"
@@ -103,8 +104,8 @@ export const customerSlice = createAppSlice({
       console.log("emoji", action.payload)
       state.emoji = action.payload
     }),
-    setRoomType: create.reducer((state, action: PayloadAction<string>) => {
-      state.roomType = action.payload
+    setChatType: create.reducer((state, action: PayloadAction<ChatType>) => {
+      state.chatType = action.payload
     }),
     setCurrentRoomId: create.reducer((state, action: PayloadAction<number>) => {
       state.currentRoomId = action.payload
@@ -154,7 +155,7 @@ export const customerSlice = createAppSlice({
       async (request: SpeakRequest, { getState }): Promise<ChatInfo> => {
         const state = getState() as RootState
         const tokenInfo = selectTokenInfo(state)
-        const chatType = state.chat.type
+        const chatType = state.chat.chatType
         const publishType = getPublishType(chatType)
         let success
 
@@ -344,7 +345,7 @@ export const {
   loadChats,
   loadChannels,
   subscribeGroups,
-  setRoomType,
+  setChatType,
   setCurrentRoomId,
   setCurrentRoomName,
   sendMessage,

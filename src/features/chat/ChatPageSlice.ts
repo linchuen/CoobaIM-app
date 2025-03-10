@@ -23,6 +23,7 @@ import type { PayloadAction } from "@reduxjs/toolkit"
 import type { IMessage } from "@stomp/stompjs"
 import { WebSocketManager } from "../../services/websocketApi"
 import config from "../../app/config"
+import { ChatType } from "../../services/constant"
 
 type MessageState = {
   message: IMessage
@@ -45,7 +46,7 @@ type ChatRoomState = {
   roomChatLoaded: number[]
   eventSubscribeSet: string[]
   status: string
-  roomType: string;
+  chatType: ChatType;
   currentRoomId: number
   currentRoomName: string
   emoji: string
@@ -61,13 +62,13 @@ const initialState: ChatRoomState = {
   roomChatLoaded: [],
   eventSubscribeSet: [],
   status: "",
-  roomType: "",
+  chatType: ChatType.ToNobody,
   currentRoomId: 0,
   currentRoomName: "",
   emoji: ""
 }
 
-function getPublishType(chatType: string): string {
+function getPublishType(chatType: ChatType): string {
   switch (chatType) {
     case "user":
       return "/app/sendToUser"
@@ -92,8 +93,8 @@ export const chatSlice = createAppSlice({
       console.log("emoji", action.payload)
       state.emoji = action.payload
     }),
-    setRoomType: create.reducer((state, action: PayloadAction<string>) => {
-      state.roomType = action.payload
+    setRoomType: create.reducer((state, action: PayloadAction<ChatType>) => {
+      state.chatType = action.payload
     }),
     setCurrentRoomId: create.reducer((state, action: PayloadAction<number>) => {
       state.currentRoomId = action.payload
@@ -148,7 +149,7 @@ export const chatSlice = createAppSlice({
       async (request: SpeakRequest, { getState }): Promise<ChatInfo> => {
         const state = getState() as RootState
         const tokenInfo = selectTokenInfo(state)
-        const chatType = state.chat.type
+        const chatType = state.chat.chatType
         const publishType = getPublishType(chatType)
         let success
 

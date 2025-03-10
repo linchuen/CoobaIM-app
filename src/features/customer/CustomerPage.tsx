@@ -16,9 +16,10 @@ import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { WebSocketManager } from "../../services/websocketApi";
 import { selectTokenInfo } from "../globalSlice";
-import { enterChannel, loadChats, selectChannelList, selectFriendInfoList, selectRoomSubscribeSet, setCurrentRoomId, setCurrentRoomName, setRoomType, subscribeGroups } from "./CustomerPageSlice";
+import { enterChannel, loadChats, selectChannelList, selectFriendInfoList, selectRoomSubscribeSet, setChatType, setCurrentRoomId, setCurrentRoomName, subscribeGroups } from "./CustomerPageSlice";
 import CSWebSocket from "./components/CSWebSocket";
 import { useNavigate } from "react-router-dom";
+import { ChatType } from "../../services/constant";
 
 const CustomerPage: React.FC = () => {
   const navigate = useNavigate()
@@ -43,15 +44,15 @@ const CustomerPage: React.FC = () => {
 
   }, [dispatch, friendInfos, roomSubscribeSet, tokenInfo])
 
-  const handleEnterChannel = (channelId: number, name: string, type: string) => {
-    dispatch(setRoomType(type))
+  const handleEnterChannel = (channelId: number, name: string, type: ChatType) => {
+    dispatch(setChatType(type))
     dispatch(setCurrentRoomId(channelId))
     dispatch(setCurrentRoomName(name))
     dispatch(enterChannel({ channelId: channelId }))
   }
 
-  const handleLoadChat = (roomId: number, name: string, type: string) => {
-    dispatch(setRoomType(type))
+  const handleLoadChat = (roomId: number, name: string, type: ChatType) => {
+    dispatch(setChatType(type))
     dispatch(setCurrentRoomId(roomId))
     dispatch(setCurrentRoomName(name))
     dispatch(loadChats({ roomId: roomId }))
@@ -63,7 +64,7 @@ const CustomerPage: React.FC = () => {
         sx={{ marginBottom: 1 }}
         key={"friend_" + info.friendUserId}
         onClick={() => {
-          handleLoadChat(info.roomId, info.showName, "user")
+          handleLoadChat(info.roomId, info.showName, ChatType.ToUser)
           navigate("/customer/chat")
         }}
       >
@@ -84,7 +85,7 @@ const CustomerPage: React.FC = () => {
         sx={{ marginBottom: 1 }}
         key={"channel_" + info.id}
         onClick={() => {
-          handleEnterChannel(info.id, info.name, "channel")
+          handleEnterChannel(info.id, info.name, ChatType.ToRoom)
           navigate("/customer/chat")
         }}
       >

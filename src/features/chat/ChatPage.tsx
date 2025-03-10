@@ -15,7 +15,6 @@ import {
   Tabs,
   Typography,
 } from "@mui/material"
-import AddIcon from "@mui/icons-material/Add"
 import VisibilityIcon from "@mui/icons-material/Visibility"
 import { Chat } from "@mui/icons-material"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
@@ -42,6 +41,7 @@ import { fetchPermitFriend } from "../../services/FriendApi"
 import type { PermitFriendResponse } from "../../services/ResponseInterface"
 import { WebSocketManager } from "../../services/websocketApi"
 import type { IMessage } from "@stomp/stompjs"
+import { ChatType } from "../../services/constant"
 
 
 const ChatPage: React.FC = () => {
@@ -85,7 +85,7 @@ const ChatPage: React.FC = () => {
   }, [dispatch, roomInfos, roomSubscribeSet, tokenInfo])
 
 
-  const handleLoadChat = (roomId: number, name: string, type: string) => {
+  const handleLoadChat = (roomId: number, name: string, type: ChatType) => {
     dispatch(setRoomType(type))
     dispatch(setCurrentRoomId(roomId))
     dispatch(setCurrentRoomName(name))
@@ -149,7 +149,7 @@ const ChatPage: React.FC = () => {
         sx={{ marginBottom: 1 }}
         key={"friend_" + info.friendUserId}
         onClick={() => {
-          handleLoadChat(info.roomId, info.showName, "user")
+          handleLoadChat(info.roomId, info.showName, ChatType.ToUser)
           setOpenDialog(false)
         }}
       >
@@ -164,7 +164,7 @@ const ChatPage: React.FC = () => {
       <ListItem
         key={"room_" + info.id}
         onClick={() => {
-          handleLoadChat(info.id, info.name, "room")
+          handleLoadChat(info.id, info.name, ChatType.ToRoom)
           setOpenDialog(false)
         }}
       >
