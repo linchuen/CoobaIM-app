@@ -28,6 +28,7 @@ export interface ChannelCreateResponse {
 export interface OfficialChannel {
     id: number;
     name: string;
+    isPublic: boolean;
 }
 
 export interface ChannelSearchResponse {

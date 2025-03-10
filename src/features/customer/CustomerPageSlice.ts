@@ -36,7 +36,7 @@ type ChatState = {
   roomId: number
 }
 
-type FriendState = {
+type ChatRoomState = {
   friendInfoList: FriendInfo[]
   roomInfoList: RoomInfo[]
   chatInfoList: ChatInfo[]
@@ -52,7 +52,7 @@ type FriendState = {
   channelList: OfficialChannel[]
 }
 
-const initialState: FriendState = {
+const initialState: ChatRoomState = {
   friendInfoList: [],
   roomInfoList: [],
   chatInfoList: [],
@@ -295,9 +295,7 @@ export const {
   addRoom,
   addChannel,
   addFriend,
-  addFriendApply,
   addSubscribeEvent,
-  removeFriendApply,
   setEmoji,
   reset
 } = customerSlice.actions

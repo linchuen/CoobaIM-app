@@ -31,7 +31,7 @@ export interface ChannelDeleteRequest {
 }
 
 export interface CustomerEnterRequest {
-    roomId: number;
+    channelId: number;
     isUsePreviousChat?: boolean;
 }
 

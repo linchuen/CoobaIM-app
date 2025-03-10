@@ -1,6 +1,6 @@
 import { callFetch } from "../common";
-import type { AgentCreateRequest, AgentUpdateRequest, AgentSearchRequest, CustomerTicketSearchRequest, AgentCustomerRequest, AgentDisableRequest } from "./CsRequestInterface";
-import type { AgentCreateResponse, AgentSearchResponse, CustomerSearchResponse, CustomerTicketSearchResponse } from "./CsResponseInterface";
+import type { AgentCreateRequest, AgentUpdateRequest, AgentSearchRequest, CustomerTicketSearchRequest, AgentCustomerRequest, AgentDisableRequest, TicketTransferRequest } from "./CsRequestInterface";
+import type { AgentCreateResponse, AgentSearchResponse, CustomerSearchResponse, CustomerTicketSearchResponse, TicketTransferResponse } from "./CsResponseInterface";
 import type { ApiResponse } from "../ResponseInterface";
 
 

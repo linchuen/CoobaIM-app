@@ -43,11 +43,11 @@ const CustomerPage: React.FC = () => {
 
   }, [dispatch, friendInfos, roomSubscribeSet, tokenInfo])
 
-  const handleEnterChat = (roomId: number, name: string, type: string) => {
+  const handleEnterChat = (channelId: number, name: string, type: string) => {
     dispatch(setType(type))
-    dispatch(setCurrentRoomId(roomId))
+    dispatch(setCurrentRoomId(channelId))
     dispatch(setCurrentRoomName(name))
-    dispatch(loadChats({ roomId: roomId }))
+    dispatch(loadChats({ roomId: channelId }))
   }
 
   const handleLoadChat = (roomId: number, name: string, type: string) => {
@@ -82,9 +82,9 @@ const CustomerPage: React.FC = () => {
     return (
       <ListItem
         sx={{ marginBottom: 1 }}
-        key={"friend_" + info.id}
+        key={"channel_" + info.id}
         onClick={() => {
-          handleLoadChat(info.roomId, info.showName, "user")
+          handleEnterChat(info.id, info.name, "user")
           navigate("/customer/chat")
         }}
       >

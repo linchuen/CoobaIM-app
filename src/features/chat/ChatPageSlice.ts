@@ -35,7 +35,7 @@ type ChatState = {
   roomId: number
 }
 
-type FriendState = {
+type ChatRoomState = {
   friendApplyInfoList: FriendApplyInfo[]
   friendInfoList: FriendInfo[]
   roomInfoList: RoomInfo[]
@@ -45,13 +45,13 @@ type FriendState = {
   roomChatLoaded: number[]
   eventSubscribeSet: string[]
   status: string
-  type: string
+  roomType: string;
   currentRoomId: number
   currentRoomName: string
   emoji: string
 }
 
-const initialState: FriendState = {
+const initialState: ChatRoomState = {
   friendApplyInfoList: [],
   friendInfoList: [],
   roomInfoList: [],
@@ -61,7 +61,7 @@ const initialState: FriendState = {
   roomChatLoaded: [],
   eventSubscribeSet: [],
   status: "",
-  type: "",
+  roomType: "",
   currentRoomId: 0,
   currentRoomName: "",
   emoji: ""
@@ -92,8 +92,8 @@ export const chatSlice = createAppSlice({
       console.log("emoji", action.payload)
       state.emoji = action.payload
     }),
-    setType: create.reducer((state, action: PayloadAction<string>) => {
-      state.type = action.payload
+    setRoomType: create.reducer((state, action: PayloadAction<string>) => {
+      state.roomType = action.payload
     }),
     setCurrentRoomId: create.reducer((state, action: PayloadAction<number>) => {
       state.currentRoomId = action.payload
@@ -292,7 +292,7 @@ export const {
   loadFriendApply,
   loadChats,
   subscribeGroups,
-  setType,
+  setRoomType,
   setCurrentRoomId,
   setCurrentRoomName,
   sendMessage,

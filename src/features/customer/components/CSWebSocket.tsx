@@ -6,7 +6,7 @@ import { selectTokenInfo, setCallDialogOpen, setErrorDialogOpen, setErrorMessage
 import type { FriendInfo, LiveCall } from "../../../services/ResponseInterface"
 import { WebSocketManager } from "../../../services/websocketApi"
 import { addFriend, addRoom, loadChannels, loadFriends } from "../CustomerPageSlice"
-import type { OfficialChannel } from "../../../services/CsResponseInterface"
+import type { OfficialChannel } from "../../../services/cs/CsResponseInterface"
 
 
 const CSWebSocket: React.FC = () => {
