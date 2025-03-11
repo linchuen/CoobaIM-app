@@ -65,6 +65,10 @@ export interface CustomerTicketSearchResponse {
     tickets: Ticket[];
 }
 
+export interface TicketSearchResponse {
+    tickets: Ticket[];
+}
+
 export interface TicketTransferResponse {
     roomId: number;
     userId: number;

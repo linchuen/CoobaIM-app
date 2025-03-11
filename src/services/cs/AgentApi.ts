@@ -1,6 +1,6 @@
 import { callFetch } from "../common";
 import type { AgentCreateRequest, AgentUpdateRequest, AgentSearchRequest, CustomerTicketSearchRequest, AgentCustomerRequest, AgentDisableRequest, TicketTransferRequest } from "./CsRequestInterface";
-import type { AgentCreateResponse, AgentSearchResponse, CustomerSearchResponse, CustomerTicketSearchResponse, TicketTransferResponse } from "./CsResponseInterface";
+import type { AgentCreateResponse, AgentSearchResponse, CustomerSearchResponse, CustomerTicketSearchResponse, TicketSearchResponse, TicketTransferResponse } from "./CsResponseInterface";
 import type { ApiResponse } from "../ResponseInterface";
 
 
@@ -43,6 +43,12 @@ export const fetchSearchCustomerTicket = async (
   token?: string
 ): Promise<ApiResponse<CustomerTicketSearchResponse>> => {
   return callFetch("/agent/customer/ticket", "POST", token, data);
+};
+
+export const fetchSearchRecentTicket = async (
+  token?: string
+): Promise<ApiResponse<TicketSearchResponse>> => {
+  return callFetch("/agent/ticket", "GET", token);
 };
 
 export const fetchTransferTicket = async (

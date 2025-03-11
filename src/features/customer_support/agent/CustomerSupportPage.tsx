@@ -10,7 +10,7 @@ import TicketManagement from "./TicketManagement";
 import UserManagement from "./UserManagement";
 import HelpCenter from "./HelpCenter";
 
-const CustomerSupportDashboard: React.FC = () => {
+const CustomerSupportPage: React.FC = () => {
   const [openDrawer, setOpenDrawer] = useState<null | "tickets" | "users" | "colleagues">(null);
   const [openTickets, setOpenTickets] = useState(true);
   const [selectedPage, setSelectedPage] = useState<"dashboard" | "channels" | "tickets" | "users" | "support" | "help" | "setting">("dashboard");
@@ -147,4 +147,4 @@ const CustomerSupportDashboard: React.FC = () => {
   );
 };
 
-export default CustomerSupportDashboard;
+export default CustomerSupportPage;

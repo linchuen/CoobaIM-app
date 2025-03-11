@@ -1,12 +1,12 @@
 import type React from "react"
 import { useEffect } from "react"
-import { useAppDispatch, useAppSelector } from "../../../app/hooks"
+import { useAppDispatch, useAppSelector } from "../../../../app/hooks"
+import type { OfficialChannel } from "../../../../services/cs/CsResponseInterface"
+import type { FriendInfo, LiveCall } from "../../../../services/ResponseInterface"
+import { WebSocketManager } from "../../../../services/websocketApi"
+import { selectTokenInfo, setCallDialogOpen, setLiveCall, setErrorMessage, setErrorDialogOpen } from "../../../globalSlice"
+import { addFriend, addRoom, loadFriends, loadChannels } from "../../CustomerSupportSlice"
 
-import { selectTokenInfo, setCallDialogOpen, setErrorDialogOpen, setErrorMessage, setLiveCall } from "../../globalSlice"
-import type { FriendInfo, LiveCall } from "../../../services/ResponseInterface"
-import { WebSocketManager } from "../../../services/websocketApi"
-import { addFriend, addRoom, loadChannels, loadFriends } from "../CustomerPageSlice"
-import type { OfficialChannel } from "../../../services/cs/CsResponseInterface"
 
 
 const CSWebSocket: React.FC = () => {

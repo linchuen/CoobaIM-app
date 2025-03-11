@@ -90,8 +90,8 @@ function getPublishType(chatType: ChatType): string {
   }
 }
 
-export const customerSlice = createAppSlice({
-  name: "customer",
+export const customerSupportSlice = createAppSlice({
+  name: "customer_support",
   initialState,
   reducers: create => ({
     reset: create.reducer((state, action: PayloadAction<void>) => {
@@ -356,7 +356,7 @@ export const {
   setEmoji,
   reset,
   enterChannel
-} = customerSlice.actions
+} = customerSupportSlice.actions
 
 export const {
   selectFriendInfoList,
@@ -372,4 +372,4 @@ export const {
   selectEmoji,
   selectChannelList,
   selectChannelLoaded,
-} = customerSlice.selectors
+} = customerSupportSlice.selectors

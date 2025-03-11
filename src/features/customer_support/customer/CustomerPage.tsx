@@ -13,13 +13,13 @@ import {
 import PhoneIcon from "@mui/icons-material/Phone";
 import type { IMessage } from "@stomp/stompjs";
 import { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { WebSocketManager } from "../../services/websocketApi";
-import { selectTokenInfo } from "../globalSlice";
-import { enterChannel, loadChats, selectChannelList, selectFriendInfoList, selectRoomSubscribeSet, setChatType, setCurrentRoomId, setCurrentRoomName, subscribeGroups } from "./CustomerPageSlice";
+import { enterChannel, loadChats, selectChannelList, selectFriendInfoList, selectRoomSubscribeSet, setChatType, setCurrentRoomId, setCurrentRoomName, subscribeGroups } from "../CustomerSupportSlice";
 import CSWebSocket from "./components/CSWebSocket";
 import { useNavigate } from "react-router-dom";
-import { ChatType } from "../../services/constant";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
+import { ChatType } from "../../../services/constant";
+import { WebSocketManager } from "../../../services/websocketApi";
+import { selectTokenInfo } from "../../globalSlice";
 
 const CustomerPage: React.FC = () => {
   const navigate = useNavigate()

@@ -1,9 +1,9 @@
 import { Box, Paper, Typography, Link, ImageList, ImageListItem } from "@mui/material";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
-import { useAppSelector } from "../../../app/hooks";
-import { selectTokenInfo } from "../../globalSlice";
-import { selectChatInfoList } from "../CustomerPageSlice";
+import { selectChatInfoList } from "../../CustomerSupportSlice";
+import { useAppSelector } from "../../../../app/hooks";
+import { selectTokenInfo } from "../../../globalSlice";
 
 const CSChatMessages: React.FC = () => {
     const chatInfos = useAppSelector(selectChatInfoList)
