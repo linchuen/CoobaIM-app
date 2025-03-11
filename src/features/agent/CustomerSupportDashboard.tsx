@@ -7,6 +7,8 @@ import Dashboard from "./Dashboard";
 const CustomerSupportDashboard: React.FC = () => {
   const [openDrawer, setOpenDrawer] = useState<null | "tickets" | "users" | "colleagues">(null);
   const [openTickets, setOpenTickets] = useState(true);
+  const [selectedPage, setSelectedPage] = useState<"dashboard" | "channels" | "tickets" | "users" | "support" | "help" | "setting">("dashboard");
+
 
   const toggleDrawer = (section: "tickets" | "users" | "colleagues") => {
     setOpenDrawer(openDrawer === section ? null : section);
@@ -60,42 +62,42 @@ const CustomerSupportDashboard: React.FC = () => {
           </ListItem>
 
           {/* 頻道管理 */}
-          <ListItem >
+          <ListItem onClick={() => setSelectedPage("channels")}>
             <Folder sx={{ mr: 1 }} />
             <ListItemText primary="頻道管理" />
           </ListItem>
           <Divider />
 
           {/* 會員管理 */}
-          <ListItem >
+          <ListItem onClick={() => setSelectedPage("users")}>
             <People sx={{ mr: 1 }} />
             <ListItemText primary="會員管理" />
           </ListItem>
           <Divider />
 
           {/* 客服管理 */}
-          <ListItem >
+          <ListItem onClick={() => setSelectedPage("support")}>
             <Chat sx={{ mr: 1 }} />
             <ListItemText primary="客服管理" />
           </ListItem>
           <Divider />
 
           {/* 工單管理 */}
-          <ListItem >
+          <ListItem onClick={() => setSelectedPage("tickets")}>
             <Work sx={{ mr: 1 }} />
             <ListItemText primary="工單管理" />
           </ListItem>
           <Divider />
 
           {/* 幫助中心 */}
-          <ListItem >
+          <ListItem onClick={() => setSelectedPage("help")}>
             <HelpOutline sx={{ mr: 1 }} />
             <ListItemText primary="幫助中心" />
           </ListItem>
           <Divider />
 
           {/* 系統設定 */}
-          <ListItem >
+          <ListItem onClick={() => setSelectedPage("setting")}>
             <Settings sx={{ mr: 1 }} />
             <ListItemText primary="系統設定" />
           </ListItem>
@@ -105,7 +107,7 @@ const CustomerSupportDashboard: React.FC = () => {
 
       {/* Dynamic Right Drawer with Close Button */}
       <Drawer anchor="left" open={Boolean(openDrawer)} onClose={() => setOpenDrawer(null)} sx={{ width: 260 }}>
-        <Box sx={{ width: 260, height:"100%", p: 2, bgcolor: "#333", color: "#fff" }}>
+        <Box sx={{ width: 260, height: "100%", p: 2, bgcolor: "#333", color: "#fff" }}>
           <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
             <Typography variant="h6">
               {openDrawer === "tickets" ? "最近工單" : openDrawer === "users" ? "用戶列表" : "同事列表"}
@@ -124,7 +126,18 @@ const CustomerSupportDashboard: React.FC = () => {
           </IconButton>
         </Box>
       </Drawer>
-      <Dashboard />
+
+      {/* 主要內容區域：根據 selectedPage 渲染不同組件 */}
+      <Box flexGrow={1} p={3} bgcolor="#222">
+        {selectedPage === "dashboard" && <Dashboard />}
+        {selectedPage === "channels" && <ChannelManagement />}
+        {selectedPage === "users" && <UserManagement />}
+        {selectedPage === "support" && <CustomerSupport />}
+        {selectedPage === "tickets" && <TicketManagement />}
+        {selectedPage === "help" && <HelpCenter />}
+        {selectedPage === "setting" && <Setting />}
+
+      </Box>
     </Box>
   );
 };
