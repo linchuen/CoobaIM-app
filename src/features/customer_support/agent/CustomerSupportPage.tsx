@@ -6,12 +6,12 @@ import Dashboard from "./Dashboard";
 import ChannelManagement from "./ChannelManagement";
 import CustomerSupport from "./CustomerSupport";
 import Setting from "./Setting";
-import TicketManagement from "./TicketManagement";
 import UserManagement from "./UserManagement";
 import HelpCenter from "./HelpCenter";
 import RecentTicket from "./components/RecentTicket";
 import CustomerList from "./components/CutomerList";
 import AgentList from "./components/AgentList";
+import RoutingManagement from "./RoutingManagement";
 
 const CustomerSupportPage: React.FC = () => {
   const [selectedPage, setSelectedPage] = useState<"dashboard" | "channels" | "tickets" | "users" | "support" | "help" | "setting">("dashboard");
@@ -85,7 +85,7 @@ const CustomerSupportPage: React.FC = () => {
         {selectedPage === "channels" && <ChannelManagement />}
         {selectedPage === "users" && <UserManagement />}
         {selectedPage === "support" && <CustomerSupport />}
-        {selectedPage === "tickets" && <TicketManagement />}
+        {selectedPage === "tickets" && <RoutingManagement />}
         {selectedPage === "help" && <HelpCenter />}
         {selectedPage === "setting" && <Setting />}
       </Box>

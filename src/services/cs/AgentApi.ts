@@ -76,7 +76,7 @@ export const fetchSearchCustomer = async (
           "name": "Jane Smith"
         }
       ],
-    }) : callFetch("/agent/customer", "GET", token);
+    }) : callFetch("/agent/customer/search", "GET", token);
 };
 
 export const fetchSearchCustomerTicket = async (
