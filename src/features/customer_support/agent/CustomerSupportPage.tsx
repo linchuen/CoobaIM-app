@@ -16,7 +16,6 @@ import AgentList from "./components/AgentList";
 const CustomerSupportPage: React.FC = () => {
   const [selectedPage, setSelectedPage] = useState<"dashboard" | "channels" | "tickets" | "users" | "support" | "help" | "setting">("dashboard");
 
-
   return (
     <Box display="flex" height="100vh" bgcolor="#333" color="#fff">
       {/* Left Sidebar with Customer Info */}
