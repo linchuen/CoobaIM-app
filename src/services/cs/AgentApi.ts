@@ -31,7 +31,32 @@ export const fetchSearchAgent = async (
   data: AgentSearchRequest,
   token?: string
 ): Promise<ApiResponse<AgentSearchResponse>> => {
-  return callFetch("/agent/search", "POST", token, data);
+  return config.useFake
+    ? new FakeSuccessResponse({
+      agents: [
+        {
+          "id": 1,
+          "userId": 1001,
+          "isDisable": false,
+          "isDefault": true,
+          "name": "Tom"
+        },
+        {
+          "id": 2,
+          "userId": 1002,
+          "isDisable": false,
+          "isDefault": false,
+          "name": "Gina"
+        },
+        {
+          "id": 3,
+          "userId": 1003,
+          "isDisable": true,
+          "isDefault": false,
+          "name": "Peter"
+        }
+      ],
+    }) : callFetch("/agent/search", "POST", token, data);
 };
 
 export const fetchSearchCustomer = async (

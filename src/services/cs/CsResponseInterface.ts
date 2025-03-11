@@ -16,9 +16,16 @@ export interface Agent {
     createdTime: string;
     updatedTime: string;
 }
+export interface AgentInfo {
+    id: number;
+    userId: number;
+    isDisable: boolean;
+    isDefault: boolean;
+    name: string;
+}
 
 export interface AgentSearchResponse {
-    agents: Agent[];
+    agents: AgentInfo[];
 }
 
 export interface ChannelCreateResponse {

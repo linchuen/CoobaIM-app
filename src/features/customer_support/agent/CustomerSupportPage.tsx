@@ -1,7 +1,7 @@
 import type React from "react";
 import { useState } from "react";
-import { Box, Drawer, List, ListItem, ListItemText, Typography, Divider, Avatar, IconButton } from "@mui/material";
-import { ChevronRight, ChevronLeft, Chat, Folder, People, Work, Business, SupervisedUserCircle, Settings, HelpOutline } from "@mui/icons-material";
+import { Box, Drawer, ListItem, ListItemText, Typography, Divider, Avatar } from "@mui/material";
+import { Chat, Folder, People, Work, Settings, HelpOutline } from "@mui/icons-material";
 import Dashboard from "./Dashboard";
 import ChannelManagement from "./ChannelManagement";
 import CustomerSupport from "./CustomerSupport";
@@ -10,14 +10,11 @@ import TicketManagement from "./TicketManagement";
 import UserManagement from "./UserManagement";
 import HelpCenter from "./HelpCenter";
 import RecentTicket from "./components/RecentTicket";
+import CustomerList from "./components/CutomerList";
+import AgentList from "./components/AgentList";
 
 const CustomerSupportPage: React.FC = () => {
-  const [openDrawer, setOpenDrawer] = useState<null | "tickets" | "users" | "colleagues">(null);
   const [selectedPage, setSelectedPage] = useState<"dashboard" | "channels" | "tickets" | "users" | "support" | "help" | "setting">("dashboard");
-
-  const toggleDrawer = (section: "tickets" | "users" | "colleagues") => {
-    setOpenDrawer(openDrawer === section ? null : section);
-  };
 
 
   return (
@@ -33,24 +30,11 @@ const CustomerSupportPage: React.FC = () => {
           <RecentTicket />
           <Divider />
 
-          {/* 用戶列表 */}
-          <ListItem onClick={() => toggleDrawer("users")}>
-            <SupervisedUserCircle sx={{ mr: 1 }} />
-            <ListItemText primary="用戶列表" />
-            <IconButton>
-              <ChevronRight />
-            </IconButton>
-          </ListItem>
+          <CustomerList />
           <Divider />
 
-          {/* 同事列表 */}
-          <ListItem onClick={() => toggleDrawer("colleagues")}>
-            <Business sx={{ mr: 1 }} />
-            <ListItemText primary="同事列表" />
-            <IconButton>
-              <ChevronRight />
-            </IconButton>
-          </ListItem>
+          <AgentList />
+          <Divider />
 
           {/* 頻道管理 */}
           <ListItem onClick={() => setSelectedPage("channels")}>
@@ -93,28 +77,6 @@ const CustomerSupportPage: React.FC = () => {
             <ListItemText primary="系統設定" />
           </ListItem>
           <Divider />
-        </Box>
-      </Drawer>
-
-      {/* Dynamic Right Drawer with Close Button */}
-      <Drawer anchor="left" open={Boolean(openDrawer)} onClose={() => setOpenDrawer(null)} sx={{ width: 260 }}>
-        <Box sx={{ width: 260, height: "100%", p: 2, bgcolor: "#333", color: "#fff" }}>
-          <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-            <Typography variant="h6">
-              {openDrawer === "tickets" ? "最近工單" : openDrawer === "users" ? "用戶列表" : "同事列表"}
-            </Typography>
-          </Box>
-          <List>
-            {openDrawer === "users" && ["用戶 A", "用戶 B", "用戶 C"].map((text) => (
-              <ListItem key={text}><ListItemText primary={text} /></ListItem>
-            ))}
-            {openDrawer === "colleagues" && ["同事 X", "同事 Y", "同事 Z"].map((text) => (
-              <ListItem key={text}><ListItemText primary={text} /></ListItem>
-            ))}
-          </List>
-          <IconButton onClick={() => setOpenDrawer(null)} sx={{ position: "absolute", top: 8, right: 8, color: "#fff" }}>
-            <ChevronLeft />
-          </IconButton>
         </Box>
       </Drawer>
 
