@@ -2,10 +2,10 @@ import type React from "react";
 import { useState } from "react";
 import {  Container, Typography, Paper } from "@mui/material";
 import Grid from "@mui/material/Grid2"; // Import MUI Grid v2
-import TicketStatus from "./components/TicketStatus";
-import FAQStatistics from "./components/FAQStatistics";
-import TicketCategories from "./components/TicketCategories";
-import AgentSchedule from "./components/AgentSchedule";
+import TicketStatus from "./charts/TicketStatus";
+import FAQStatistics from "./charts/FAQStatistics";
+import TicketCategories from "./charts/TicketCategories";
+import AgentSchedule from "./charts/AgentSchedule";
 import { styled } from "@mui/material/styles";
 
 const Item = styled(Paper)(({ theme }) => ({

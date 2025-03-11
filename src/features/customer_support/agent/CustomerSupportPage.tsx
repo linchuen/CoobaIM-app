@@ -1,7 +1,7 @@
 import type React from "react";
 import { useState } from "react";
-import { Box, Drawer, List, ListItem, ListItemText, Typography, Divider, Avatar, IconButton, Collapse } from "@mui/material";
-import { ChevronRight, ChevronLeft, ExpandLess, ExpandMore, Chat, Folder, People, Work, Assignment, Business, SupervisedUserCircle, Settings, HelpOutline } from "@mui/icons-material";
+import { Box, Drawer, List, ListItem, ListItemText, Typography, Divider, Avatar, IconButton } from "@mui/material";
+import { ChevronRight, ChevronLeft, Chat, Folder, People, Work, Business, SupervisedUserCircle, Settings, HelpOutline } from "@mui/icons-material";
 import Dashboard from "./Dashboard";
 import ChannelManagement from "./ChannelManagement";
 import CustomerSupport from "./CustomerSupport";
@@ -9,12 +9,11 @@ import Setting from "./Setting";
 import TicketManagement from "./TicketManagement";
 import UserManagement from "./UserManagement";
 import HelpCenter from "./HelpCenter";
+import RecentTicket from "./components/RecentTicket";
 
 const CustomerSupportPage: React.FC = () => {
   const [openDrawer, setOpenDrawer] = useState<null | "tickets" | "users" | "colleagues">(null);
-  const [openTickets, setOpenTickets] = useState(true);
   const [selectedPage, setSelectedPage] = useState<"dashboard" | "channels" | "tickets" | "users" | "support" | "help" | "setting">("dashboard");
-
 
   const toggleDrawer = (section: "tickets" | "users" | "colleagues") => {
     setOpenDrawer(openDrawer === section ? null : section);
@@ -31,21 +30,7 @@ const CustomerSupportPage: React.FC = () => {
           <Typography variant="body2">support@example.com</Typography>
           <Divider sx={{ my: 2 }} />
 
-          {/* 最近工單 - 可收合 */}
-          <ListItem onClick={() => setOpenTickets(!openTickets)}>
-            <Assignment sx={{ mr: 1 }} />
-            <ListItemText primary="最近工單" />
-            {openTickets ? <ExpandLess /> : <ExpandMore />}
-          </ListItem>
-          <Collapse in={openTickets} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-              {["工單 #12345", "工單 #12346", "工單 #12347"].map((text) => (
-                <ListItem key={text} sx={{ pl: 4 }}>
-                  <ListItemText primary={text} />
-                </ListItem>
-              ))}
-            </List>
-          </Collapse>
+          <RecentTicket />
           <Divider />
 
           {/* 用戶列表 */}

@@ -1,6 +1,6 @@
 import { createAppSlice } from "../../app/createAppSlice"
 import type { PayloadAction } from "@reduxjs/toolkit"
-import type { Ticket, TicketSearchResponse } from "../../services/cs/CsResponseInterface"
+import type { Ticket } from "../../services/cs/CsResponseInterface"
 import { selectTokenInfo } from "../globalSlice"
 import type { RootState } from "../../app/store"
 import { fetchSearchCustomerTicket, fetchSearchRecentTicket } from "../../services/cs/AgentApi"

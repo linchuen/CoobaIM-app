@@ -19,7 +19,6 @@ import {
   DateRange,
   ArrowBack,
 } from "@mui/icons-material"
-import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
 import {
   selectCurrentRoomId,
