@@ -1,7 +1,7 @@
 import type React from "react";
 import { useState } from "react";
 import { Box, Drawer, ListItem, ListItemText, Typography, Divider, Avatar } from "@mui/material";
-import { Chat, Folder, People, Work, Settings, HelpOutline } from "@mui/icons-material";
+import { Chat, Folder, People, Work, Settings, HelpOutline, Route, Directions, SupportAgent } from "@mui/icons-material";
 import Dashboard from "./Dashboard";
 import ChannelManagement from "./ChannelManagement";
 import CustomerSupport from "./CustomerSupport";
@@ -12,9 +12,10 @@ import RecentTicket from "./components/RecentTicket";
 import CustomerList from "./components/CutomerList";
 import AgentList from "./components/AgentList";
 import RoutingManagement from "./RoutingManagement";
+import TicketManagement from "./TicketManagement";
 
 const CustomerSupportPage: React.FC = () => {
-  const [selectedPage, setSelectedPage] = useState<"dashboard" | "channels" | "tickets" | "users" | "support" | "help" | "setting">("dashboard");
+  const [selectedPage, setSelectedPage] = useState<"dashboard" | "channels" | "tickets" | "routing" | "users" | "support" | "help" | "setting">("dashboard");
 
   return (
     <Box display="flex" height="100vh" bgcolor="#333" color="#fff">
@@ -51,8 +52,15 @@ const CustomerSupportPage: React.FC = () => {
 
           {/* 客服管理 */}
           <ListItem onClick={() => setSelectedPage("support")}>
-            <Chat sx={{ mr: 1 }} />
+            <SupportAgent sx={{ mr: 1 }} />
             <ListItemText primary="客服管理" />
+          </ListItem>
+          <Divider />
+
+          {/* 路由管理 */}
+          <ListItem onClick={() => setSelectedPage("routing")}>
+            <Directions sx={{ mr: 1 }} />
+            <ListItemText primary="路由管理" />
           </ListItem>
           <Divider />
 
@@ -85,7 +93,8 @@ const CustomerSupportPage: React.FC = () => {
         {selectedPage === "channels" && <ChannelManagement />}
         {selectedPage === "users" && <UserManagement />}
         {selectedPage === "support" && <CustomerSupport />}
-        {selectedPage === "tickets" && <RoutingManagement />}
+        {selectedPage === "routing" && <RoutingManagement />}
+        {selectedPage === "tickets" && <TicketManagement />}
         {selectedPage === "help" && <HelpCenter />}
         {selectedPage === "setting" && <Setting />}
       </Box>
