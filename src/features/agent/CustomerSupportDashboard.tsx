@@ -1,8 +1,14 @@
 import type React from "react";
 import { useState } from "react";
 import { Box, Drawer, List, ListItem, ListItemText, Typography, Divider, Avatar, IconButton, Collapse } from "@mui/material";
-import { ChevronRight, ChevronLeft, Close, ExpandLess, ExpandMore, Chat, Folder, People, Work, Assignment, Business, SupervisedUserCircle, Settings, HelpOutline } from "@mui/icons-material";
+import { ChevronRight, ChevronLeft, ExpandLess, ExpandMore, Chat, Folder, People, Work, Assignment, Business, SupervisedUserCircle, Settings, HelpOutline } from "@mui/icons-material";
 import Dashboard from "./Dashboard";
+import ChannelManagement from "./ChannelManagement";
+import CustomerSupport from "./CustomerSupport";
+import Setting from "./Setting";
+import TicketManagement from "./TicketManagement";
+import UserManagement from "./UserManagement";
+import HelpCenter from "./HelpCenter";
 
 const CustomerSupportDashboard: React.FC = () => {
   const [openDrawer, setOpenDrawer] = useState<null | "tickets" | "users" | "colleagues">(null);
@@ -136,7 +142,6 @@ const CustomerSupportDashboard: React.FC = () => {
         {selectedPage === "tickets" && <TicketManagement />}
         {selectedPage === "help" && <HelpCenter />}
         {selectedPage === "setting" && <Setting />}
-
       </Box>
     </Box>
   );
