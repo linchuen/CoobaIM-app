@@ -12,7 +12,6 @@ import {
 import { selectTokenInfo, setCallDialogOpen, setErrorDialogOpen, setErrorMessage, setLiveCall } from "../../globalSlice"
 import type { FriendApplyInfo, FriendInfo, LiveCall, RoomInfo } from "../../../services/ResponseInterface"
 import { WebSocketManager } from "../../../services/websocketApi"
-import type { IMessage } from "@stomp/stompjs"
 
 
 const WebSocket: React.FC = () => {
