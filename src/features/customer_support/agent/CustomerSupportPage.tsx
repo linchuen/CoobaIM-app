@@ -2,17 +2,17 @@ import type React from "react";
 import { useState } from "react";
 import { Box, Drawer, ListItem, ListItemText, Typography, Divider, Avatar } from "@mui/material";
 import { Chat, Folder, People, Work, Settings, HelpOutline, Route, Directions, SupportAgent } from "@mui/icons-material";
-import Dashboard from "./Dashboard";
-import ChannelManagement from "./ChannelManagement";
-import CustomerSupport from "./CustomerSupport";
-import Setting from "./Setting";
-import UserManagement from "./UserManagement";
-import HelpCenter from "./HelpCenter";
+import Dashboard from "./pages/Dashboard";
+import ChannelManagement from "./pages/ChannelManagement";
+import CustomerSupport from "./pages/CustomerSupport";
+import Setting from "./pages/Setting";
+import UserManagement from "./pages/UserManagement";
+import HelpCenter from "./pages/HelpCenter";
 import RecentTicket from "./components/RecentTicket";
 import CustomerList from "./components/CutomerList";
 import AgentList from "./components/AgentList";
-import RoutingManagement from "./RoutingManagement";
-import TicketManagement from "./TicketManagement";
+import RoutingManagement from "./pages/RoutingManagement";
+import TicketManagement from "./pages/TicketManagement";
 
 const CustomerSupportPage: React.FC = () => {
   const [selectedPage, setSelectedPage] = useState<"dashboard" | "channels" | "tickets" | "routing" | "users" | "support" | "help" | "setting">("dashboard");
