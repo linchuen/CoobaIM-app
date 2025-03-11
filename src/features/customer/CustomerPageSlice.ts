@@ -91,7 +91,7 @@ function getPublishType(chatType: ChatType): string {
 }
 
 export const customerSlice = createAppSlice({
-  name: "chat",
+  name: "customer",
   initialState,
   reducers: create => ({
     reset: create.reducer((state, action: PayloadAction<void>) => {
