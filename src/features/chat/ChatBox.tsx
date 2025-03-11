@@ -38,6 +38,7 @@ import ChatMessages from "./components/ChatMessages"
 import LiveRoomDialoag from "./components/AddLiveRoomDialog"
 import AddMemberDialog from "./components/AddMemberDialog"
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
+import RemoveMemberDialog from "./components/RemoveMemberDialog"
 
 const ChatBox: React.FC = () => {
   const navigate = useNavigate()
@@ -136,9 +137,7 @@ const ChatBox: React.FC = () => {
             <DateRange />
           </IconButton>
           <AddMemberDialog />
-          <IconButton sx={{ color: "white" }}>
-            <PersonRemoveIcon />
-          </IconButton>
+          <RemoveMemberDialog />
           <IconButton sx={{ color: "white" }}>
             <SwapHorizIcon />
           </IconButton>

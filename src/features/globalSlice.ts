@@ -1,6 +1,6 @@
 import type { PayloadAction } from "@reduxjs/toolkit"
 import { createAppSlice } from "../app/createAppSlice"
-import { LiveCall } from "../services/ResponseInterface"
+import type { LiveCall } from "../services/ResponseInterface"
 
 interface User {
   id: number
