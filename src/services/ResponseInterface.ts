@@ -87,7 +87,7 @@ export interface ChatInfo {
   message: string
   url?: string
   type: string
-  success: boolean | undefined
+  success?: boolean | undefined
 }
 
 export interface ChatLoadResponse {

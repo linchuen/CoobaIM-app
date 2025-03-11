@@ -20,7 +20,7 @@ export const fetchBuildRoom = async (
 ): Promise<ApiResponse<BuildRoomResponse>> => {
   return config.useFake
     ? new FakeSuccessResponse({
-      name: "Room 3",
+      roomId: 3,
     })
     : callFetch("/room/build", "POST", token, data)
 }
@@ -75,15 +75,15 @@ export const fetchSearchRoomUsers = async (
   token?: string,
 ): Promise<ApiResponse<RoomMemberResponse>> => {
   return config.useFake
-  ? new FakeSuccessResponse({
-    roomUsers: [
-      {
-        id: 1,
-        roomId: 1,
-        userId: 2,
-        showName: "Alice"
-      },
-    ],
-  })
-  :callFetch("/room/search/users", "POST", token, data)
+    ? new FakeSuccessResponse({
+      roomUsers: [
+        {
+          id: 1,
+          roomId: 1,
+          userId: 2,
+          showName: "Alice"
+        },
+      ],
+    })
+    : callFetch("/room/search/users", "POST", token, data)
 }

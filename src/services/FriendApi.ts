@@ -74,7 +74,7 @@ export const fetchSearchFriendApply = async (
       applicants: [
         {
           id: 1,
-          applyUserId: 4,
+          applyId: 4,
           name: "Tom",
         },
       ],
