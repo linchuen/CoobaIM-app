@@ -2,6 +2,7 @@ import { createAppSlice } from "../../app/createAppSlice"
 import type { PayloadAction } from "@reduxjs/toolkit"
 
 export enum PageType {
+    chat = "chat",
     dashboard = "dashboard",
     channels = "channels",
     tickets = "tickets",

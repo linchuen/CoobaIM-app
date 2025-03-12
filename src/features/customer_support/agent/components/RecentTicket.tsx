@@ -4,6 +4,7 @@ import { List, ListItem, ListItemText, Collapse } from "@mui/material";
 import { ExpandLess, ExpandMore, Assignment } from "@mui/icons-material";
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
 import { selectRecentTicketLsit, setRecentTicket } from "../../TicketSlice";
+import { switchPage, PageType } from "../../PageSlice";
 
 const RecentTicket: React.FC = () => {
     const dispatch = useAppDispatch()
@@ -15,7 +16,7 @@ const RecentTicket: React.FC = () => {
     }, [dispatch])
 
     const tickets = ticketInfos.map(info => (
-        <ListItem key={info.id} sx={{ pl: 4 }}>
+        <ListItem key={info.id} sx={{ pl: 4 }} onClick={() => dispatch(switchPage(PageType.chat))}>
             <ListItemText primary={info.name} />
         </ListItem>
     ))

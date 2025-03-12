@@ -14,6 +14,7 @@ import RoutingManagement from "./pages/RoutingManagement";
 import TicketManagement from "./pages/TicketManagement";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { PageType, selectedPage, switchPage } from "../PageSlice";
+import ChatBox from "../../chat/ChatBox";
 
 const CustomerSupportPage: React.FC = () => {
   const dispatch = useAppDispatch()
@@ -91,6 +92,7 @@ const CustomerSupportPage: React.FC = () => {
 
       {/* 主要內容區域：根據 selectedPage 渲染不同組件 */}
       <Box flexGrow={1} p={3} bgcolor="#222">
+        {page === PageType.chat && <ChatBox />}
         {page === PageType.dashboard && <Dashboard />}
         {page === PageType.channels && <ChannelManagement />}
         {page === PageType.users && <UserManagement />}
