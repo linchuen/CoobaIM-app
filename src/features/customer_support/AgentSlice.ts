@@ -1,6 +1,6 @@
 import { createAppSlice } from "../../app/createAppSlice"
 import type { PayloadAction } from "@reduxjs/toolkit"
-import type { Agent, AgentInfo } from "../../services/cs/CsResponseInterface"
+import type { AgentInfo } from "../../services/cs/CsResponseInterface"
 import { selectTokenInfo } from "../globalSlice"
 import type { RootState } from "../../app/store"
 import { fetchSearchAgent } from "../../services/cs/AgentApi"
@@ -26,7 +26,7 @@ export const agentSlice = createAppSlice({
                 const state = getState() as RootState
                 const tokenInfo = selectTokenInfo(state)
                 const response = await fetchSearchAgent(request, tokenInfo?.token ?? "")
-                return response.data?.agents ?? [];
+                return response.data.agents;
             },
             {
                 pending: () => { },

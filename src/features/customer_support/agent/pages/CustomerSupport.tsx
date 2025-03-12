@@ -1,5 +1,5 @@
 import type React from "react";
-import { Box, Typography, Paper, Button, TextField, Table, TableHead, TableRow, TableCell, TableBody, Switch, Dialog, DialogTitle, DialogContent, DialogActions, Container, TableContainer } from "@mui/material";
+import { Box, Typography, Paper, Button, TextField, Table, TableHead, TableRow, TableCell, TableBody, Switch, Container, TableContainer } from "@mui/material";
 import { useState } from "react";
 
 const fakeAgents = [
@@ -11,9 +11,6 @@ const fakeAgents = [
 const CustomerSupport: React.FC = () => {
   const [agents, setAgents] = useState(fakeAgents);
   const [newAgentName, setNewAgentName] = useState("");
-  const [openDialog, setOpenDialog] = useState(false);
-  const [selectedAgent, setSelectedAgent] = useState<any>(null);
-  const [customerName, setCustomerName] = useState("");
 
   const handleCreate = () => {
     if (newAgentName) {

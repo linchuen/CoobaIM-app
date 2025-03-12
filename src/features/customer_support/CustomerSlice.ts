@@ -25,7 +25,7 @@ export const customerSlice = createAppSlice({
                 const state = getState() as RootState
                 const tokenInfo = selectTokenInfo(state)
                 const response = await fetchSearchCustomer(tokenInfo?.token ?? "")
-                return response.data?.customerInfos ?? [];
+                return response.data.customerInfos;
             },
             {
                 pending: () => { },

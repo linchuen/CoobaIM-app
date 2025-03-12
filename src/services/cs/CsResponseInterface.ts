@@ -42,6 +42,10 @@ export interface ChannelSearchResponse {
     channels: OfficialChannel[];
 }
 
+export interface ChannelDeleteResponse{
+    channelId: number;
+}
+
 export interface CustomerEnterResponse {
     ticket: Ticket;
     chats: ChatInfo[];

@@ -112,5 +112,5 @@ export interface ApiResponse<T> {
   traceId: string
   code: number
   errorMessage?: string
-  data?: T
+  data: T
 }

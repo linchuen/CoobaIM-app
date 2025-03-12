@@ -30,6 +30,7 @@ export async function callFetch(
         traceId: "99999",
         code: -1,
         errorMessage: res.status,
+        data: null,
       }
     }
     const response = res.json()
@@ -41,6 +42,7 @@ export async function callFetch(
       traceId: "99999",
       code: -1,
       errorMessage: e.message,
+      data: null,
     }
   }
 }

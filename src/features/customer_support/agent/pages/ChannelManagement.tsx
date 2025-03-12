@@ -38,7 +38,8 @@ const ChannelManagement: React.FC = () => {
   return (
     <Container>
       <Typography variant="h4" gutterBottom>
-        頻道管理</Typography>
+        頻道管理
+      </Typography>
       <TableContainer component={Paper}>
         <Box display="flex" gap={2} mb={2}>
           <TextField

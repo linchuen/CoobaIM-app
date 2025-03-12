@@ -4,7 +4,7 @@ import { callFetch } from "../common";
 import { FakeSuccessResponse } from "../FakeSuccessResponse";
 import type { ApiResponse } from "../ResponseInterface";
 import type { ChannelCreateRequest, ChannelDeleteRequest } from "./CsRequestInterface";
-import type { ChannelCreateResponse, ChannelSearchResponse } from "./CsResponseInterface";
+import type { ChannelCreateResponse, ChannelDeleteResponse, ChannelSearchResponse } from "./CsResponseInterface";
 
 
 export const fetchCreateChannel = async (
@@ -17,7 +17,7 @@ export const fetchCreateChannel = async (
 export const fetchDeleteChannel = async (
   data: ChannelDeleteRequest,
   token?: string
-): Promise<ApiResponse<boolean>> => {
+): Promise<ApiResponse<ChannelDeleteResponse>> => {
   return callFetch("/channel/delete", "DELETE", token, data);
 };
 
