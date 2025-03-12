@@ -18,7 +18,7 @@ import { PageType, selectedPage, switchPage } from "../PageSlice";
 
 const CustomerSupportPage: React.FC = () => {
   const dispatch = useAppDispatch()
-   const page = useAppSelector(selectedPage)
+  const page = useAppSelector(selectedPage)
 
   return (
     <Box display="flex" height="100vh" bgcolor="#333" color="#fff">
@@ -82,7 +82,7 @@ const CustomerSupportPage: React.FC = () => {
           <Divider />
 
           {/* 系統設定 */}
-          <ListItem onClick={() =>  dispatch(switchPage(PageType.setting))}>
+          <ListItem onClick={() => dispatch(switchPage(PageType.setting))}>
             <Settings sx={{ mr: 1 }} />
             <ListItemText primary="系統設定" />
           </ListItem>

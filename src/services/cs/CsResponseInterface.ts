@@ -36,6 +36,7 @@ export interface OfficialChannel {
     id: number;
     name: string;
     isPublic: boolean;
+    createdTime: string;
 }
 
 export interface ChannelSearchResponse {

@@ -1,38 +1,27 @@
-import { Container, TextField, Button, Table, TableHead, TableRow, TableCell, TableBody, Switch, Box, Paper, Typography, Toolbar, TableContainer } from "@mui/material";
+import { Container, TextField, Button, Table, TableHead, TableRow, TableCell, TableBody, Switch, Box, Paper, Typography, TableContainer } from "@mui/material";
 import type React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { addChannelThunk, deleteChannelThunk, selectChannelList, setChannelList } from "../../ChannelSlice";
+import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
 
-interface Channel {
-  id: number;
-  name: string;
-  isPublic: boolean;
-  createdTime: string;
-}
-
-const mockChannels: Channel[] = [
-  { id: 1, name: "頻道 A", isPublic: true, createdTime: "2024-03-11T10:00:00" },
-  { id: 2, name: "頻道 B", isPublic: false, createdTime: "2024-03-10T15:30:00" },
-  { id: 3, name: "頻道 C", isPublic: true, createdTime: "2024-03-09T08:45:00" },
-];
 
 const ChannelManagement: React.FC = () => {
-  const [channels, setChannels] = useState<Channel[]>(mockChannels);
+  const dispatch = useAppDispatch()
+  const channels = useAppSelector(selectChannelList)
   const [channelName, setChannelName] = useState("");
 
+  useEffect(() => {
+    dispatch(setChannelList())
+  }, [dispatch])
+  
   const createChannel = () => {
     if (!channelName) return;
-    const newChannel: Channel = {
-      id: channels.length + 1,
-      name: channelName,
-      isPublic: false,
-      createdTime: new Date().toISOString(),
-    };
-    setChannels([...channels, newChannel]);
-    setChannelName("");
-  };
 
-  const deleteChannel = (id: number) => {
-    setChannels(channels.filter(channel => channel.id !== id));
+    dispatch(addChannelThunk({
+      name: channelName,
+      isPublic: false
+    }));
+    setChannelName("");
   };
 
   return (
@@ -57,7 +46,6 @@ const ChannelManagement: React.FC = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>ID</TableCell>
               <TableCell>名稱</TableCell>
               <TableCell>公開</TableCell>
               <TableCell>建立時間</TableCell>
@@ -66,15 +54,14 @@ const ChannelManagement: React.FC = () => {
           </TableHead>
           <TableBody>
             {channels.map((channel) => (
-              <TableRow key={channel.id}>
-                <TableCell>{channel.id}</TableCell>
+              <TableRow key={"channel_" + channel.id}>
                 <TableCell>{channel.name}</TableCell>
                 <TableCell>
                   <Switch checked={channel.isPublic} disabled />
                 </TableCell>
                 <TableCell>{new Date(channel.createdTime).toLocaleString()}</TableCell>
                 <TableCell>
-                  <Button onClick={() => deleteChannel(channel.id)} color="secondary">刪除</Button>
+                  <Button onClick={() => dispatch(deleteChannelThunk({ channelId: channel.id }))} color="secondary">刪除</Button>
                 </TableCell>
               </TableRow>
             ))}

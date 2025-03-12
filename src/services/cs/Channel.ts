@@ -11,14 +11,22 @@ export const fetchCreateChannel = async (
   data: ChannelCreateRequest,
   token?: string
 ): Promise<ApiResponse<ChannelCreateResponse>> => {
-  return callFetch("/channel/create", "POST", token, data);
+  return config.useFake
+    ? new FakeSuccessResponse({
+      channelId: Math.floor(Math.random() * 100) + 1
+    })
+    : callFetch("/channel/create", "POST", token, data);
 };
 
 export const fetchDeleteChannel = async (
   data: ChannelDeleteRequest,
   token?: string
 ): Promise<ApiResponse<ChannelDeleteResponse>> => {
-  return callFetch("/channel/delete", "DELETE", token, data);
+  return config.useFake
+    ? new FakeSuccessResponse({
+      channelId: data.channelId
+    })
+    : callFetch("/channel/delete", "DELETE", token, data);
 };
 
 export const fetchSearchChannel = async (
@@ -30,12 +38,14 @@ export const fetchSearchChannel = async (
         {
           id: 1,
           name: "24h客服",
-          isPublic: true
+          isPublic: true,
+          createdTime: "2025-03-10T14:45:00Z"
         },
         {
           id: 2,
           name: "會員客服",
-          isPublic: false
+          isPublic: false,
+          createdTime: "2025-03-10T14:45:00Z"
         },
       ],
     })
