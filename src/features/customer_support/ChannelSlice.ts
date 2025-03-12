@@ -35,7 +35,7 @@ export const channelSlice = createAppSlice({
                     id: response.data.channelId,
                     name: request.name,
                     isPublic: request.isPublic ?? false,
-                    createdTime: new Date().toLocaleString()
+                    createdTime: new Date().toISOString()
                 };
             },
             {

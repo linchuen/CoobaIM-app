@@ -1,7 +1,6 @@
 import type React from "react";
-import { useState } from "react";
 import { Box, Drawer, ListItem, ListItemText, Typography, Divider, Avatar } from "@mui/material";
-import { Chat, Folder, People, Work, Settings, HelpOutline, Route, Directions, SupportAgent } from "@mui/icons-material";
+import { Folder, People, Work, Settings, HelpOutline, Directions, SupportAgent } from "@mui/icons-material";
 import Dashboard from "./pages/Dashboard";
 import ChannelManagement from "./pages/ChannelManagement";
 import CustomerSupport from "./pages/CustomerSupport";

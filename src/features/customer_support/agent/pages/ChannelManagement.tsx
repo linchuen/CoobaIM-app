@@ -1,27 +1,27 @@
 import { Container, TextField, Button, Table, TableHead, TableRow, TableCell, TableBody, Switch, Box, Paper, Typography, TableContainer } from "@mui/material";
 import type React from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 import { addChannelThunk, deleteChannelThunk, selectChannelList, setChannelList } from "../../ChannelSlice";
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
 
 
 const ChannelManagement: React.FC = () => {
-  const dispatch = useAppDispatch()
-  const channels = useAppSelector(selectChannelList)
-  const [channelName, setChannelName] = useState("");
+  const dispatch = useAppDispatch();
+  const channels = useAppSelector(selectChannelList);
+  const channelNameRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    dispatch(setChannelList())
-  }, [dispatch])
+    dispatch(setChannelList());
+  }, [dispatch]);
   
   const createChannel = () => {
-    if (!channelName) return;
+    if (!channelNameRef.current?.value) return;
 
     dispatch(addChannelThunk({
-      name: channelName,
+      name: channelNameRef.current.value,
       isPublic: false
     }));
-    setChannelName("");
+    channelNameRef.current.value = "";
   };
 
   return (
@@ -30,11 +30,10 @@ const ChannelManagement: React.FC = () => {
         頻道管理
       </Typography>
       <TableContainer component={Paper}>
-        <Box display="flex" gap={2} mb={2}>
+      <Box display="flex" gap={2} mb={2} p={2}>
           <TextField
             label="頻道名稱"
-            value={channelName}
-            onChange={(e) => setChannelName(e.target.value)}
+            inputRef={channelNameRef}
             fullWidth
             variant="outlined"
           />
