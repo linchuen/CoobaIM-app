@@ -12,6 +12,7 @@ interface TokenInfo {
   userId: number
   name: string
   token: string
+  role: string
   platform: string
   ip?: string
   loginTime: string

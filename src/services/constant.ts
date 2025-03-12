@@ -4,3 +4,9 @@ export enum ChatType {
     ToAll = "all",
     ToNobody = "",
 }
+
+export enum RoleType {
+    AGENT = "AGENT",
+    GUEST = "GUEST",
+    USER = "USER",
+}

@@ -22,6 +22,7 @@ export const fetchLogin = async (
         userId: 1,
         name: "Bob",
         token: "token",
+        role: "user",
         platform: "PC",
         loginTime: "string",
         expireTime: "string",

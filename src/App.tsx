@@ -19,6 +19,7 @@ const App = () => {
       userId: 1,
       name: "Bob",
       token: "token",
+      role: "USER",
       platform: "PC",
       loginTime: "string",
       expireTime: "string"

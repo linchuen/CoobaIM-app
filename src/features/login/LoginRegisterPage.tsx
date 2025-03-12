@@ -19,6 +19,7 @@ import { useAppDispatch } from "../../app/hooks"
 import { handleFetch } from "../../services/common"
 import type { LoginResponse } from "../../services/ResponseInterface"
 import { reset } from "../chat/ChatPageSlice"
+import { RoleType } from "../../services/constant"
 
 const LoginRegisterPage: React.FC = () => {
   const navigate = useNavigate()
@@ -28,7 +29,7 @@ const LoginRegisterPage: React.FC = () => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
-  const handleLogin = () =>{
+  const handleLogin = () => {
     dispatch(reset())
     handleFetch<LoginResponse>(
       dispatch,
@@ -39,7 +40,13 @@ const LoginRegisterPage: React.FC = () => {
       data => {
         dispatch(setTokenInfo(data))
         dispatch(setIsLogin(true))
-        navigate("/customer")
+        if (data.role === RoleType.GUEST) {
+          navigate("/customer")
+        } else if (data.role === RoleType.AGENT) {
+          navigate("/agent")
+        } else {
+          navigate("/chat")
+        }
       },
     )
   }
