@@ -24,7 +24,7 @@ export const agentSlice = createAppSlice({
         diableAgent: create.reducer((state, action: PayloadAction<number>) => {
             const agentUserId = action.payload
             const agentList = state.agentList
-            state.agentList = agentList.filter(agent => agent.userId !== agentUserId)
+            state.agentList = agentList.filter(agent => agent.userId === agentUserId)
         }),
         addAgentThunk: create.asyncThunk(
             async (request: AgentCreateRequest, { getState }): Promise<AgentInfo> => {

@@ -10,7 +10,14 @@ export const fetchCreateAgent = async (
   data: AgentCreateRequest,
   token?: string
 ): Promise<ApiResponse<AgentCreateResponse>> => {
-  return callFetch("/agent/create", "POST", token, data);
+  return config.useFake
+    ? new FakeSuccessResponse({
+      agentId: Math.random() * 1000,
+      userId: Math.random() * 1000,
+      isDisable: false,
+      createdTime: new Date().toISOString(),
+    })
+    : callFetch("/agent/create", "POST", token, data);
 };
 
 export const fetchUpdateAgent = async (
@@ -24,7 +31,9 @@ export const fetchDisableAgent = async (
   data: AgentDisableRequest,
   token?: string
 ): Promise<ApiResponse<boolean>> => {
-  return callFetch("/agent/disable", "POST", token, data);
+  return config.useFake
+    ? new FakeSuccessResponse(true)
+    : callFetch("/agent/disable", "POST", token, data);
 };
 
 export const fetchSearchAgent = async (
