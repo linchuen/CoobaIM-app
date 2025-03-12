@@ -29,7 +29,7 @@ const CustomerSupport: React.FC = () => {
         客服管理
       </Typography>
       <TableContainer component={Paper}>
-        <Box display="flex" gap={2} mb={2}>
+        <Box display="flex" gap={2} mb={2} p={2}>
           <TextField
             label="客服名稱"
             value={newAgentName}

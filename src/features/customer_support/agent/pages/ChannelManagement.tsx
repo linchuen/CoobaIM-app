@@ -13,7 +13,7 @@ const ChannelManagement: React.FC = () => {
   useEffect(() => {
     dispatch(setChannelList());
   }, [dispatch]);
-  
+
   const createChannel = () => {
     if (!channelNameRef.current?.value) return;
 
@@ -30,7 +30,7 @@ const ChannelManagement: React.FC = () => {
         頻道管理
       </Typography>
       <TableContainer component={Paper}>
-      <Box display="flex" gap={2} mb={2} p={2}>
+        <Box display="flex" gap={2} mb={2} p={2}>
           <TextField
             label="頻道名稱"
             inputRef={channelNameRef}

@@ -81,9 +81,11 @@ const UserManagement: React.FC = () => {
       </Typography>
 
       <TableContainer component={Paper}>
-        <Box mb={2} display="flex" gap={2}>
-          <TextField label="搜尋用戶" variant="outlined" fullWidth onChange={handleSearch} sx={{ backgroundColor: "white" }} />
-          <Button variant="contained" onClick={handleOpenDialog}>建立用戶</Button>
+        <Box display="flex" gap={2} mb={2} p={2}>
+          <TextField label="搜尋用戶" variant="outlined" fullWidth onChange={handleSearch} />
+          <Button onClick={handleOpenDialog} variant="contained" color="primary" sx={{ minWidth: 120 }}>
+            建立用戶
+          </Button>
         </Box>
         <Table>
           <TableHead>
