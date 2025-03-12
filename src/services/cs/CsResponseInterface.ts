@@ -54,8 +54,12 @@ export interface CustomerEnterResponse {
     chats: ChatInfo[];
 }
 
+export interface CustomerBindResponse{
+    agentCustomers: CustomerInfo[];
+}
+
 export interface CustomerInfo {
-    agentCustomerId: number;
+    agentUserId: number;
     customerUserId: number;
     name: string;
 }

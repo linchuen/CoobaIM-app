@@ -1,5 +1,5 @@
 import type React from "react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
     Table,
     TableBody,
@@ -13,38 +13,13 @@ import {
     Typography,
     Container,
 } from "@mui/material";
-
-interface Ticket {
-    id: number;
-    name: string;
-    roomId: number;
-    agentUserId: number;
-    customerUserId: number;
-    isOpen: boolean;
-    createdTime: string;
-}
+import { useAppSelector } from "../../../../app/hooks";
+import { selectRecentTicketLsit } from "../../TicketSlice";
 
 const TicketManagement: React.FC = () => {
-    const [tickets, setTickets] = useState<Ticket[]>([]);
+    const tickets = useAppSelector(selectRecentTicketLsit)
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
-
-    useEffect(() => {
-        // 模擬 API 請求獲取工單數據
-        const fetchTickets = async () => {
-            const mockData: Ticket[] = Array.from({ length: 20 }, (_, index) => ({
-                id: index + 1,
-                name: `工單 ${index + 1}`,
-                roomId: Math.floor(Math.random() * 100),
-                agentUserId: Math.floor(Math.random() * 10),
-                customerUserId: Math.floor(Math.random() * 50),
-                isOpen: Math.random() > 0.5,
-                createdTime: new Date().toISOString(),
-            }));
-            setTickets(mockData);
-        };
-        fetchTickets();
-    }, []);
 
     const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage);
@@ -55,14 +30,6 @@ const TicketManagement: React.FC = () => {
     ) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
-    };
-
-    const toggleTicketStatus = (id: number) => {
-        setTickets((prevTickets) =>
-            prevTickets.map((ticket) =>
-                ticket.id === id ? { ...ticket, isOpen: !ticket.isOpen } : ticket
-            )
-        );
     };
 
     return (
@@ -98,24 +65,22 @@ const TicketManagement: React.FC = () => {
                                     <TableCell>
                                         <Switch
                                             checked={ticket.isOpen}
-                                            onChange={() => toggleTicketStatus(ticket.id)}
                                         />
                                     </TableCell>
                                 </TableRow>
                             ))}
                     </TableBody>
                 </Table>
+                <TablePagination
+                    rowsPerPageOptions={[5, 10, 20]}
+                    component="div"
+                    count={tickets.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                />
             </TableContainer>
-            <TablePagination
-                rowsPerPageOptions={[5, 10, 20]}
-                component="div"
-                count={tickets.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-            />
-
         </Container>
     );
 };

@@ -2,7 +2,7 @@ import { Button, Table, TableHead, TableRow, TableCell, TableBody, Paper, TableC
 import type React from "react";
 import { useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
-import { selectCustomerList } from "../../CustomerSlice";
+import { bindCustomer, selectCustomerList, unbindCustomer } from "../../CustomerSlice";
 
 
 const BindCustomer: React.FC = () => {
@@ -11,8 +11,15 @@ const BindCustomer: React.FC = () => {
     const userIdRef = useRef<HTMLInputElement>(null);
     const [open, setOpen] = useState(false);
 
-    const handleSubmit = () => {
+    const handleBind = () => {
+        if (!userIdRef.current) return
+        dispatch(bindCustomer({ userIds: [Number(userIdRef.current.value)] }));
+        handleClose();
+    };
 
+    const handleUnbind = () => {
+        if (!userIdRef.current) return
+        dispatch(unbindCustomer({ userIds: [Number(userIdRef.current.value)] }));
         handleClose();
     };
 
@@ -39,7 +46,7 @@ const BindCustomer: React.FC = () => {
                                     <TableRow key={"customer_" + customer.customerUserId}>
                                         <TableCell>{customer.name}</TableCell>
                                         <TableCell>
-                                            {customer.agentCustomerId}
+                                            {customer.customerUserId}
                                         </TableCell>
                                     </TableRow>
                                 ))}
@@ -54,8 +61,8 @@ const BindCustomer: React.FC = () => {
                         fullWidth
                         variant="outlined"
                     />
-                    <Button onClick={handleClose} color="secondary">解綁</Button>
-                    <Button onClick={handleSubmit} color="primary" variant="contained">綁定</Button>
+                    <Button onClick={handleUnbind} color="secondary">解綁</Button>
+                    <Button onClick={handleBind} color="primary" variant="contained">綁定</Button>
                 </DialogActions>
             </Dialog>
         </>
