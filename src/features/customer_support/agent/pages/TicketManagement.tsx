@@ -10,8 +10,8 @@ import {
     Paper,
     Switch,
     TablePagination,
-    Box,
     Typography,
+    Container,
 } from "@mui/material";
 
 interface Ticket {
@@ -66,57 +66,57 @@ const TicketManagement: React.FC = () => {
     };
 
     return (
-        <Box p={3}>
+        <Container>
             <Typography variant="h4" gutterBottom>
-                頻道管理
+                工單管理
             </Typography>
-            <Paper>
-                <TableContainer>
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>ID</TableCell>
-                                <TableCell>名稱</TableCell>
-                                <TableCell>房間 ID</TableCell>
-                                <TableCell>客服 ID</TableCell>
-                                <TableCell>客戶 ID</TableCell>
-                                <TableCell>創建時間</TableCell>
-                                <TableCell>狀態</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {tickets
-                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map((ticket) => (
-                                    <TableRow key={ticket.id}>
-                                        <TableCell>{ticket.id}</TableCell>
-                                        <TableCell>{ticket.name}</TableCell>
-                                        <TableCell>{ticket.roomId}</TableCell>
-                                        <TableCell>{ticket.agentUserId}</TableCell>
-                                        <TableCell>{ticket.customerUserId}</TableCell>
-                                        <TableCell>{new Date(ticket.createdTime).toLocaleString()}</TableCell>
-                                        <TableCell>
-                                            <Switch
-                                                checked={ticket.isOpen}
-                                                onChange={() => toggleTicketStatus(ticket.id)}
-                                            />
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-                <TablePagination
-                    rowsPerPageOptions={[5, 10, 20]}
-                    component="div"
-                    count={tickets.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                />
-            </Paper>
-        </Box>
+
+            <TableContainer component={Paper}>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>ID</TableCell>
+                            <TableCell>名稱</TableCell>
+                            <TableCell>房間 ID</TableCell>
+                            <TableCell>客服 ID</TableCell>
+                            <TableCell>客戶 ID</TableCell>
+                            <TableCell>創建時間</TableCell>
+                            <TableCell>狀態</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {tickets
+                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                            .map((ticket) => (
+                                <TableRow key={ticket.id}>
+                                    <TableCell>{ticket.id}</TableCell>
+                                    <TableCell>{ticket.name}</TableCell>
+                                    <TableCell>{ticket.roomId}</TableCell>
+                                    <TableCell>{ticket.agentUserId}</TableCell>
+                                    <TableCell>{ticket.customerUserId}</TableCell>
+                                    <TableCell>{new Date(ticket.createdTime).toLocaleString()}</TableCell>
+                                    <TableCell>
+                                        <Switch
+                                            checked={ticket.isOpen}
+                                            onChange={() => toggleTicketStatus(ticket.id)}
+                                        />
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+            <TablePagination
+                rowsPerPageOptions={[5, 10, 20]}
+                component="div"
+                count={tickets.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+
+        </Container>
     );
 };
 

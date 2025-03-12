@@ -1,5 +1,5 @@
 import type React from "react";
-import { Box, Typography, Paper, Button, TextField, Table, TableHead, TableRow, TableCell, TableBody, Switch, Dialog, DialogTitle, DialogContent, DialogActions, Container } from "@mui/material";
+import { Box, Typography, Paper, Button, TextField, Table, TableHead, TableRow, TableCell, TableBody, Switch, Dialog, DialogTitle, DialogContent, DialogActions, Container, TableContainer } from "@mui/material";
 import { useState } from "react";
 
 const fakeAgents = [
@@ -27,56 +27,54 @@ const CustomerSupport: React.FC = () => {
   };
 
   return (
-    <Box p={3}>
+    <Container >
       <Typography variant="h4" gutterBottom>
         客服管理
       </Typography>
-      <Paper sx={{ p: 2 }}>
-        <Container>
-          <Box display="flex" gap={2} mb={2}>
-            <TextField
-              label="客服名稱"
-              value={newAgentName}
-              onChange={(e) => setNewAgentName(e.target.value)}
-              fullWidth
-              variant="outlined"
-            />
-            <Button onClick={handleCreate} variant="contained" color="primary" sx={{ minWidth: 120 }}>
-              建立客服
-            </Button>
-          </Box>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>ID</TableCell>
-                <TableCell>名稱</TableCell>
-                <TableCell>部門</TableCell>
-                <TableCell>預設</TableCell>
-                <TableCell>建立時間</TableCell>
-                <TableCell>操作</TableCell>
+      <TableContainer component={Paper}>
+        <Box display="flex" gap={2} mb={2}>
+          <TextField
+            label="客服名稱"
+            value={newAgentName}
+            onChange={(e) => setNewAgentName(e.target.value)}
+            fullWidth
+            variant="outlined"
+          />
+          <Button onClick={handleCreate} variant="contained" color="primary" sx={{ minWidth: 120 }}>
+            建立客服
+          </Button>
+        </Box>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>ID</TableCell>
+              <TableCell>名稱</TableCell>
+              <TableCell>部門</TableCell>
+              <TableCell>預設</TableCell>
+              <TableCell>建立時間</TableCell>
+              <TableCell>操作</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {agents.map((agent) => (
+              <TableRow key={agent.id}>
+                <TableCell>{agent.id}</TableCell>
+                <TableCell>{agent.name}</TableCell>
+                <TableCell>{agent.department}</TableCell>
+                <TableCell>
+                  <Switch checked={agent.isDefault} disabled />
+                </TableCell>
+                <TableCell>{new Date(agent.createdTime).toLocaleString()}</TableCell>
+                <TableCell>
+                  <Button onClick={() => handleDisable(agent.id)} color="secondary">綁定</Button>
+                  <Button onClick={() => handleDisable(agent.id)} color="secondary">停用</Button>
+                </TableCell>
               </TableRow>
-            </TableHead>
-            <TableBody>
-              {agents.map((agent) => (
-                <TableRow key={agent.id}>
-                  <TableCell>{agent.id}</TableCell>
-                  <TableCell>{agent.name}</TableCell>
-                  <TableCell>{agent.department}</TableCell>
-                  <TableCell>
-                    <Switch checked={agent.isDefault} disabled />
-                  </TableCell>
-                  <TableCell>{new Date(agent.createdTime).toLocaleString()}</TableCell>
-                  <TableCell>
-                    <Button onClick={() => handleDisable(agent.id)} color="secondary">綁定</Button>
-                    <Button onClick={() => handleDisable(agent.id)} color="secondary">停用</Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </Container>
-      </Paper>
-    </Box>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Container>
   );
 };
 

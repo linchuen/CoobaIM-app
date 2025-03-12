@@ -1,4 +1,4 @@
-import { Container, TextField, Button, Table, TableHead, TableRow, TableCell, TableBody, Switch, Box, Paper, Typography, Toolbar } from "@mui/material";
+import { Container, TextField, Button, Table, TableHead, TableRow, TableCell, TableBody, Switch, Box, Paper, Typography, Toolbar, TableContainer } from "@mui/material";
 import type React from "react";
 import { useState } from "react";
 
@@ -36,54 +36,51 @@ const ChannelManagement: React.FC = () => {
   };
 
   return (
-    <Box p={3}>
+    <Container>
       <Typography variant="h4" gutterBottom>
-        頻道管理
-      </Typography>
-      <Paper sx={{ p: 2 }}>
-        <Container>
-          <Box display="flex" gap={2} mb={2}>
-            <TextField
-              label="頻道名稱"
-              value={channelName}
-              onChange={(e) => setChannelName(e.target.value)}
-              fullWidth
-              variant="outlined"
-            />
-            <Button onClick={createChannel} variant="contained" color="primary" sx={{ minWidth: 120 }}>
-              建立頻道
-            </Button>
-          </Box>
+        頻道管理</Typography>
+      <TableContainer component={Paper}>
+        <Box display="flex" gap={2} mb={2}>
+          <TextField
+            label="頻道名稱"
+            value={channelName}
+            onChange={(e) => setChannelName(e.target.value)}
+            fullWidth
+            variant="outlined"
+          />
+          <Button onClick={createChannel} variant="contained" color="primary" sx={{ minWidth: 120 }}>
+            建立頻道
+          </Button>
+        </Box>
 
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>ID</TableCell>
-                <TableCell>名稱</TableCell>
-                <TableCell>公開</TableCell>
-                <TableCell>建立時間</TableCell>
-                <TableCell>操作</TableCell>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>ID</TableCell>
+              <TableCell>名稱</TableCell>
+              <TableCell>公開</TableCell>
+              <TableCell>建立時間</TableCell>
+              <TableCell>操作</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {channels.map((channel) => (
+              <TableRow key={channel.id}>
+                <TableCell>{channel.id}</TableCell>
+                <TableCell>{channel.name}</TableCell>
+                <TableCell>
+                  <Switch checked={channel.isPublic} disabled />
+                </TableCell>
+                <TableCell>{new Date(channel.createdTime).toLocaleString()}</TableCell>
+                <TableCell>
+                  <Button onClick={() => deleteChannel(channel.id)} color="secondary">刪除</Button>
+                </TableCell>
               </TableRow>
-            </TableHead>
-            <TableBody>
-              {channels.map((channel) => (
-                <TableRow key={channel.id}>
-                  <TableCell>{channel.id}</TableCell>
-                  <TableCell>{channel.name}</TableCell>
-                  <TableCell>
-                    <Switch checked={channel.isPublic} disabled />
-                  </TableCell>
-                  <TableCell>{new Date(channel.createdTime).toLocaleString()}</TableCell>
-                  <TableCell>
-                    <Button onClick={() => deleteChannel(channel.id)} color="secondary">刪除</Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </Container>
-      </Paper>
-    </Box>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Container>
   );
 };
 

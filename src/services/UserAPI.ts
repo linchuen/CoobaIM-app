@@ -22,7 +22,7 @@ export const fetchLogin = async (
         userId: 1,
         name: "Bob",
         token: "token",
-        role: "user",
+        role: config.testRole,
         platform: "PC",
         loginTime: "string",
         expireTime: "string",

@@ -1,6 +1,6 @@
 import type React from "react";
 import { useState } from "react";
-import { Box, Typography, Paper, TextField, Button, Accordion, AccordionSummary, AccordionDetails, IconButton } from "@mui/material";
+import { Box, Typography, Paper, TextField, Button, Accordion, AccordionSummary, AccordionDetails, IconButton, Container } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import DeleteIcon from "@mui/icons-material/Delete";
 
@@ -27,7 +27,7 @@ const HelpCenter: React.FC = () => {
   };
 
   return (
-    <Box p={3}>
+    <Container>
       <Typography variant="h4" gutterBottom>
         幫助中心
       </Typography>
@@ -72,7 +72,7 @@ const HelpCenter: React.FC = () => {
           </Button>
         </Box>
       </Paper>
-    </Box>
+    </Container>
   );
 };
 

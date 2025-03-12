@@ -17,6 +17,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  Container,
 } from "@mui/material";
 import { v4 as uuidv4 } from "uuid";
 
@@ -74,47 +75,47 @@ const UserManagement: React.FC = () => {
   );
 
   return (
-    <Box p={3}>
+    <Container>
       <Typography variant="h4" gutterBottom>
         會員管理
       </Typography>
-      <Box mb={2} display="flex" gap={2}>
-        <TextField label="搜尋用戶" variant="outlined" fullWidth onChange={handleSearch} sx={{ backgroundColor: "white" }} />
-        <Button variant="contained" onClick={handleOpenDialog}>建立用戶</Button>
-      </Box>
-      <Paper sx={{ p: 2 }}>
-        <TableContainer>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>名稱</TableCell>
-                <TableCell>Email</TableCell>
-                <TableCell>角色</TableCell>
-                <TableCell>狀態</TableCell>
+
+      <TableContainer component={Paper}>
+        <Box mb={2} display="flex" gap={2}>
+          <TextField label="搜尋用戶" variant="outlined" fullWidth onChange={handleSearch} sx={{ backgroundColor: "white" }} />
+          <Button variant="contained" onClick={handleOpenDialog}>建立用戶</Button>
+        </Box>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>名稱</TableCell>
+              <TableCell>Email</TableCell>
+              <TableCell>角色</TableCell>
+              <TableCell>狀態</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((user) => (
+              <TableRow key={user.id}>
+                <TableCell>{user.name}</TableCell>
+                <TableCell>{user.email}</TableCell>
+                <TableCell>{user.role}</TableCell>
+                <TableCell>{user.status}</TableCell>
               </TableRow>
-            </TableHead>
-            <TableBody>
-              {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((user) => (
-                <TableRow key={user.id}>
-                  <TableCell>{user.name}</TableCell>
-                  <TableCell>{user.email}</TableCell>
-                  <TableCell>{user.role}</TableCell>
-                  <TableCell>{user.status}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={filteredUsers.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Paper>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <TablePagination
+        rowsPerPageOptions={[5, 10, 25]}
+        component="div"
+        count={filteredUsers.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
+
       <Dialog open={open} onClose={handleCloseDialog}>
         <DialogTitle>新增用戶</DialogTitle>
         <DialogContent>
@@ -126,7 +127,7 @@ const UserManagement: React.FC = () => {
           <Button onClick={handleAddUser} variant="contained">新增</Button>
         </DialogActions>
       </Dialog>
-    </Box>
+    </Container>
   );
 };
 

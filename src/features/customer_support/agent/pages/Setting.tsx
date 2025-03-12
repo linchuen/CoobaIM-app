@@ -14,44 +14,41 @@ const Setting: React.FC = () => {
   };
 
   return (
-    <Box p={3}>
+    <Container>
       <Typography variant="h4" gutterBottom>
         後台設定
       </Typography>
-      <Container maxWidth="md">
-
-        <Card>
-          <CardContent>
-            <Box display="flex" flexDirection="column" gap={3}>
-              <FormControlLabel
-                control={<Switch checked={autoReply} onChange={() => setAutoReply(!autoReply)} />}
-                label="自動回覆開啟"
-              />
-              <TextField
-                fullWidth
-                label="客服電子郵件"
-                variant="outlined"
-                value={supportEmail}
-                onChange={(e) => setSupportEmail(e.target.value)}
-              />
-              <Typography variant="subtitle1">語系</Typography>
-              <Select
-                fullWidth
-                value={language}
-                onChange={(e) => setLanguage(e.target.value)}
-              >
-                <MenuItem value="zh-TW">繁體中文</MenuItem>
-                <MenuItem value="en-US">English</MenuItem>
-                <MenuItem value="ja-JP">日本語</MenuItem>
-              </Select>
-              <Button variant="contained" color="primary" startIcon={<Save />} onClick={handleSave}>
-                儲存設定
-              </Button>
-            </Box>
-          </CardContent>
-        </Card>
-      </Container>
-    </Box>
+      <Card>
+        <CardContent>
+          <Box display="flex" flexDirection="column" gap={3}>
+            <FormControlLabel
+              control={<Switch checked={autoReply} onChange={() => setAutoReply(!autoReply)} />}
+              label="自動回覆開啟"
+            />
+            <TextField
+              fullWidth
+              label="客服電子郵件"
+              variant="outlined"
+              value={supportEmail}
+              onChange={(e) => setSupportEmail(e.target.value)}
+            />
+            <Typography variant="subtitle1">語系</Typography>
+            <Select
+              fullWidth
+              value={language}
+              onChange={(e) => setLanguage(e.target.value)}
+            >
+              <MenuItem value="zh-TW">繁體中文</MenuItem>
+              <MenuItem value="en-US">English</MenuItem>
+              <MenuItem value="ja-JP">日本語</MenuItem>
+            </Select>
+            <Button variant="contained" color="primary" startIcon={<Save />} onClick={handleSave}>
+              儲存設定
+            </Button>
+          </Box>
+        </CardContent>
+      </Card>
+    </Container>
   );
 };
 
