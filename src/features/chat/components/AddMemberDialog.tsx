@@ -18,10 +18,11 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import CloseIcon from "@mui/icons-material/Close"
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { selectTokenInfo } from "../../globalSlice";
-import { selectCurrentRoomId, selectFriendInfoList } from "../ChatPageSlice";
+import { selectCurrentRoomId } from "../ChatPageSlice";
 import { handleFetch } from "../../../services/common";
 import { fetchInviteUser, fetchSearchRoomUsers } from "../../../services/RoomApi";
 import type { RoomMemberResponse} from "../../../services/ResponseInterface";
+import { selectFriendInfoList } from "../FriendSlice";
 
 
 const AddMemberDialog: React.FC = () => {

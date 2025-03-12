@@ -2,16 +2,13 @@ import type React from "react"
 import { useEffect } from "react"
 import { useAppDispatch, useAppSelector } from "../../../app/hooks"
 import {
-  addFriend,
-  addFriendApply,
   addRoom,
-  loadFriendApply,
-  loadFriends,
   loadGroups,
 } from "../ChatPageSlice"
 import { selectTokenInfo, setCallDialogOpen, setErrorDialogOpen, setErrorMessage, setLiveCall } from "../../globalSlice"
 import type { FriendApplyInfo, FriendInfo, LiveCall, RoomInfo } from "../../../services/ResponseInterface"
 import { WebSocketManager } from "../../../services/websocketApi"
+import { addFriend, addFriendApply, loadFriendApply, loadFriends } from "../FriendSlice"
 
 
 const WebSocket: React.FC = () => {

@@ -1,5 +1,5 @@
 import type React from "react";
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Box, IconButton } from "@mui/material";
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, IconButton } from "@mui/material";
 import type { EmojiClickData } from "emoji-picker-react";
 import Picker from "emoji-picker-react";
 import { useAppDispatch } from "../../../app/hooks";

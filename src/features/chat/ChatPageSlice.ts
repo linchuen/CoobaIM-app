@@ -37,8 +37,6 @@ type ChatState = {
 }
 
 type ChatRoomState = {
-  friendApplyInfoList: FriendApplyInfo[]
-  friendInfoList: FriendInfo[]
   roomInfoList: RoomInfo[]
   chatInfoList: ChatInfo[]
   roomChatMap: Record<number, ChatInfo[]>
@@ -53,8 +51,6 @@ type ChatRoomState = {
 }
 
 const initialState: ChatRoomState = {
-  friendApplyInfoList: [],
-  friendInfoList: [],
   roomInfoList: [],
   chatInfoList: [],
   roomChatMap: {},
@@ -101,17 +97,6 @@ export const chatSlice = createAppSlice({
     }),
     setCurrentRoomName: create.reducer((state, action: PayloadAction<string>) => {
       state.currentRoomName = action.payload
-    }),
-    addFriendApply: create.reducer((state, action: PayloadAction<FriendApplyInfo>) => {
-      state.friendApplyInfoList.push(action.payload)
-    }),
-    removeFriendApply: create.reducer((state, action: PayloadAction<number>) => {
-      state.friendApplyInfoList = state.friendApplyInfoList.filter(
-        info => info.applyId !== action.payload,
-      )
-    }),
-    addFriend: create.reducer((state, action: PayloadAction<FriendInfo>) => {
-      state.friendInfoList.push(action.payload)
     }),
     addRoom: create.reducer((state, action: PayloadAction<RoomInfo>) => {
       state.roomInfoList.push(action.payload)
@@ -185,22 +170,6 @@ export const chatSlice = createAppSlice({
         rejected: () => { },
       },
     ),
-    loadFriends: create.asyncThunk(
-      async (request: FriendSearchRequest, { getState },) => {
-        const state = getState() as RootState
-        const tokenInfo = selectTokenInfo(state)
-        const response = await fetchSearchFriend(request, tokenInfo?.token ?? "")
-        return response.data?.friends ?? []
-      },
-      {
-        pending: () => { },
-        fulfilled: (state, action) => {
-          state.status = "idle"
-          state.friendInfoList = action.payload
-        },
-        rejected: () => { },
-      },
-    ),
     loadGroups: create.asyncThunk(
       async (request: RoomSearchRequest, { getState }) => {
         const state = getState() as RootState
@@ -213,22 +182,6 @@ export const chatSlice = createAppSlice({
         fulfilled: (state, action) => {
           state.status = "idle"
           state.roomInfoList = action.payload
-        },
-        rejected: () => { },
-      },
-    ),
-    loadFriendApply: create.asyncThunk(
-      async (request: null, { getState }) => {
-        const state = getState() as RootState
-        const tokenInfo = selectTokenInfo(state)
-        const response = await fetchSearchFriendApply(request, tokenInfo?.token)
-        return response.data.applicants
-      },
-      {
-        pending: () => { },
-        fulfilled: (state, action) => {
-          state.status = "idle"
-          state.friendApplyInfoList = action.payload ?? []
         },
         rejected: () => { },
       },
@@ -272,13 +225,11 @@ export const chatSlice = createAppSlice({
     ),
   }),
   selectors: {
-    selectFriendInfoList: state => state.friendInfoList,
     selectRoomInfoList: state => state.roomInfoList,
     selectChatInfoList: state => state.chatInfoList,
     selectRoomChatMap: state => state.roomChatMap,
     selectRoomChatLoaded: state => state.roomChatLoaded,
     selectRoomSubscribeSet: state => state.roomSubscribeSet,
-    selectFriendApplyInfoList: state => state.friendApplyInfoList,
     selectEventSubscribeSet: state => state.eventSubscribeSet,
     selectStatus: state => state.status,
     selectCurrentRoomId: state => state.currentRoomId,
@@ -288,9 +239,7 @@ export const chatSlice = createAppSlice({
 })
 
 export const {
-  loadFriends,
   loadGroups,
-  loadFriendApply,
   loadChats,
   subscribeGroups,
   setRoomType,
@@ -298,22 +247,17 @@ export const {
   setCurrentRoomName,
   sendMessage,
   addRoom,
-  addFriend,
-  addFriendApply,
   addSubscribeEvent,
-  removeFriendApply,
   setEmoji,
   reset
 } = chatSlice.actions
 
 export const {
-  selectFriendInfoList,
   selectRoomInfoList,
   selectChatInfoList,
   selectRoomChatMap,
   selectRoomChatLoaded,
   selectRoomSubscribeSet,
-  selectFriendApplyInfoList,
   selectEventSubscribeSet,
   selectStatus,
   selectCurrentRoomId,

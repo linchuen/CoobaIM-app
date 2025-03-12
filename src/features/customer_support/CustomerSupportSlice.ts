@@ -261,7 +261,7 @@ export const customerSupportSlice = createAppSlice({
       },
     ),
     loadChannels: create.asyncThunk(
-      async (_request: null, { getState }) => {
+      async (request: void, { getState }) => {
         const state = getState() as RootState
         const tokenInfo = selectTokenInfo(state)
         const response = await fetchSearchChannel(tokenInfo?.token)

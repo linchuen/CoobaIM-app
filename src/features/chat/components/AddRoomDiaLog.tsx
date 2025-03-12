@@ -25,7 +25,8 @@ import { handleFetch } from "../../../services/common"
 import type {
   BuildRoomResponse,
 } from "../../../services/ResponseInterface"
-import { addRoom, selectFriendInfoList } from "../ChatPageSlice";
+import { addRoom } from "../ChatPageSlice";
+import { selectFriendInfoList } from "../FriendSlice"
 
 const AddRoomDiaLog: React.FC = () => {
   const dispatch = useAppDispatch()
