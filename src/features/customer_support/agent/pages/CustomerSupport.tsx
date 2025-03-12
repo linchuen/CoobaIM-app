@@ -1,26 +1,21 @@
 import type React from "react";
 import { Box, Typography, Paper, Button, TextField, Table, TableHead, TableRow, TableCell, TableBody, Switch, Container, TableContainer } from "@mui/material";
-import { useState } from "react";
-
-const fakeAgents = [
-  { id: 1, name: "Agent A", department: "Sales", isDefault: true, createdTime: new Date().toISOString() },
-  { id: 2, name: "Agent B", department: "Support", isDefault: false, createdTime: new Date().toISOString() },
-  { id: 3, name: "Agent C", department: "IT", isDefault: true, createdTime: new Date().toISOString() },
-];
+import { useEffect, useState } from "react";
+import CreateCustomerSupport from "../components/CreateCustomerSupportDiaLog";
+import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
+import { diableAgentThunk, selectAgentList, setAgentList } from "../../AgentSlice";
 
 const CustomerSupport: React.FC = () => {
-  const [agents, setAgents] = useState(fakeAgents);
+  const dispatch = useAppDispatch();
+  const agents = useAppSelector(selectAgentList);
   const [newAgentName, setNewAgentName] = useState("");
 
-  const handleCreate = () => {
-    if (newAgentName) {
-      setAgents([...agents, { id: agents.length + 1, name: newAgentName, department: "General", isDefault: true, createdTime: new Date().toISOString() }]);
-      setNewAgentName("");
-    }
-  };
+  useEffect(() => {
+    dispatch(setAgentList({ agentIds: [] }));
+  }, [dispatch]);
 
-  const handleDisable = (id: number) => {
-    setAgents(agents.map((agent) => (agent.id === id ? { ...agent, department: "Disabled" } : agent)));
+  const handleDisable = (agentUserId: number) => {
+    dispatch(diableAgentThunk({ agentUserId: agentUserId }));
   };
 
   return (
@@ -30,6 +25,7 @@ const CustomerSupport: React.FC = () => {
       </Typography>
       <TableContainer component={Paper}>
         <Box display="flex" gap={2} mb={2} p={2}>
+          搜尋:
           <TextField
             label="客服名稱"
             value={newAgentName}
@@ -37,9 +33,7 @@ const CustomerSupport: React.FC = () => {
             fullWidth
             variant="outlined"
           />
-          <Button onClick={handleCreate} variant="contained" color="primary" sx={{ minWidth: 120 }}>
-            建立客服
-          </Button>
+          <CreateCustomerSupport />
         </Box>
         <Table>
           <TableHead>
@@ -64,7 +58,7 @@ const CustomerSupport: React.FC = () => {
                 <TableCell>{new Date(agent.createdTime).toLocaleString()}</TableCell>
                 <TableCell>
                   <Button onClick={() => handleDisable(agent.id)} color="secondary">綁定</Button>
-                  <Button onClick={() => handleDisable(agent.id)} color="secondary">停用</Button>
+                  <Button onClick={() => handleDisable(agent.userId)} color="secondary">停用</Button>
                 </TableCell>
               </TableRow>
             ))}

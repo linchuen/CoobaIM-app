@@ -6,6 +6,7 @@ export interface AgentCreateRequest {
     name: string;
     password: string;
     email: string;
+    department: string;
 }
 
 export interface AgentDisableRequest{

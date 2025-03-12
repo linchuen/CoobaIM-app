@@ -39,21 +39,27 @@ export const fetchSearchAgent = async (
           "userId": 1001,
           "isDisable": false,
           "isDefault": true,
-          "name": "Tom"
+          "name": "Tom",
+          "department": "IT",
+          "createdTime": new Date().toISOString()
         },
         {
           "id": 2,
           "userId": 1002,
           "isDisable": false,
           "isDefault": false,
-          "name": "Gina"
+          "name": "Gina",
+          "department": "IT",
+          "createdTime": new Date().toISOString()
         },
         {
           "id": 3,
           "userId": 1003,
           "isDisable": true,
           "isDefault": false,
-          "name": "Peter"
+          "name": "Peter",
+          "department": "IT",
+          "createdTime": new Date().toISOString()
         }
       ],
     }) : callFetch("/agent/search", "POST", token, data);

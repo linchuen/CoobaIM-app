@@ -22,6 +22,8 @@ export interface AgentInfo {
     isDisable: boolean;
     isDefault: boolean;
     name: string;
+    department: string;
+    createdTime: string;
 }
 
 export interface AgentSearchResponse {
