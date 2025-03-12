@@ -4,6 +4,9 @@ import { Box, Drawer, List, ListItem, ListItemText, Typography, Divider, IconBut
 import { ChevronRight, ChevronLeft, SupervisedUserCircle } from "@mui/icons-material";
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
 import { selectCustomerList, setCustomerList } from "../../CustomerSlice";
+import { handleLoadChat } from "../../../../services/common";
+import type { ChatType } from "../../../../services/constant";
+import { switchPage, PageType } from "../../PageSlice";
 
 const CustomerList: React.FC = () => {
     const dispatch = useAppDispatch()
@@ -17,8 +20,13 @@ const CustomerList: React.FC = () => {
         dispatch(setCustomerList())
     }, [dispatch])
 
+    const loadChat = (roomId: number, name: string, type: ChatType) => {
+        handleLoadChat(dispatch, roomId, name, type)
+        dispatch(switchPage(PageType.chat))
+    }
+
     const customers = customerInfos.map(info => (
-        <ListItem key={info.customerUserId} sx={{ pl: 4 }}>
+        <ListItem key={info.customerUserId} sx={{ pl: 4 }} >
             <ListItemText primary={info.name} />
         </ListItem>
     ))

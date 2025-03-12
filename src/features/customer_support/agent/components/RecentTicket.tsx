@@ -5,6 +5,8 @@ import { ExpandLess, ExpandMore, Assignment } from "@mui/icons-material";
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
 import { selectRecentTicketLsit, setRecentTicket } from "../../TicketSlice";
 import { switchPage, PageType } from "../../PageSlice";
+import { ChatType } from "../../../../services/constant";
+import { handleLoadChat } from "../../../../services/common";
 
 const RecentTicket: React.FC = () => {
     const dispatch = useAppDispatch()
@@ -15,8 +17,13 @@ const RecentTicket: React.FC = () => {
         dispatch(setRecentTicket())
     }, [dispatch])
 
+    const loadChat = (roomId: number, name: string, type: ChatType) => {
+        handleLoadChat(dispatch, roomId, name, type)
+        dispatch(switchPage(PageType.chat))
+    }
+
     const tickets = ticketInfos.map(info => (
-        <ListItem key={info.id} sx={{ pl: 4 }} onClick={() => dispatch(switchPage(PageType.chat))}>
+        <ListItem key={info.id} sx={{ pl: 4 }} onClick={() => loadChat(info.roomId, info.name, ChatType.ToRoom)}>
             <ListItemText primary={info.name} />
         </ListItem>
     ))

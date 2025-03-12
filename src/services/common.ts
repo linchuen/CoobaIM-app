@@ -5,6 +5,8 @@ import {
 import type { ApiResponse } from "./ResponseInterface"
 import type { AppDispatch } from "../app/store"
 import config from "../app/config"
+import type { ChatType } from "./constant"
+import { loadChats, setCurrentRoomId, setCurrentRoomName, setRoomType } from "../features/chat/ChatPageSlice"
 
 export async function callFetch(
   url: string,
@@ -45,6 +47,13 @@ export async function callFetch(
       data: null,
     }
   }
+}
+
+export async function handleLoadChat(dispatch: AppDispatch, roomId: number, name: string, type: ChatType){
+  dispatch(setRoomType(type))
+  dispatch(setCurrentRoomId(roomId))
+  dispatch(setCurrentRoomName(name))
+  dispatch(loadChats({ roomId: roomId }))
 }
 
 export async function handleFetch<T>(
