@@ -265,7 +265,7 @@ export const customerSupportSlice = createAppSlice({
         const state = getState() as RootState
         const tokenInfo = selectTokenInfo(state)
         const response = await fetchSearchChannel(tokenInfo?.token)
-        return response.data?.channels ?? []
+        return response.data.channels
       },
       {
         pending: () => { },

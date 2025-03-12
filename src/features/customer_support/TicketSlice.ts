@@ -28,7 +28,7 @@ export const ticketSlice = createAppSlice({
                 const state = getState() as RootState
                 const tokenInfo = selectTokenInfo(state)
                 const response = await fetchSearchRecentTicket(tokenInfo?.token ?? "")
-                return response.data?.tickets ?? [];
+                return response.data.tickets;
             },
             {
                 pending: () => { },

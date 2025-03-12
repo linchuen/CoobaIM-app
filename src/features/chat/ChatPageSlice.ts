@@ -206,7 +206,7 @@ export const chatSlice = createAppSlice({
         const state = getState() as RootState
         const tokenInfo = selectTokenInfo(state)
         const response = await fetchSearchRoom(request, tokenInfo?.token)
-        return response.data?.rooms ?? []
+        return response.data.rooms
       },
       {
         pending: () => { },
@@ -222,7 +222,7 @@ export const chatSlice = createAppSlice({
         const state = getState() as RootState
         const tokenInfo = selectTokenInfo(state)
         const response = await fetchSearchFriendApply(request, tokenInfo?.token)
-        return response.data?.applicants
+        return response.data.applicants
       },
       {
         pending: () => { },
@@ -252,7 +252,7 @@ export const chatSlice = createAppSlice({
 
         const response = await fetchLoadChat(request, tokenInfo?.token)
         return {
-          chats: response.data?.chats ?? [],
+          chats: response.data.chats,
           roomId: request.roomId,
         }
       },
