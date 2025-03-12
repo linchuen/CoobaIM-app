@@ -1,13 +1,7 @@
 import type {
   ChatInfo,
-  FriendApplyInfo,
-  FriendInfo,
   RoomInfo,
 } from "../../services/ResponseInterface"
-import {
-  fetchSearchFriend,
-  fetchSearchFriendApply,
-} from "../../services/FriendApi"
 import { createAppSlice } from "../../app/createAppSlice"
 import { fetchSearchRoom } from "../../services/RoomApi"
 import { selectTokenInfo } from "../globalSlice"
@@ -15,7 +9,6 @@ import type { RootState } from "../../app/store"
 import { fetchLoadChat } from "../../services/MessageApi"
 import type {
   ChatLoadRequest,
-  FriendSearchRequest,
   RoomSearchRequest,
   SpeakRequest,
 } from "../../services/RequestInterface"

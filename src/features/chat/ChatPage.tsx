@@ -19,11 +19,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility"
 import { Chat } from "@mui/icons-material"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
 import {
-  addFriend,
   loadChats,
-  removeFriendApply,
-  selectFriendApplyInfoList,
-  selectFriendInfoList,
   selectRoomInfoList,
   selectRoomSubscribeSet,
   setCurrentRoomId,
@@ -42,6 +38,7 @@ import type { PermitFriendResponse } from "../../services/ResponseInterface"
 import { WebSocketManager } from "../../services/websocketApi"
 import type { IMessage } from "@stomp/stompjs"
 import { ChatType } from "../../services/constant"
+import { addFriend, removeFriendApply, selectFriendApplyInfoList, selectFriendInfoList } from "./FriendSlice"
 
 
 const ChatPage: React.FC = () => {
