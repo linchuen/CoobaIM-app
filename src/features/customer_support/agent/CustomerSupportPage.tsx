@@ -13,9 +13,12 @@ import CustomerList from "./components/CutomerList";
 import AgentList from "./components/AgentList";
 import RoutingManagement from "./pages/RoutingManagement";
 import TicketManagement from "./pages/TicketManagement";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
+import { PageType, selectedPage, switchPage } from "../PageSlice";
 
 const CustomerSupportPage: React.FC = () => {
-  const [selectedPage, setSelectedPage] = useState<"dashboard" | "channels" | "tickets" | "routing" | "users" | "support" | "help" | "setting">("dashboard");
+  const dispatch = useAppDispatch()
+   const page = useAppSelector(selectedPage)
 
   return (
     <Box display="flex" height="100vh" bgcolor="#333" color="#fff">
@@ -37,49 +40,49 @@ const CustomerSupportPage: React.FC = () => {
           <Divider />
 
           {/* 頻道管理 */}
-          <ListItem onClick={() => setSelectedPage("channels")}>
+          <ListItem onClick={() => dispatch(switchPage(PageType.channels))}>
             <Folder sx={{ mr: 1 }} />
             <ListItemText primary="頻道管理" />
           </ListItem>
           <Divider />
 
           {/* 會員管理 */}
-          <ListItem onClick={() => setSelectedPage("users")}>
+          <ListItem onClick={() => dispatch(switchPage(PageType.users))}>
             <People sx={{ mr: 1 }} />
             <ListItemText primary="會員管理" />
           </ListItem>
           <Divider />
 
           {/* 客服管理 */}
-          <ListItem onClick={() => setSelectedPage("support")}>
+          <ListItem onClick={() => dispatch(switchPage(PageType.support))}>
             <SupportAgent sx={{ mr: 1 }} />
             <ListItemText primary="客服管理" />
           </ListItem>
           <Divider />
 
           {/* 路由管理 */}
-          <ListItem onClick={() => setSelectedPage("routing")}>
+          <ListItem onClick={() => dispatch(switchPage(PageType.routing))}>
             <Directions sx={{ mr: 1 }} />
             <ListItemText primary="路由管理" />
           </ListItem>
           <Divider />
 
           {/* 工單管理 */}
-          <ListItem onClick={() => setSelectedPage("tickets")}>
+          <ListItem onClick={() => dispatch(switchPage(PageType.tickets))}>
             <Work sx={{ mr: 1 }} />
             <ListItemText primary="工單管理" />
           </ListItem>
           <Divider />
 
           {/* 幫助中心 */}
-          <ListItem onClick={() => setSelectedPage("help")}>
+          <ListItem onClick={() => dispatch(switchPage(PageType.help))}>
             <HelpOutline sx={{ mr: 1 }} />
             <ListItemText primary="幫助中心" />
           </ListItem>
           <Divider />
 
           {/* 系統設定 */}
-          <ListItem onClick={() => setSelectedPage("setting")}>
+          <ListItem onClick={() =>  dispatch(switchPage(PageType.setting))}>
             <Settings sx={{ mr: 1 }} />
             <ListItemText primary="系統設定" />
           </ListItem>
@@ -89,14 +92,14 @@ const CustomerSupportPage: React.FC = () => {
 
       {/* 主要內容區域：根據 selectedPage 渲染不同組件 */}
       <Box flexGrow={1} p={3} bgcolor="#222">
-        {selectedPage === "dashboard" && <Dashboard />}
-        {selectedPage === "channels" && <ChannelManagement />}
-        {selectedPage === "users" && <UserManagement />}
-        {selectedPage === "support" && <CustomerSupport />}
-        {selectedPage === "routing" && <RoutingManagement />}
-        {selectedPage === "tickets" && <TicketManagement />}
-        {selectedPage === "help" && <HelpCenter />}
-        {selectedPage === "setting" && <Setting />}
+        {page === PageType.dashboard && <Dashboard />}
+        {page === PageType.channels && <ChannelManagement />}
+        {page === PageType.users && <UserManagement />}
+        {page === PageType.support && <CustomerSupport />}
+        {page === PageType.routing && <RoutingManagement />}
+        {page === PageType.tickets && <TicketManagement />}
+        {page === PageType.help && <HelpCenter />}
+        {page === PageType.setting && <Setting />}
       </Box>
     </Box>
   );

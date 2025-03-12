@@ -8,10 +8,11 @@ import { customerSupportSlice } from "../features/customer_support/CustomerSuppo
 import { ticketSlice } from "../features/customer_support/TicketSlice"
 import { customerSlice } from "../features/customer_support/CustomerSlice"
 import { agentSlice } from "../features/customer_support/AgentSlice"
+import { pageSlice } from "../features/customer_support/PageSlice"
 
 // `combineSlices` automatically combines the reducers using
 // their `reducerPath`s, therefore we no longer need to call `combineReducers`.
-const rootReducer = combineSlices(counterSlice, globalSlice, chatSlice, customerSupportSlice, ticketSlice, customerSlice, agentSlice)
+const rootReducer = combineSlices(counterSlice, globalSlice, chatSlice, customerSupportSlice, ticketSlice, customerSlice, agentSlice, pageSlice)
 // Infer the `RootState` type from the root reducer
 export type RootState = ReturnType<typeof rootReducer>
 
