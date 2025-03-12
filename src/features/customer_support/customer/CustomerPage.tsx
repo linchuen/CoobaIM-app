@@ -23,7 +23,7 @@ import type { CustomerEnterResponse, OfficialChannel } from "../../../services/c
 import { handleFetch } from "../../../services/common";
 import { selectRoomSubscribeSet, subscribeGroups, setCurrentRoomId, setCurrentRoomName, loadChats, setChatType } from "../../chat/ChatPageSlice";
 import { selectFriendInfoList } from "../../chat/FriendSlice";
-import { selectChannelList } from "../ChannelSlice";
+import { selectChannelList, selectChannelLoaded } from "../ChannelSlice";
 import { fetchEnterRoom } from "../../../services/cs/CustomerApi";
 
 const CustomerPage: React.FC = () => {
@@ -32,6 +32,7 @@ const CustomerPage: React.FC = () => {
   const friendInfos = useAppSelector(selectFriendInfoList)
   const channelInfos = useAppSelector(selectChannelList)
   const roomSubscribeSet = useAppSelector(selectRoomSubscribeSet)
+  const channelLoadedSet = useAppSelector(selectChannelLoaded)
   const tokenInfo = useAppSelector(selectTokenInfo)
 
   useEffect(() => {
@@ -55,7 +56,7 @@ const CustomerPage: React.FC = () => {
       dispatch,
       fetchEnterRoom({
         channelId: channel.id,
-        isUsePreviousChat: !channel.isPublic
+        isUsePreviousChat: !channel.isPublic && !channelLoadedSet.includes(channel.id)
       }, tokenInfo.token),
       data => {
         const ticket = data.ticket

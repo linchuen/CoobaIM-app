@@ -8,10 +8,12 @@ import type { ChannelCreateRequest, ChannelDeleteRequest } from "../../services/
 
 type ChannelState = {
     channelList: OfficialChannel[]
+    channelLoaded: number[]
 }
 
 const initialState: ChannelState = {
     channelList: [],
+    channelLoaded: [],
 }
 
 export const channelSlice = createAppSlice({
@@ -82,9 +84,14 @@ export const channelSlice = createAppSlice({
                 rejected: () => { },
             },
         ),
+        setChannelLoaded: create.reducer((state, action: PayloadAction<number>) => {
+                state.channelLoaded.push(action.payload)
+            },
+        ),
     }),
     selectors: {
         selectChannelList: state => state.channelList,
+        selectChannelLoaded: state => state.channelLoaded,
     },
 })
 
@@ -94,8 +101,10 @@ export const {
     deleteChannel,
     deleteChannelThunk,
     setChannelList,
+    setChannelLoaded,
 } = channelSlice.actions
 
 export const {
     selectChannelList,
+    selectChannelLoaded,
 } = channelSlice.selectors
