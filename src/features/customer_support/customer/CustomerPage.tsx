@@ -13,13 +13,18 @@ import {
 import PhoneIcon from "@mui/icons-material/Phone";
 import type { IMessage } from "@stomp/stompjs";
 import { useEffect } from "react";
-import { enterChannel, loadChats, selectChannelList, selectFriendInfoList, selectRoomSubscribeSet, setChatType, setCurrentRoomId, setCurrentRoomName, subscribeGroups } from "../CustomerSupportSlice";
 import CSWebSocket from "./components/CSWebSocket";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { ChatType } from "../../../services/constant";
 import { WebSocketManager } from "../../../services/websocketApi";
 import { selectTokenInfo } from "../../globalSlice";
+import type { CustomerEnterResponse, OfficialChannel } from "../../../services/cs/CsResponseInterface";
+import { handleFetch } from "../../../services/common";
+import { selectRoomSubscribeSet, subscribeGroups, setCurrentRoomId, setCurrentRoomName, loadChats, setChatType } from "../../chat/ChatPageSlice";
+import { selectFriendInfoList } from "../../chat/FriendSlice";
+import { selectChannelList } from "../ChannelSlice";
+import { fetchEnterRoom } from "../../../services/cs/CustomerApi";
 
 const CustomerPage: React.FC = () => {
   const navigate = useNavigate()
@@ -44,11 +49,20 @@ const CustomerPage: React.FC = () => {
 
   }, [dispatch, friendInfos, roomSubscribeSet, tokenInfo])
 
-  const handleEnterChannel = (channelId: number, name: string, type: ChatType) => {
-    dispatch(setChatType(type))
-    dispatch(setCurrentRoomId(channelId))
-    dispatch(setCurrentRoomName(name))
-    dispatch(enterChannel({ channelId: channelId }))
+  const handleEnterChannel = async (channel: OfficialChannel) => {
+    if (!tokenInfo) return
+    await handleFetch<CustomerEnterResponse>(
+      dispatch,
+      fetchEnterRoom({
+        channelId: channel.id,
+        isUsePreviousChat: !channel.isPublic
+      }, tokenInfo.token),
+      data => {
+        const ticket = data.ticket
+        handleLoadChat(ticket.roomId, ticket.name, ChatType.ToRoom)
+      },
+    )
+
   }
 
   const handleLoadChat = (roomId: number, name: string, type: ChatType) => {
@@ -85,7 +99,7 @@ const CustomerPage: React.FC = () => {
         sx={{ marginBottom: 1 }}
         key={"channel_" + info.id}
         onClick={() => {
-          handleEnterChannel(info.id, info.name, ChatType.ToRoom)
+          handleEnterChannel(info)
           navigate("/customer/chat")
         }}
       >

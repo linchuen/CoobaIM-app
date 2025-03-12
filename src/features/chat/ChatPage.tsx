@@ -22,9 +22,9 @@ import {
   loadChats,
   selectRoomInfoList,
   selectRoomSubscribeSet,
+  setChatType,
   setCurrentRoomId,
   setCurrentRoomName,
-  setRoomType,
   subscribeGroups,
 } from "./ChatPageSlice"
 import { selectTokenInfo } from "../globalSlice"
@@ -83,7 +83,7 @@ const ChatPage: React.FC = () => {
 
 
   const handleLoadChat = (roomId: number, name: string, type: ChatType) => {
-    dispatch(setRoomType(type))
+    dispatch(setChatType(type))
     dispatch(setCurrentRoomId(roomId))
     dispatch(setCurrentRoomName(name))
     dispatch(loadChats({ roomId: roomId }))

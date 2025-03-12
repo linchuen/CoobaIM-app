@@ -82,7 +82,7 @@ export const chatSlice = createAppSlice({
       console.log("emoji", action.payload)
       state.emoji = action.payload
     }),
-    setRoomType: create.reducer((state, action: PayloadAction<ChatType>) => {
+    setChatType: create.reducer((state, action: PayloadAction<ChatType>) => {
       state.chatType = action.payload
     }),
     setCurrentRoomId: create.reducer((state, action: PayloadAction<number>) => {
@@ -235,7 +235,7 @@ export const {
   loadGroups,
   loadChats,
   subscribeGroups,
-  setRoomType,
+  setChatType,
   setCurrentRoomId,
   setCurrentRoomName,
   sendMessage,

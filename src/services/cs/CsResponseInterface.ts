@@ -51,7 +51,6 @@ export interface ChannelDeleteResponse{
 
 export interface CustomerEnterResponse {
     ticket: Ticket;
-    chats: ChatInfo[];
 }
 
 export interface CustomerBindResponse{
