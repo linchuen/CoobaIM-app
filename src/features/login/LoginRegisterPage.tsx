@@ -14,7 +14,7 @@ import { useNavigate } from "react-router"
 import { RegisterDiaLog } from "./components/RegisterDiaLog"
 import { ForgetPasswordDialog } from "./components/ForgetPasswordDialog"
 import { fetchLogin } from "../../services/UserAPI"
-import { setIsLogin, setTokenInfo } from "../globalSlice"
+import { setIsLogin, setTokenInfo, setEmail as setGlobaEmail} from "../globalSlice"
 import { useAppDispatch } from "../../app/hooks"
 import { handleFetch } from "../../services/common"
 import type { LoginResponse } from "../../services/ResponseInterface"
@@ -38,6 +38,7 @@ const LoginRegisterPage: React.FC = () => {
         password: password,
       }),
       data => {
+        dispatch(setGlobaEmail(email))
         dispatch(setTokenInfo(data))
         dispatch(setIsLogin(true))
         if (data.role === RoleType.GUEST) {

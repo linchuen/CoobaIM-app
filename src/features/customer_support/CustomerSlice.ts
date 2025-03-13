@@ -4,17 +4,20 @@ import type { CustomerAgentInfo, CustomerInfo } from "../../services/cs/CsRespon
 import { selectTokenInfo } from "../globalSlice"
 import type { RootState } from "../../app/store"
 import { fetchBindCustomer, fetchSearchCustomer, fetchUnbindCustomer } from "../../services/cs/AgentApi"
-import type { AgentCustomerRequest } from "../../services/cs/CsRequestInterface"
-import { fetchSearchAgent } from "../../services/cs/CustomerApi"
+import type { AgentCustomerRequest, CustomerDetailRequest } from "../../services/cs/CsRequestInterface"
+import { fetchGetDetails, fetchSearchAgent } from "../../services/cs/CustomerApi"
+import type { UserDetail } from "../../services/ResponseInterface"
 
 type CustomerState = {
     customerList: CustomerInfo[]
     agentInfos: CustomerAgentInfo[]
+    customerDetailList: UserDetail[]
 }
 
 const initialState: CustomerState = {
     customerList: [],
     agentInfos: [],
+    customerDetailList: [],
 }
 
 export const customerSlice = createAppSlice({
@@ -80,7 +83,22 @@ export const customerSlice = createAppSlice({
                 rejected: () => { },
             },
         ),
-        setAgentInfos: create.asyncThunk(
+        setCustomerDetailList: create.asyncThunk(
+            async (request: CustomerDetailRequest, { getState }): Promise<UserDetail[]> => {
+                const state = getState() as RootState
+                const tokenInfo = selectTokenInfo(state)
+                const response = await fetchGetDetails(request, tokenInfo?.token ?? "")
+                return response.data.userDetails;
+            },
+            {
+                pending: () => { },
+                fulfilled: (state, action: PayloadAction<UserDetail[]>) => {
+                    state.customerDetailList = action.payload
+                },
+                rejected: () => { },
+            },
+        ),
+        loadAgentInfos: create.asyncThunk(
             async (request: void, { getState }): Promise<CustomerAgentInfo[]> => {
                 const state = getState() as RootState
                 const tokenInfo = selectTokenInfo(state)
@@ -99,6 +117,7 @@ export const customerSlice = createAppSlice({
     selectors: {
         selectCustomerList: state => state.customerList,
         selectAgentList: state => state.agentInfos,
+        selectCustomerDetailList: state => state.customerDetailList,
     },
 })
 
@@ -108,10 +127,12 @@ export const {
     bindCustomer,
     unbindCustomer,
     setCustomerList,
-    setAgentInfos,
+    setCustomerDetailList,
+    loadAgentInfos,
 } = customerSlice.actions
 
 export const {
     selectCustomerList,
     selectAgentList,
+    selectCustomerDetailList,
 } = customerSlice.selectors

@@ -40,6 +40,10 @@ export interface CustomerTicketSearchRequest {
     customerUserId: number;
 }
 
+export interface CustomerDetailRequest{
+    userIds: []
+}
+
 export interface TicketTransferRequest {
     transferUserId: number;
     roomId: number;

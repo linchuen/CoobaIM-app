@@ -7,6 +7,7 @@ import { WebSocketManager } from "../../../../services/websocketApi"
 import { selectTokenInfo, setCallDialogOpen, setLiveCall, setErrorMessage, setErrorDialogOpen } from "../../../globalSlice"
 import { addRoom } from "../../../chat/ChatPageSlice"
 import { loadChannels } from "../../ChannelSlice"
+import { loadAgentInfos } from "../../CustomerSlice"
 
 const CSWebSocket: React.FC = () => {
   const dispatch = useAppDispatch()
@@ -28,6 +29,7 @@ const CSWebSocket: React.FC = () => {
     }
     const loadData = (webSocket: WebSocketManager) => {
       dispatch(loadChannels())
+      dispatch(loadAgentInfos())
 
       webSocket.subscribe<OfficialChannel>("/topic/channel", addChannelEvent)
       webSocket.subscribe<LiveCall>("/user/queue/live_call", addCallEvent)

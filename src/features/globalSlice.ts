@@ -2,25 +2,18 @@ import type { PayloadAction } from "@reduxjs/toolkit"
 import { createAppSlice } from "../app/createAppSlice"
 import type { LiveCall } from "../services/ResponseInterface"
 
-interface User {
-  id: number
-  name: string
-  email: string
-}
-
 interface TokenInfo {
   userId: number
   name: string
   token: string
   role: string
   platform: string
-  ip?: string
   loginTime: string
   expireTime: string
 }
 
 interface GlobalState {
-  user: User | null
+  email: string | null
   tokenInfo: TokenInfo | null
   isLogin: boolean
   errorMessage: string
@@ -30,7 +23,7 @@ interface GlobalState {
 }
 
 const initialState: GlobalState = {
-  user: null,
+  email: "",
   tokenInfo: null,
   isLogin: false,
   errorMessage: "",
@@ -43,11 +36,11 @@ export const globalSlice = createAppSlice({
   name: "global",
   initialState,
   reducers: create => ({
-    setUser: create.reducer((state, action: PayloadAction<User>) => {
-      state.user = action.payload
+    setEmail: create.reducer((state, action: PayloadAction<string>) => {
+      state.email = action.payload
     }),
-    clearUser: create.reducer(state => {
-      state.user = null
+    clearEmail: create.reducer(state => {
+      state.email = null
     }),
     setTokenInfo: create.reducer((state, action: PayloadAction<TokenInfo>) => {
       console.log("setTokenInfo", action.payload)
@@ -76,12 +69,13 @@ export const globalSlice = createAppSlice({
     selectLiveCall: state => state.liveCall,
     selectTokenInfo: state => state.tokenInfo,
     selectIsLogin: state => state.isLogin,
+    selectEmail: state => state.email,
   },
 })
 
 export const {
-  setUser,
-  clearUser,
+  setEmail,
+  clearEmail,
   setTokenInfo,
   setIsLogin,
   setErrorMessage,
@@ -90,5 +84,5 @@ export const {
   setLiveCall,
 } = globalSlice.actions
 
-export const { selectErrorMessage, selectErrorDialogOpen, selectCallDialogOpen, selectLiveCall, selectTokenInfo, selectIsLogin } =
+export const { selectEmail, selectErrorMessage, selectErrorDialogOpen, selectCallDialogOpen, selectLiveCall, selectTokenInfo, selectIsLogin } =
   globalSlice.selectors

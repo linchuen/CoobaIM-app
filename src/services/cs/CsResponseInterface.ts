@@ -1,4 +1,4 @@
-import type { ChatInfo } from "../ResponseInterface";
+import type { ChatInfo, UserDetail } from "../ResponseInterface";
 
 export interface AgentCreateResponse {
     agentId: number;
@@ -103,4 +103,8 @@ export interface CustomerAgentInfo {
 
 export interface CustomerAgentSearchResponse {
     agentInfos: CustomerAgentInfo[]
+}
+
+export interface CustomerDetailResponse{
+    userDetails: UserDetail[]
 }

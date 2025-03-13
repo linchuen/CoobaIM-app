@@ -2,10 +2,13 @@ import type React from "react";
 import { useState } from "react";
 import { Container, Typography, TextField, Switch, FormControlLabel, Button, MenuItem, Select, Card, CardContent, Box } from "@mui/material";
 import { Save } from "@mui/icons-material";
+import { useAppSelector } from "../../../../app/hooks";
+import { selectEmail } from "../../../globalSlice";
 
 const Setting: React.FC = () => {
   const [autoReply, setAutoReply] = useState<boolean>(true);
-  const [supportEmail, setSupportEmail] = useState<string>("support@example.com");
+  const email = useAppSelector(selectEmail)
+  const [supportEmail, setSupportEmail] = useState<string | null>(email);
   const [language, setLanguage] = useState<string>("zh-TW");
 
   const handleSave = () => {

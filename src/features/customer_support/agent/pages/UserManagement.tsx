@@ -1,5 +1,5 @@
 import type React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Typography,
@@ -19,29 +19,26 @@ import {
   DialogActions,
   Container,
 } from "@mui/material";
-import { v4 as uuidv4 } from "uuid";
+import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
+import { selectCustomerDetailList, setCustomerDetailList } from "../../CustomerSlice";
+import type { RegisterResponse, UserDetail } from "../../../../services/ResponseInterface";
+import { handleFetch } from "../../../../services/common";
+import { fetchCreateUser } from "../../../../services/cs/CustomerApi";
+import type { RegisterRequest } from "../../../../services/RequestInterface";
 
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  role: string;
-  status: string;
-}
-
-const initialUsers: User[] = [
-  { id: "1", name: "用戶 A", email: "usera@example.com", role: "管理員", status: "啟用" },
-  { id: "2", name: "用戶 B", email: "userb@example.com", role: "會員", status: "停用" },
-  { id: "3", name: "用戶 C", email: "userc@example.com", role: "會員", status: "啟用" },
-];
 
 const UserManagement: React.FC = () => {
-  const [users, setUsers] = useState<User[]>(initialUsers);
+  const dispatch = useAppDispatch()
+  const userDetails = useAppSelector(selectCustomerDetailList)
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [open, setOpen] = useState(false);
-  const [newUser, setNewUser] = useState<User>({ id: "", name: "", email: "", role: "會員", status: "啟用" });
+  const [newUser, setNewUser] = useState<RegisterRequest>({ name: "", email: "", password: "" });
+
+  useEffect(() => {
+    dispatch(setCustomerDetailList({ userIds: [] }));
+  }, [dispatch]);
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
@@ -62,15 +59,19 @@ const UserManagement: React.FC = () => {
 
   const handleCloseDialog = () => {
     setOpen(false);
-    setNewUser({ id: "", name: "", email: "", role: "會員", status: "啟用" });
+    setNewUser({ name: "", email: "", password: "" });
   };
 
   const handleAddUser = () => {
-    setUsers([...users, { ...newUser, id: uuidv4() }]);
+    handleFetch<RegisterResponse>(
+      dispatch,
+      fetchCreateUser(newUser),
+      data => { },
+    )
     handleCloseDialog();
   };
 
-  const filteredUsers = users.filter(
+  const filteredUsers = userDetails.filter(
     (user) => user.name.includes(search) || user.email.includes(search)
   );
 
@@ -92,17 +93,17 @@ const UserManagement: React.FC = () => {
             <TableRow>
               <TableCell>名稱</TableCell>
               <TableCell>Email</TableCell>
-              <TableCell>角色</TableCell>
-              <TableCell>狀態</TableCell>
+              <TableCell>標記</TableCell>
+              <TableCell>備註</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((user) => (
-              <TableRow key={user.id}>
+              <TableRow key={user.userId}>
                 <TableCell>{user.name}</TableCell>
                 <TableCell>{user.email}</TableCell>
-                <TableCell>{user.role}</TableCell>
-                <TableCell>{user.status}</TableCell>
+                <TableCell>{user.tags ?? ""}</TableCell>
+                <TableCell>{user.remark ?? ""}</TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -124,6 +125,7 @@ const UserManagement: React.FC = () => {
         <DialogContent>
           <TextField label="名稱" fullWidth margin="dense" value={newUser.name} onChange={(e) => setNewUser({ ...newUser, name: e.target.value })} />
           <TextField label="Email" fullWidth margin="dense" value={newUser.email} onChange={(e) => setNewUser({ ...newUser, email: e.target.value })} />
+          <TextField label="Password" fullWidth margin="dense" value={newUser.password} onChange={(e) => setNewUser({ ...newUser, password: e.target.value })} />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog}>取消</Button>

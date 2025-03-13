@@ -16,9 +16,12 @@ import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { PageType, selectedPage, switchPage } from "../PageSlice";
 import ChatBox from "../../chat/ChatBox";
 import CSAgentWebSocket from "./components/CSAgentWebSocket";
+import { selectEmail, selectTokenInfo } from "../../globalSlice";
 
 const CustomerSupportPage: React.FC = () => {
   const dispatch = useAppDispatch()
+  const tokenInfo = useAppSelector(selectTokenInfo)
+  const email = useAppSelector(selectEmail)
   const page = useAppSelector(selectedPage)
 
   return (
@@ -29,8 +32,8 @@ const CustomerSupportPage: React.FC = () => {
         <Drawer variant="permanent" sx={{ width: 260, flexShrink: 0, bgcolor: "#1e1e1e" }}>
           <Box sx={{ width: 260, p: 2, textAlign: "center" }}>
             <Avatar sx={{ width: 60, height: 60, mx: "auto", mb: 1 }} src="/path/to/avatar.jpg" />
-            <Typography variant="h6">客服人員</Typography>
-            <Typography variant="body2">support@example.com</Typography>
+            <Typography variant="h6">{tokenInfo?.name}</Typography>
+            <Typography variant="body2">{email}</Typography>
             <Divider sx={{ my: 2 }} />
 
             <RecentTicket />
@@ -94,7 +97,7 @@ const CustomerSupportPage: React.FC = () => {
         </Drawer>
 
         {/* 主要內容區域：根據 selectedPage 渲染不同組件 */}
-        <Box flexGrow={1} p={3} bgcolor="#222">
+        <Box flexGrow={1} p={3} bgcolor="#222" >
           {page === PageType.chat && <ChatBox />}
           {page === PageType.dashboard && <Dashboard />}
           {page === PageType.channels && <ChannelManagement />}
