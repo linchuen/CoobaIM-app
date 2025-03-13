@@ -8,6 +8,7 @@ import { selectFriendInfoList } from "../../../chat/FriendSlice";
 import { handleLoadChat } from "../../../../services/common";
 import { ChatType } from "../../../../services/constant";
 import { switchPage, PageType } from "../../PageSlice";
+import { setCustomerUserId } from "../../CustomerSlice";
 
 const AgentList: React.FC = () => {
     const dispatch = useAppDispatch()
@@ -24,10 +25,11 @@ const AgentList: React.FC = () => {
     const loadChat = (roomId: number, name: string, type: ChatType) => {
         handleLoadChat(dispatch, roomId, name, type)
         dispatch(switchPage(PageType.chat))
+        dispatch(setCustomerUserId(null))
     }
 
     const agents = friendInfos.map(info => (
-        <ListItem key={info.friendUserId} sx={{ pl: 4 }} onClick={() => loadChat(info.roomId, info.showName, ChatType.ToRoom)}>
+        <ListItem key={info.friendUserId} sx={{ pl: 4 }} onClick={() => loadChat(info.roomId, info.showName, ChatType.ToUser)}>
             <ListItemText primary={info.showName} />
         </ListItem>
     ))

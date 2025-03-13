@@ -1,4 +1,4 @@
-import type { ChatInfo, UserDetail } from "../ResponseInterface";
+import type { UserDetail } from "../ResponseInterface";
 
 export interface AgentCreateResponse {
     agentId: number;

@@ -9,12 +9,20 @@ import { fetchGetDetails, fetchSearchAgent } from "../../services/cs/CustomerApi
 import type { UserDetail } from "../../services/ResponseInterface"
 
 type CustomerState = {
+    customerUserId: number | null
+    customerDetail: UserDetail
     customerList: CustomerInfo[]
     agentInfos: CustomerAgentInfo[]
     customerDetailList: UserDetail[]
 }
 
 const initialState: CustomerState = {
+    customerUserId: null,
+    customerDetail: {
+        userId: 0,
+        name: "",
+        email: ""
+    },
     customerList: [],
     agentInfos: [],
     customerDetailList: [],
@@ -29,6 +37,9 @@ export const customerSlice = createAppSlice({
         }),
         deleteCustomer: create.reducer((state, action: PayloadAction<number[]>) => {
             state.customerList = state.customerList.filter(customer => !action.payload.includes(customer.customerUserId))
+        }),
+        setCustomerUserId: create.reducer((state, action: PayloadAction<number | null>) => {
+            state.customerUserId = action.payload
         }),
         bindCustomer: create.asyncThunk(
             async (request: AgentCustomerRequest, { getState }): Promise<CustomerInfo[]> => {
@@ -98,6 +109,21 @@ export const customerSlice = createAppSlice({
                 rejected: () => { },
             },
         ),
+        loadCustomerDetail: create.asyncThunk(
+            async (request: CustomerDetailRequest, { getState }): Promise<UserDetail> => {
+                const state = getState() as RootState
+                const tokenInfo = selectTokenInfo(state)
+                const response = await fetchGetDetails(request, tokenInfo?.token ?? "")
+                return response.data.userDetails[0];
+            },
+            {
+                pending: () => { },
+                fulfilled: (state, action: PayloadAction<UserDetail>) => {
+                    state.customerDetail = action.payload
+                },
+                rejected: () => { },
+            },
+        ),
         loadAgentInfos: create.asyncThunk(
             async (request: void, { getState }): Promise<CustomerAgentInfo[]> => {
                 const state = getState() as RootState
@@ -115,19 +141,23 @@ export const customerSlice = createAppSlice({
         ),
     }),
     selectors: {
+        selectCustomerUserId: state => state.customerUserId,
         selectCustomerList: state => state.customerList,
         selectAgentList: state => state.agentInfos,
         selectCustomerDetailList: state => state.customerDetailList,
+        selectCurrentCustomerDetail: state => state.customerDetail,
     },
 })
 
 export const {
     addCustomer,
     deleteCustomer,
+    setCustomerUserId,
     bindCustomer,
     unbindCustomer,
     setCustomerList,
     setCustomerDetailList,
+    loadCustomerDetail,
     loadAgentInfos,
 } = customerSlice.actions
 
@@ -135,4 +165,6 @@ export const {
     selectCustomerList,
     selectAgentList,
     selectCustomerDetailList,
+    selectCustomerUserId,
+    selectCurrentCustomerDetail,
 } = customerSlice.selectors

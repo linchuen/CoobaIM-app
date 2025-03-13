@@ -7,6 +7,7 @@ import { selectRecentTicketLsit, setRecentTicket } from "../../TicketSlice";
 import { switchPage, PageType } from "../../PageSlice";
 import { ChatType } from "../../../../services/constant";
 import { handleLoadChat } from "../../../../services/common";
+import { setCustomerUserId } from "../../CustomerSlice";
 
 const RecentTicket: React.FC = () => {
     const dispatch = useAppDispatch()
@@ -17,13 +18,14 @@ const RecentTicket: React.FC = () => {
         dispatch(setRecentTicket())
     }, [dispatch])
 
-    const loadChat = (roomId: number, name: string, type: ChatType) => {
+    const loadChat = (roomId: number, name: string, type: ChatType, userId: number) => {
         handleLoadChat(dispatch, roomId, name, type)
         dispatch(switchPage(PageType.chat))
+        dispatch(setCustomerUserId(userId))
     }
 
     const tickets = ticketInfos.map(info => (
-        <ListItem key={info.id} sx={{ pl: 4 }} onClick={() => loadChat(info.roomId, info.name, ChatType.ToRoom)}>
+        <ListItem key={info.id} sx={{ pl: 4 }} onClick={() => loadChat(info.roomId, info.name, ChatType.ToRoom, info.customerUserId)}>
             <ListItemText primary={info.name} />
         </ListItem>
     ))

@@ -41,7 +41,7 @@ export interface CustomerTicketSearchRequest {
 }
 
 export interface CustomerDetailRequest{
-    userIds: []
+    userIds: number[]
 }
 
 export interface TicketTransferRequest {

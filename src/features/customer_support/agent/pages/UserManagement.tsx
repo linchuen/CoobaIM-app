@@ -21,7 +21,7 @@ import {
 } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
 import { selectCustomerDetailList, setCustomerDetailList } from "../../CustomerSlice";
-import type { RegisterResponse, UserDetail } from "../../../../services/ResponseInterface";
+import type { RegisterResponse } from "../../../../services/ResponseInterface";
 import { handleFetch } from "../../../../services/common";
 import { fetchCreateUser } from "../../../../services/cs/CustomerApi";
 import type { RegisterRequest } from "../../../../services/RequestInterface";

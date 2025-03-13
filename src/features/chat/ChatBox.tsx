@@ -101,7 +101,7 @@ const ChatBox: React.FC = () => {
   }, [handleScroll])
 
   return (
-    <Box flex={1} display="flex" flexDirection="column" padding={2} height="100vh">
+    <Box flex={1} display="flex" flexDirection="column" padding={2}>
       {/* Search Bar */}
       <AppBar
         position="static"

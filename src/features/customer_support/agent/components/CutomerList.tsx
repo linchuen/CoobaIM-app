@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Box, Drawer, List, ListItem, ListItemText, Typography, Divider, IconButton } from "@mui/material";
 import { ChevronRight, ChevronLeft, SupervisedUserCircle } from "@mui/icons-material";
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
-import { selectCustomerList, setCustomerList } from "../../CustomerSlice";
+import { selectCustomerList, setCustomerList, setCustomerUserId } from "../../CustomerSlice";
 import { handleLoadChat } from "../../../../services/common";
 import { ChatType } from "../../../../services/constant";
 import { switchPage, PageType } from "../../PageSlice";
@@ -20,13 +20,14 @@ const CustomerList: React.FC = () => {
         dispatch(setCustomerList())
     }, [dispatch])
 
-    const loadChat = (roomId: number, name: string, type: ChatType) => {
+    const loadChat = (roomId: number, name: string, type: ChatType, userId: number) => {
         handleLoadChat(dispatch, roomId, name, type)
         dispatch(switchPage(PageType.chat))
+        dispatch(setCustomerUserId(userId))
     }
 
     const customers = customerInfos.map(info => (
-        <ListItem key={info.customerUserId} sx={{ pl: 4 }} onClick={() => loadChat(info.roomId, info.name, ChatType.ToRoom)}>
+        <ListItem key={info.customerUserId} sx={{ pl: 4 }} onClick={() => loadChat(info.roomId, info.name, ChatType.ToRoom, info.customerUserId)}>
             <ListItemText primary={info.name} />
         </ListItem>
     ))

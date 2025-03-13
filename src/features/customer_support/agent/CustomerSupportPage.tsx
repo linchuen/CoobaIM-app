@@ -17,9 +17,12 @@ import { PageType, selectedPage, switchPage } from "../PageSlice";
 import ChatBox from "../../chat/ChatBox";
 import CSAgentWebSocket from "./components/CSAgentWebSocket";
 import { selectEmail, selectTokenInfo } from "../../globalSlice";
+import UserDetailBox from "./components/UserDetailBox";
+import { selectCustomerUserId } from "../CustomerSlice";
 
 const CustomerSupportPage: React.FC = () => {
   const dispatch = useAppDispatch()
+  const customerUserId = useAppSelector(selectCustomerUserId)
   const tokenInfo = useAppSelector(selectTokenInfo)
   const email = useAppSelector(selectEmail)
   const page = useAppSelector(selectedPage)
@@ -97,8 +100,8 @@ const CustomerSupportPage: React.FC = () => {
         </Drawer>
 
         {/* 主要內容區域：根據 selectedPage 渲染不同組件 */}
-        <Box flexGrow={1} p={3} bgcolor="#222" >
-          {page === PageType.chat && <ChatBox />}
+        <Box flexGrow={1} pl={3} bgcolor="#222" >
+          {page === PageType.chat && chatBoxWithInfo()}
           {page === PageType.dashboard && <Dashboard />}
           {page === PageType.channels && <ChannelManagement />}
           {page === PageType.users && <UserManagement />}
@@ -111,6 +114,15 @@ const CustomerSupportPage: React.FC = () => {
       </Box>
     </>
   );
+
+  function chatBoxWithInfo(): React.ReactNode {
+    return <Box display="flex" height="100vh">
+      <ChatBox />
+
+      {customerUserId && <UserDetailBox />}
+
+    </Box>;
+  }
 };
 
 export default CustomerSupportPage;
