@@ -22,25 +22,25 @@ import { selectTokenInfo } from "../../globalSlice";
 import type { CustomerEnterResponse, OfficialChannel } from "../../../services/cs/CsResponseInterface";
 import { handleFetch } from "../../../services/common";
 import { selectRoomSubscribeSet, subscribeGroups, setCurrentRoomId, setCurrentRoomName, loadChats, setChatType } from "../../chat/ChatPageSlice";
-import { selectFriendInfoList } from "../../chat/FriendSlice";
 import { selectChannelList, selectChannelLoaded } from "../ChannelSlice";
+import { selectAgentList } from "../CustomerSlice";
 import { fetchEnterRoom } from "../../../services/cs/CustomerApi";
 
 const CustomerPage: React.FC = () => {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
-  const friendInfos = useAppSelector(selectFriendInfoList)
+  const agentInfos = useAppSelector(selectAgentList)
   const channelInfos = useAppSelector(selectChannelList)
   const roomSubscribeSet = useAppSelector(selectRoomSubscribeSet)
   const channelLoadedSet = useAppSelector(selectChannelLoaded)
   const tokenInfo = useAppSelector(selectTokenInfo)
 
   useEffect(() => {
-    if (friendInfos.length === 0 || !tokenInfo) return
+    if (agentInfos.length === 0 || !tokenInfo) return
 
     const stompClient = WebSocketManager.getInstance()
-    friendInfos.forEach(friendInfo => {
-      const roomId = friendInfo.roomId
+    agentInfos.forEach(agentInfo => {
+      const roomId = agentInfo.roomId
       if (roomSubscribeSet.includes(roomId)) return
 
       stompClient.subscribe(("/group/" + roomId), (message: IMessage) => {
@@ -48,7 +48,7 @@ const CustomerPage: React.FC = () => {
       })
     })
 
-  }, [dispatch, friendInfos, roomSubscribeSet, tokenInfo])
+  }, [dispatch, agentInfos, roomSubscribeSet, tokenInfo])
 
   const handleEnterChannel = async (channel: OfficialChannel) => {
     if (!tokenInfo) return
@@ -73,20 +73,20 @@ const CustomerPage: React.FC = () => {
     dispatch(loadChats({ roomId: roomId }))
   }
 
-  const friendList = friendInfos.map(info => {
+  const friendList = agentInfos.map(info => {
     return (
       <ListItem
         sx={{ marginBottom: 1 }}
-        key={"friend_" + info.friendUserId}
+        key={"agent_" + info.agentId}
         onClick={() => {
-          handleLoadChat(info.roomId, info.showName, ChatType.ToUser)
+          handleLoadChat(info.roomId, info.name, ChatType.ToUser)
           navigate("/customer/chat")
         }}
       >
         <ListItemAvatar>
-          <Avatar sx={{ bgcolor: "gray" }}>{info.showName.charAt(0)}</Avatar>
+          <Avatar sx={{ bgcolor: "gray" }}>{info.name.charAt(0)}</Avatar>
         </ListItemAvatar>
-        <ListItemText primary={info.showName} secondary={info.friendUserId} />
+        <ListItemText primary={info.name} secondary={info.agentUserId} />
       </ListItem>
     )
   })

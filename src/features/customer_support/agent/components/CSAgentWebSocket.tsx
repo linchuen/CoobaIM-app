@@ -2,19 +2,23 @@ import type React from "react"
 import { useEffect } from "react"
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks"
 import type { OfficialChannel } from "../../../../services/cs/CsResponseInterface"
-import type { LiveCall } from "../../../../services/ResponseInterface"
+import type { FriendInfo, LiveCall } from "../../../../services/ResponseInterface"
 import { WebSocketManager } from "../../../../services/websocketApi"
 import { selectTokenInfo, setCallDialogOpen, setLiveCall, setErrorMessage, setErrorDialogOpen } from "../../../globalSlice"
-import { addRoom } from "../../../chat/ChatPageSlice"
-import { loadChannels } from "../../ChannelSlice"
+import { addFriend, loadFriends } from "../../../chat/FriendSlice"
+import { addChannel, loadChannels } from "../../ChannelSlice"
 
-const CSWebSocket: React.FC = () => {
+const CSAgentWebSocket: React.FC = () => {
   const dispatch = useAppDispatch()
   const tokenInfo = useAppSelector(selectTokenInfo)
 
   useEffect(() => {
+    const addFriendEvent = (newFriend: FriendInfo) => {
+      dispatch(addFriend(newFriend))
+      console.log("addFriendEvent", newFriend)
+    }
     const addChannelEvent = (newChannel: OfficialChannel) => {
-      dispatch(addRoom(newChannel))
+      dispatch(addChannel(newChannel))
       console.log("addChannelEvent", newChannel)
     }
     const addCallEvent = (newCall: LiveCall) => {
@@ -27,9 +31,11 @@ const CSWebSocket: React.FC = () => {
       dispatch(setErrorDialogOpen(false))
     }
     const loadData = (webSocket: WebSocketManager) => {
+      dispatch(loadFriends({ friendUserIds: [] }))
       dispatch(loadChannels())
 
       webSocket.subscribe<OfficialChannel>("/topic/channel", addChannelEvent)
+      webSocket.subscribe<FriendInfo>("/user/queue/friend_add", addFriendEvent)
       webSocket.subscribe<LiveCall>("/user/queue/live_call", addCallEvent)
       webSocket.subscribe<string>("/user/queue/error", addErrorEvent)
     }
@@ -46,4 +52,4 @@ const CSWebSocket: React.FC = () => {
   )
 }
 
-export default CSWebSocket
+export default CSAgentWebSocket

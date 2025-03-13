@@ -1,17 +1,20 @@
 import { createAppSlice } from "../../app/createAppSlice"
 import type { PayloadAction } from "@reduxjs/toolkit"
-import type { CustomerInfo } from "../../services/cs/CsResponseInterface"
+import type { CustomerAgentInfo, CustomerInfo } from "../../services/cs/CsResponseInterface"
 import { selectTokenInfo } from "../globalSlice"
 import type { RootState } from "../../app/store"
 import { fetchBindCustomer, fetchSearchCustomer, fetchUnbindCustomer } from "../../services/cs/AgentApi"
 import type { AgentCustomerRequest } from "../../services/cs/CsRequestInterface"
+import { fetchSearchAgent } from "../../services/cs/CustomerApi"
 
 type CustomerState = {
     customerList: CustomerInfo[]
+    agentInfos: CustomerAgentInfo[]
 }
 
 const initialState: CustomerState = {
     customerList: [],
+    agentInfos: [],
 }
 
 export const customerSlice = createAppSlice({
@@ -77,9 +80,25 @@ export const customerSlice = createAppSlice({
                 rejected: () => { },
             },
         ),
+        setAgentInfos: create.asyncThunk(
+            async (request: void, { getState }): Promise<CustomerAgentInfo[]> => {
+                const state = getState() as RootState
+                const tokenInfo = selectTokenInfo(state)
+                const response = await fetchSearchAgent(tokenInfo?.token ?? "")
+                return response.data.agentInfos;
+            },
+            {
+                pending: () => { },
+                fulfilled: (state, action: PayloadAction<CustomerAgentInfo[]>) => {
+                    state.agentInfos = action.payload
+                },
+                rejected: () => { },
+            },
+        ),
     }),
     selectors: {
         selectCustomerList: state => state.customerList,
+        selectAgentList: state => state.agentInfos,
     },
 })
 
@@ -89,8 +108,10 @@ export const {
     bindCustomer,
     unbindCustomer,
     setCustomerList,
+    setAgentInfos,
 } = customerSlice.actions
 
 export const {
     selectCustomerList,
+    selectAgentList,
 } = customerSlice.selectors

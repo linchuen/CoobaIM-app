@@ -5,10 +5,10 @@ import SendIcon from "@mui/icons-material/Send";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import CSChatMessages from "./components/CSChatMessages";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { selectTokenInfo } from "../../globalSlice";
 import { selectCurrentRoomId, selectCurrentRoomName, selectEmoji, sendMessage, setEmoji } from "../../chat/ChatPageSlice";
+import ChatMessages from "../../chat/components/ChatMessages";
 
 
 const CustomerChatBox: React.FC = () => {
@@ -107,7 +107,7 @@ const CustomerChatBox: React.FC = () => {
           scrollbarWidth: "none",
         }}
       >
-        <CSChatMessages />
+        <ChatMessages />
 
         {/* Snackbar 提示 */}
         <Snackbar

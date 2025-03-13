@@ -45,7 +45,7 @@ export interface ChannelSearchResponse {
     channels: OfficialChannel[];
 }
 
-export interface ChannelDeleteResponse{
+export interface ChannelDeleteResponse {
     channelId: number;
 }
 
@@ -53,7 +53,7 @@ export interface CustomerEnterResponse {
     ticket: Ticket;
 }
 
-export interface CustomerBindResponse{
+export interface CustomerBindResponse {
     agentCustomers: CustomerInfo[];
 }
 
@@ -91,4 +91,16 @@ export interface TicketTransferResponse {
     roomId: number;
     userId: number;
     showName: string;
+}
+
+export interface CustomerAgentInfo {
+    agentId: number;
+    agentUserId: number;
+    roomId: number;
+    name: string;
+    department: string;
+}
+
+export interface CustomerAgentSearchResponse {
+    agentInfos: CustomerAgentInfo[]
 }
