@@ -4,8 +4,8 @@ import { Modal, Box, Typography, IconButton, Paper, Button } from "@mui/material
 import Draggable from "react-draggable";
 import { Close, ChatBubble } from "@mui/icons-material";
 import { useAppDispatch } from "../app/hooks";
-import { addFriend, addFriendApply } from "../features/chat/ChatPageSlice";
 import { setCallDialogOpen } from "../features/globalSlice";
+import { addFriendApply, addFriend } from "../features/chat/FriendSlice";
 
 const FloatingModal: React.FC = () => {
   const dispatch = useAppDispatch()

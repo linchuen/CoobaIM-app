@@ -69,7 +69,7 @@ export const channelSlice = createAppSlice({
                 rejected: () => { },
             },
         ),
-        setChannelList: create.asyncThunk(
+        loadChannels: create.asyncThunk(
             async (request: void, { getState }): Promise<OfficialChannel[]> => {
                 const state = getState() as RootState
                 const tokenInfo = selectTokenInfo(state)
@@ -100,7 +100,7 @@ export const {
     addChannelThunk,
     deleteChannel,
     deleteChannelThunk,
-    setChannelList,
+    loadChannels,
     setChannelLoaded,
 } = channelSlice.actions
 

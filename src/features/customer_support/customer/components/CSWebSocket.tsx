@@ -5,9 +5,9 @@ import type { OfficialChannel } from "../../../../services/cs/CsResponseInterfac
 import type { FriendInfo, LiveCall } from "../../../../services/ResponseInterface"
 import { WebSocketManager } from "../../../../services/websocketApi"
 import { selectTokenInfo, setCallDialogOpen, setLiveCall, setErrorMessage, setErrorDialogOpen } from "../../../globalSlice"
-import { addFriend, addRoom, loadFriends, loadChannels } from "../../CustomerSupportSlice"
-
-
+import { addFriend, loadFriends } from "../../../chat/FriendSlice"
+import { addRoom } from "../../../chat/ChatPageSlice"
+import { loadChannels } from "../../ChannelSlice"
 
 const CSWebSocket: React.FC = () => {
   const dispatch = useAppDispatch()
@@ -33,7 +33,7 @@ const CSWebSocket: React.FC = () => {
     }
     const loadData = (webSocket: WebSocketManager) => {
       dispatch(loadFriends({ friendUserIds: [] }))
-      dispatch(loadChannels(null))
+      dispatch(loadChannels())
 
       webSocket.subscribe<OfficialChannel>("/topic/channel", addChannelEvent)
       webSocket.subscribe<FriendInfo>("/user/queue/friend_add", addFriendEvent)
@@ -54,4 +54,3 @@ const CSWebSocket: React.FC = () => {
 }
 
 export default CSWebSocket
-

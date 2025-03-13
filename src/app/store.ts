@@ -4,7 +4,6 @@ import { setupListeners } from "@reduxjs/toolkit/query"
 import { counterSlice } from "../features/counter/counterSlice"
 import { globalSlice } from "../features/globalSlice"
 import { chatSlice } from "../features/chat/ChatPageSlice"
-import { customerSupportSlice } from "../features/customer_support/CustomerSupportSlice"
 import { ticketSlice } from "../features/customer_support/TicketSlice"
 import { customerSlice } from "../features/customer_support/CustomerSlice"
 import { agentSlice } from "../features/customer_support/AgentSlice"
@@ -18,7 +17,6 @@ const rootReducer = combineSlices(counterSlice,
   globalSlice,
   chatSlice,
   friendSlice,
-  customerSupportSlice,
   ticketSlice,
   customerSlice,
   agentSlice,

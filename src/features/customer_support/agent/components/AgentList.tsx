@@ -3,11 +3,15 @@ import { useEffect, useState } from "react";
 import { Box, Drawer, List, ListItem, ListItemText, Typography, Divider, IconButton } from "@mui/material";
 import { ChevronRight, ChevronLeft, Business } from "@mui/icons-material";
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
-import { selectAgentList, setAgentList } from "../../AgentSlice";
+import { setAgentList } from "../../AgentSlice";
+import { selectFriendInfoList } from "../../../chat/FriendSlice";
+import { handleLoadChat } from "../../../../services/common";
+import { ChatType } from "../../../../services/constant";
+import { switchPage, PageType } from "../../PageSlice";
 
 const AgentList: React.FC = () => {
     const dispatch = useAppDispatch()
-    const agentInfos = useAppSelector(selectAgentList)
+    const friendInfos = useAppSelector(selectFriendInfoList)
     const [openDrawer, setOpenDrawer] = useState<boolean>(false);
 
     const onOpen = () => setOpenDrawer(true)
@@ -17,9 +21,14 @@ const AgentList: React.FC = () => {
         dispatch(setAgentList({ agentIds: [] }))
     }, [dispatch])
 
-    const agents = agentInfos.map(info => (
-        <ListItem key={info.id} sx={{ pl: 4 }}>
-            <ListItemText primary={info.name} />
+    const loadChat = (roomId: number, name: string, type: ChatType) => {
+        handleLoadChat(dispatch, roomId, name, type)
+        dispatch(switchPage(PageType.chat))
+    }
+
+    const agents = friendInfos.map(info => (
+        <ListItem key={info.friendUserId} sx={{ pl: 4 }} onClick={() => loadChat(info.roomId, info.showName, ChatType.ToRoom)}>
+            <ListItemText primary={info.showName} />
         </ListItem>
     ))
     return (

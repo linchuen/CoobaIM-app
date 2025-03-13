@@ -5,7 +5,7 @@ import { ChevronRight, ChevronLeft, SupervisedUserCircle } from "@mui/icons-mate
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
 import { selectCustomerList, setCustomerList } from "../../CustomerSlice";
 import { handleLoadChat } from "../../../../services/common";
-import type { ChatType } from "../../../../services/constant";
+import { ChatType } from "../../../../services/constant";
 import { switchPage, PageType } from "../../PageSlice";
 
 const CustomerList: React.FC = () => {
@@ -26,7 +26,7 @@ const CustomerList: React.FC = () => {
     }
 
     const customers = customerInfos.map(info => (
-        <ListItem key={info.customerUserId} sx={{ pl: 4 }} >
+        <ListItem key={info.customerUserId} sx={{ pl: 4 }} onClick={() => loadChat(info.roomId, info.name, ChatType.ToRoom)}>
             <ListItemText primary={info.name} />
         </ListItem>
     ))

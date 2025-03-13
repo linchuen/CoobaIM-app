@@ -61,6 +61,7 @@ export interface CustomerInfo {
     agentUserId: number;
     customerUserId: number;
     name: string;
+    roomId: number;
 }
 
 export interface CustomerSearchResponse {

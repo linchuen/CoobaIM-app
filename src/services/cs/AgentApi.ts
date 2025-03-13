@@ -83,12 +83,14 @@ export const fetchSearchCustomer = async (
         {
           agentUserId: 5001,
           customerUserId: 3001,
-          name: "John Doe"
+          name: "John Doe",
+          roomId: 5001,
         },
         {
           agentUserId: 5002,
           customerUserId: 3002,
-          name: "Jane Smith"
+          name: "Jane Smith",
+          roomId: 5002,
         }
       ],
     }) : callFetch("/agent/customer/search", "GET", token);
@@ -144,9 +146,10 @@ export const fetchBindCustomer = async (
     ? new FakeSuccessResponse({
       agentCustomers: [
         {
-          agentUserId: 5001,
+          agentUserId: 5003,
           customerUserId: data.userIds[0],
-          name: "John Smith"
+          name: "John Smith",
+          roomId: 5003,
         }
       ],
     }) : callFetch("/agent/customer/bind", "POST", token, data);

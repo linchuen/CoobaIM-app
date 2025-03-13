@@ -1,7 +1,7 @@
 import { Container, TextField, Button, Table, TableHead, TableRow, TableCell, TableBody, Switch, Box, Paper, Typography, TableContainer } from "@mui/material";
 import type React from "react";
 import { useEffect, useRef } from "react";
-import { addChannelThunk, deleteChannelThunk, selectChannelList, setChannelList } from "../../ChannelSlice";
+import { addChannelThunk, deleteChannelThunk, loadChannels, selectChannelList } from "../../ChannelSlice";
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
 
 
@@ -11,7 +11,7 @@ const ChannelManagement: React.FC = () => {
   const channelNameRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    dispatch(setChannelList());
+    dispatch(loadChannels());
   }, [dispatch]);
 
   const createChannel = () => {
