@@ -7,6 +7,7 @@ export enum ChatType {
 
 export enum RoleType {
     AGENT = "AGENT",
+    ADMIN = "ADMIN",
     GUEST = "GUEST",
     USER = "USER",
 }

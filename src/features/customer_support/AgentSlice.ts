@@ -1,7 +1,7 @@
 import { createAppSlice } from "../../app/createAppSlice"
 import type { PayloadAction } from "@reduxjs/toolkit"
 import type { AgentInfo } from "../../services/cs/CsResponseInterface"
-import { selectTokenInfo } from "../globalSlice"
+import { selectTokenInfo, setErrorDialogOpen, setErrorMessage } from "../globalSlice"
 import type { RootState } from "../../app/store"
 import { fetchCreateAgent, fetchDisableAgent, fetchSearchAgent } from "../../services/cs/AgentApi"
 import type { AgentCreateRequest, AgentDisableRequest, AgentSearchRequest } from "../../services/cs/CsRequestInterface"
@@ -27,10 +27,14 @@ export const agentSlice = createAppSlice({
             state.agentList = agentList.filter(agent => agent.userId === agentUserId)
         }),
         addAgentThunk: create.asyncThunk(
-            async (request: AgentCreateRequest, { getState }): Promise<AgentInfo> => {
+            async (request: AgentCreateRequest, { getState, dispatch }): Promise<AgentInfo> => {
                 const state = getState() as RootState
                 const tokenInfo = selectTokenInfo(state)
                 const response = await fetchCreateAgent(request, tokenInfo?.token ?? "")
+                if(response.errorMessage){
+                    dispatch(setErrorMessage(response.errorMessage))
+                    dispatch(setErrorDialogOpen(true))
+                }
                 return {
                     id: response.data.agentId,
                     userId: response.data.userId,
@@ -49,14 +53,18 @@ export const agentSlice = createAppSlice({
                         type: "addAgent"
                     })
                 },
-                rejected: () => { },
+                rejected: () => {},
             },
         ),
         diableAgentThunk: create.asyncThunk(
-            async (request: AgentDisableRequest, { getState }): Promise<number> => {
+            async (request: AgentDisableRequest, { getState, dispatch }): Promise<number> => {
                 const state = getState() as RootState
                 const tokenInfo = selectTokenInfo(state)
-                await fetchDisableAgent(request, tokenInfo?.token ?? "")
+                const response = await fetchDisableAgent(request, tokenInfo?.token ?? "")
+                if(response.errorMessage){
+                    dispatch(setErrorMessage(response.errorMessage))
+                    dispatch(setErrorDialogOpen(true))
+                }
                 return request.agentUserId;
             },
             {
@@ -71,10 +79,14 @@ export const agentSlice = createAppSlice({
             },
         ),
         setAgentList: create.asyncThunk(
-            async (request: AgentSearchRequest, { getState }): Promise<AgentInfo[]> => {
+            async (request: AgentSearchRequest, { getState, dispatch }): Promise<AgentInfo[]> => {
                 const state = getState() as RootState
                 const tokenInfo = selectTokenInfo(state)
                 const response = await fetchSearchAgent(request, tokenInfo?.token ?? "")
+                if(response.errorMessage){
+                    dispatch(setErrorMessage(response.errorMessage))
+                    dispatch(setErrorDialogOpen(true))
+                }
                 return response.data.agents;
             },
             {
@@ -82,7 +94,7 @@ export const agentSlice = createAppSlice({
                 fulfilled: (state, action: PayloadAction<AgentInfo[]>) => {
                     state.agentList = action.payload
                 },
-                rejected: () => { },
+                rejected: () => {},
             },
         ),
     }),

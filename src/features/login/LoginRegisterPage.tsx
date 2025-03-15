@@ -43,7 +43,7 @@ const LoginRegisterPage: React.FC = () => {
         dispatch(setIsLogin(true))
         if (data.role === RoleType.GUEST) {
           navigate("/customer")
-        } else if (data.role === RoleType.AGENT) {
+        } else if (data.role === RoleType.AGENT || data.role === RoleType.ADMIN) {
           navigate("/agent")
         } else {
           navigate("/chat")

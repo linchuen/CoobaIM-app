@@ -3,7 +3,7 @@ import { Box, Drawer, ListItem, ListItemText, Typography, Divider, Avatar } from
 import { Folder, People, Work, Settings, HelpOutline, Directions, SupportAgent } from "@mui/icons-material";
 import Dashboard from "./pages/Dashboard";
 import ChannelManagement from "./pages/ChannelManagement";
-import CustomerSupport from "./pages/CustomerSupport";
+import CustomerSupport from "./pages/Agent";
 import Setting from "./pages/Setting";
 import UserManagement from "./pages/UserManagement";
 import HelpCenter from "./pages/HelpCenter";

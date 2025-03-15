@@ -1,7 +1,7 @@
 import { createAppSlice } from "../../app/createAppSlice"
 import type { PayloadAction } from "@reduxjs/toolkit"
 import type { ChannelDeleteResponse, OfficialChannel } from "../../services/cs/CsResponseInterface"
-import { selectTokenInfo } from "../globalSlice"
+import { selectTokenInfo, setErrorDialogOpen, setErrorMessage } from "../globalSlice"
 import type { RootState } from "../../app/store"
 import { fetchCreateChannel, fetchDeleteChannel, fetchSearchChannel } from "../../services/cs/Channel"
 import type { ChannelCreateRequest, ChannelDeleteRequest } from "../../services/cs/CsRequestInterface"
@@ -29,10 +29,14 @@ export const channelSlice = createAppSlice({
             state.channelList = channelList.filter(channel => channel.id !== channelId)
         }),
         addChannelThunk: create.asyncThunk(
-            async (request: ChannelCreateRequest, { getState }): Promise<OfficialChannel> => {
+            async (request: ChannelCreateRequest, { getState, dispatch }): Promise<OfficialChannel> => {
                 const state = getState() as RootState
                 const tokenInfo = selectTokenInfo(state)
                 const response = await fetchCreateChannel(request, tokenInfo?.token ?? "")
+                if (response.errorMessage) {
+                    dispatch(setErrorMessage(response.errorMessage))
+                    dispatch(setErrorDialogOpen(true))
+                }
                 return {
                     id: response.data.channelId,
                     name: request.name,
@@ -52,10 +56,14 @@ export const channelSlice = createAppSlice({
             },
         ),
         deleteChannelThunk: create.asyncThunk(
-            async (request: ChannelDeleteRequest, { getState }): Promise<ChannelDeleteResponse> => {
+            async (request: ChannelDeleteRequest, { getState, dispatch }): Promise<ChannelDeleteResponse> => {
                 const state = getState() as RootState
                 const tokenInfo = selectTokenInfo(state)
                 const response = await fetchDeleteChannel(request, tokenInfo?.token ?? "")
+                if (response.errorMessage) {
+                    dispatch(setErrorMessage(response.errorMessage))
+                    dispatch(setErrorDialogOpen(true))
+                }
                 return response.data;
             },
             {
@@ -85,8 +93,8 @@ export const channelSlice = createAppSlice({
             },
         ),
         setChannelLoaded: create.reducer((state, action: PayloadAction<number>) => {
-                state.channelLoaded.push(action.payload)
-            },
+            state.channelLoaded.push(action.payload)
+        },
         ),
     }),
     selectors: {

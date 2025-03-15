@@ -1,7 +1,7 @@
 import { createAppSlice } from "../../app/createAppSlice"
 import type { PayloadAction } from "@reduxjs/toolkit"
 import type { CustomerAgentInfo, CustomerInfo } from "../../services/cs/CsResponseInterface"
-import { selectTokenInfo } from "../globalSlice"
+import { selectTokenInfo, setErrorDialogOpen, setErrorMessage } from "../globalSlice"
 import type { RootState } from "../../app/store"
 import { fetchBindCustomer, fetchSearchCustomer, fetchUnbindCustomer } from "../../services/cs/AgentApi"
 import type { AgentCustomerRequest, CustomerDetailRequest } from "../../services/cs/CsRequestInterface"
@@ -42,10 +42,14 @@ export const customerSlice = createAppSlice({
             state.customerUserId = action.payload
         }),
         bindCustomer: create.asyncThunk(
-            async (request: AgentCustomerRequest, { getState }): Promise<CustomerInfo[]> => {
+            async (request: AgentCustomerRequest, { getState, dispatch }): Promise<CustomerInfo[]> => {
                 const state = getState() as RootState
                 const tokenInfo = selectTokenInfo(state)
                 const response = await fetchBindCustomer(request, tokenInfo?.token ?? "")
+                if (response.errorMessage) {
+                    dispatch(setErrorMessage(response.errorMessage))
+                    dispatch(setErrorDialogOpen(true))
+                }
                 return response.data.agentCustomers;
             },
             {
@@ -62,10 +66,14 @@ export const customerSlice = createAppSlice({
             },
         ),
         unbindCustomer: create.asyncThunk(
-            async (request: AgentCustomerRequest, { getState }): Promise<number[]> => {
+            async (request: AgentCustomerRequest, { getState, dispatch }): Promise<number[]> => {
                 const state = getState() as RootState
                 const tokenInfo = selectTokenInfo(state)
-                await fetchUnbindCustomer(request, tokenInfo?.token ?? "")
+                const response = await fetchUnbindCustomer(request, tokenInfo?.token ?? "")
+                if (response.errorMessage) {
+                    dispatch(setErrorMessage(response.errorMessage))
+                    dispatch(setErrorDialogOpen(true))
+                }
                 return request.userIds;
             },
             {
@@ -80,10 +88,14 @@ export const customerSlice = createAppSlice({
             },
         ),
         setCustomerList: create.asyncThunk(
-            async (request: void, { getState }): Promise<CustomerInfo[]> => {
+            async (request: void, { getState, dispatch }): Promise<CustomerInfo[]> => {
                 const state = getState() as RootState
                 const tokenInfo = selectTokenInfo(state)
                 const response = await fetchSearchCustomer(tokenInfo?.token ?? "")
+                if (response.errorMessage) {
+                    dispatch(setErrorMessage(response.errorMessage))
+                    dispatch(setErrorDialogOpen(true))
+                }
                 return response.data.customerInfos;
             },
             {
