@@ -50,6 +50,15 @@ export const fetchEvictUser = async (
     : callFetch("/room/evict", "DELETE", token, data)
 }
 
+export const fetchTransferPermission = async (
+  data: RoomUserRequest,
+  token?: string,
+): Promise<ApiResponse<boolean>> => {
+  return config.useFake
+    ? new FakeSuccessResponse(true)
+    : callFetch("/room/transfer", "POST", token, data)
+}
+
 export const fetchSearchRoom = async (
   data: RoomSearchRequest,
   token?: string,
