@@ -1,7 +1,7 @@
 import { Container, TextField, Button, Table, TableHead, TableRow, TableCell, TableBody, Switch, Box, Paper, Typography, TableContainer } from "@mui/material";
 import type React from "react";
 import { useEffect, useRef } from "react";
-import { addChannelThunk, deleteChannelThunk, loadChannels, selectChannelList } from "../../ChannelSlice";
+import { addChannelThunk, deleteChannelThunk, loadChannels, selectChannelList, updateChannelThunk } from "../../ChannelSlice";
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
 
 
@@ -56,7 +56,12 @@ const ChannelManagement: React.FC = () => {
               <TableRow key={"channel_" + channel.id}>
                 <TableCell>{channel.name}</TableCell>
                 <TableCell>
-                  <Switch checked={channel.isPublic} disabled />
+                  <Switch checked={channel.isPublic} onChange={(event) => dispatch(updateChannelThunk({
+                    channelId: channel.id,
+                    name: channel.name,
+                    isPublic: event.target.checked
+                  }))
+                  } />
                 </TableCell>
                 <TableCell>{new Date(channel.createdTime).toLocaleString()}</TableCell>
                 <TableCell>

@@ -3,8 +3,8 @@ import type { PayloadAction } from "@reduxjs/toolkit"
 import type { ChannelDeleteResponse, OfficialChannel } from "../../services/cs/CsResponseInterface"
 import { selectTokenInfo, setErrorDialogOpen, setErrorMessage } from "../globalSlice"
 import type { RootState } from "../../app/store"
-import { fetchCreateChannel, fetchDeleteChannel, fetchSearchChannel } from "../../services/cs/Channel"
-import type { ChannelCreateRequest, ChannelDeleteRequest } from "../../services/cs/CsRequestInterface"
+import { fetchCreateChannel, fetchDeleteChannel, fetchSearchChannel, fetchUpdateChannel } from "../../services/cs/Channel"
+import type { ChannelCreateRequest, ChannelDeleteRequest, ChannelUpdateRequest } from "../../services/cs/CsRequestInterface"
 
 type ChannelState = {
     channelList: OfficialChannel[]
@@ -51,6 +51,34 @@ export const channelSlice = createAppSlice({
                         payload: action.payload,
                         type: "addChannel"
                     })
+                },
+                rejected: () => { },
+            },
+        ),
+        updateChannelThunk: create.asyncThunk(
+            async (request: ChannelUpdateRequest, { getState, dispatch }): Promise<OfficialChannel> => {
+                const state = getState() as RootState
+                const tokenInfo = selectTokenInfo(state)
+                const response = await fetchUpdateChannel(request, tokenInfo?.token ?? "")
+                if (response.errorMessage) {
+                    dispatch(setErrorMessage(response.errorMessage))
+                    dispatch(setErrorDialogOpen(true))
+                }
+                return {
+                    id: request.channelId,
+                    name: request.name,
+                    isPublic: request.isPublic ?? false,
+                    createdTime: new Date().toISOString()
+                };
+            },
+            {
+                pending: () => { },
+                fulfilled: (state, action: PayloadAction<OfficialChannel>) => {
+                    const updateChannel = action.payload
+                    let channel = state.channelList.find(channel => channel.id === updateChannel.id);
+                    if (channel) {
+                        channel.isPublic = updateChannel.isPublic;
+                    }
                 },
                 rejected: () => { },
             },
@@ -106,6 +134,7 @@ export const channelSlice = createAppSlice({
 export const {
     addChannel,
     addChannelThunk,
+    updateChannelThunk,
     deleteChannel,
     deleteChannelThunk,
     loadChannels,

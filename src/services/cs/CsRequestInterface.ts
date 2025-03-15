@@ -27,6 +27,12 @@ export interface ChannelCreateRequest {
     isPublic?: boolean;
 }
 
+export interface ChannelUpdateRequest {
+    channelId: number,
+    name: string;
+    isPublic?: boolean;
+}
+
 export interface ChannelDeleteRequest {
     channelId: number;
 }

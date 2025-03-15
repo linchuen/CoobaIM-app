@@ -3,7 +3,7 @@ import { callFetch } from "../common";
 
 import { FakeSuccessResponse } from "../FakeSuccessResponse";
 import type { ApiResponse } from "../ResponseInterface";
-import type { ChannelCreateRequest, ChannelDeleteRequest } from "./CsRequestInterface";
+import type { ChannelCreateRequest, ChannelDeleteRequest, ChannelUpdateRequest } from "./CsRequestInterface";
 import type { ChannelCreateResponse, ChannelDeleteResponse, ChannelSearchResponse } from "./CsResponseInterface";
 
 
@@ -16,6 +16,15 @@ export const fetchCreateChannel = async (
       channelId: Math.floor(Math.random() * 100) + 1
     })
     : callFetch("/channel/create", "POST", token, data);
+};
+
+export const fetchUpdateChannel = async (
+  data: ChannelUpdateRequest,
+  token?: string
+): Promise<ApiResponse<boolean>> => {
+  return config.useFake
+    ? new FakeSuccessResponse(true)
+    : callFetch("/channel/update", "POST", token, data);
 };
 
 export const fetchDeleteChannel = async (
