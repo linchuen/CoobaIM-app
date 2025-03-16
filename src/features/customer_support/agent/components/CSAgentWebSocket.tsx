@@ -1,12 +1,13 @@
 import type React from "react"
 import { useEffect } from "react"
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks"
-import type { OfficialChannel } from "../../../../services/cs/CsResponseInterface"
+import type { CustomerInfo, OfficialChannel } from "../../../../services/cs/CsResponseInterface"
 import type { FriendInfo, LiveCall } from "../../../../services/ResponseInterface"
 import { WebSocketManager } from "../../../../services/websocketApi"
 import { selectTokenInfo, setCallDialogOpen, setLiveCall, setErrorMessage, setErrorDialogOpen } from "../../../globalSlice"
 import { addFriend, loadFriends } from "../../../chat/FriendSlice"
 import { addChannel, deleteChannel, loadChannels, updateChannel } from "../../ChannelSlice"
+import { addBindCustomer, removeBindCustomer } from "../../CustomerSlice"
 
 const CSAgentWebSocket: React.FC = () => {
   const dispatch = useAppDispatch()
@@ -17,13 +18,13 @@ const CSAgentWebSocket: React.FC = () => {
       dispatch(addFriend(newFriend))
       console.log("addFriendEvent", newFriend)
     }
-    const addBindCustomerEvent = (newChannel: OfficialChannel) => {
-      dispatch(addChannel(newChannel))
-      console.log("addBindCustomerEvent", newChannel)
+    const addBindCustomerEvent = (bindCustomers: CustomerInfo[]) => {
+      dispatch(addBindCustomer(bindCustomers))
+      console.log("addBindCustomerEvent", bindCustomers)
     }
-    const removeBindCustomerEvent = (newChannel: OfficialChannel) => {
-      dispatch(addChannel(newChannel))
-      console.log("removeBindCustomerEvent", newChannel)
+    const removeBindCustomerEvent = (bindCustomerIds: number[]) => {
+      dispatch(removeBindCustomer(bindCustomerIds))
+      console.log("removeBindCustomerEvent", bindCustomerIds)
     }
     const addChannelEvent = (newChannel: OfficialChannel) => {
       dispatch(addChannel(newChannel))
@@ -54,8 +55,8 @@ const CSAgentWebSocket: React.FC = () => {
       webSocket.subscribe<OfficialChannel>("/topic/channel_update", updateChannelEvent)
       webSocket.subscribe<number>("/topic/channel_delete", deleteChannelEvent)
       webSocket.subscribe<FriendInfo>("/user/queue/friend_add", addFriendEvent)
-      webSocket.subscribe<OfficialChannel>("/user/queue/bind_customer_add", addBindCustomerEvent)
-      webSocket.subscribe<OfficialChannel>("/user/queue/bind_customer_remove", removeBindCustomerEvent)
+      webSocket.subscribe<CustomerInfo[]>("/user/queue/bind_customer_add", addBindCustomerEvent)
+      webSocket.subscribe<number[]>("/user/queue/bind_customer_remove", removeBindCustomerEvent)
       webSocket.subscribe<LiveCall>("/user/queue/live_call", addCallEvent)
       webSocket.subscribe<string>("/user/queue/error", addErrorEvent)
     }

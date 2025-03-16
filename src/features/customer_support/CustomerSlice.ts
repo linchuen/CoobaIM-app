@@ -30,8 +30,9 @@ export const customerSlice = createAppSlice({
     name: "customer",
     initialState,
     reducers: create => ({
-        addBindCustomer: create.reducer((state, action: PayloadAction<CustomerInfo>) => {
-            state.bindCustomerList.push(action.payload)
+        addBindCustomer: create.reducer((state, action: PayloadAction<CustomerInfo[]>) => {
+            action.payload.forEach(customer => state.bindCustomerList.push(customer))
+
         }),
         removeBindCustomer: create.reducer((state, action: PayloadAction<number[]>) => {
             state.bindCustomerList = state.bindCustomerList.filter(customer => !action.payload.includes(customer.customerUserId))

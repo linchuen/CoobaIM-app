@@ -1,25 +1,25 @@
 import type React from "react"
 import { useEffect } from "react"
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks"
-import type { OfficialChannel } from "../../../../services/cs/CsResponseInterface"
+import type { CustomerAgentInfo, OfficialChannel } from "../../../../services/cs/CsResponseInterface"
 import type { LiveCall } from "../../../../services/ResponseInterface"
 import { WebSocketManager } from "../../../../services/websocketApi"
 import { selectTokenInfo, setCallDialogOpen, setLiveCall, setErrorMessage, setErrorDialogOpen } from "../../../globalSlice"
 import { addChannel, deleteChannel, loadChannels, updateChannel } from "../../ChannelSlice"
-import { loadCustomerAgents } from "../../AgentSlice"
+import { addBindAgent, loadCustomerAgents, removeBindAgent } from "../../AgentSlice"
 
 const CSWebSocket: React.FC = () => {
   const dispatch = useAppDispatch()
   const tokenInfo = useAppSelector(selectTokenInfo)
 
   useEffect(() => {
-    const addBindAgentEvent = (newChannel: OfficialChannel) => {
-      dispatch(addChannel(newChannel))
-      console.log("addBindAgentEvent", newChannel)
+    const addBindAgentEvent = (customerAgent: CustomerAgentInfo) => {
+      dispatch(addBindAgent(customerAgent))
+      console.log("addBindAgentEvent", customerAgent)
     }
-    const removeBindAgentEvent = (newChannel: OfficialChannel) => {
-      dispatch(addChannel(newChannel))
-      console.log("removeBindAgentEvent", newChannel)
+    const removeBindAgentEvent = (agentUserId: number) => {
+      dispatch(removeBindAgent(agentUserId))
+      console.log("removeBindAgentEvent", agentUserId)
     }
     const addChannelEvent = (newChannel: OfficialChannel) => {
       dispatch(addChannel(newChannel))
@@ -46,8 +46,8 @@ const CSWebSocket: React.FC = () => {
       dispatch(loadChannels())
       dispatch(loadCustomerAgents())
 
-      webSocket.subscribe<OfficialChannel>("/user/queue/bind_agent_add", addBindAgentEvent)
-      webSocket.subscribe<OfficialChannel>("/user/queue/bind_agent_remove", removeBindAgentEvent)
+      webSocket.subscribe<CustomerAgentInfo>("/user/queue/bind_agent_add", addBindAgentEvent)
+      webSocket.subscribe<number>("/user/queue/bind_agent_remove", removeBindAgentEvent)
       webSocket.subscribe<OfficialChannel>("/topic/channel_add", addChannelEvent)
       webSocket.subscribe<OfficialChannel>("/topic/channel_update", updateChannelEvent)
       webSocket.subscribe<number>("/topic/channel_delete", deleteChannelEvent)

@@ -29,11 +29,12 @@ export const agentSlice = createAppSlice({
             const agentList = state.agentList
             state.agentList = agentList.filter(agent => agent.userId === agentUserId)
         }),
-        addBindAgent: create.reducer((state, action: PayloadAction<AgentInfo>) => {
-            state.agentList.push(action.payload)
+        addBindAgent: create.reducer((state, action: PayloadAction<CustomerAgentInfo>) => {
+            state.customerAgents.push(action.payload)
         }),
-        removeBindAgent: create.reducer((state, action: PayloadAction<AgentInfo>) => {
-            state.agentList.push(action.payload)
+        removeBindAgent: create.reducer((state, action: PayloadAction<number>) => {
+            const agentUserId = action.payload
+            state.customerAgents =  state.customerAgents.filter(agent => agent.agentUserId === agentUserId)
         }),
         addAgentThunk: create.asyncThunk(
             async (request: AgentCreateRequest, { getState, dispatch }): Promise<AgentInfo> => {
@@ -129,6 +130,8 @@ export const agentSlice = createAppSlice({
 })
 
 export const {
+    addBindAgent,
+    removeBindAgent,
     addAgent,
     addAgentThunk,
     diableAgent,
