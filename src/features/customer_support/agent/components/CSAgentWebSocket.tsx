@@ -17,6 +17,14 @@ const CSAgentWebSocket: React.FC = () => {
       dispatch(addFriend(newFriend))
       console.log("addFriendEvent", newFriend)
     }
+    const addBindCustomerEvent = (newChannel: OfficialChannel) => {
+      dispatch(addChannel(newChannel))
+      console.log("addBindCustomerEvent", newChannel)
+    }
+    const removeBindCustomerEvent = (newChannel: OfficialChannel) => {
+      dispatch(addChannel(newChannel))
+      console.log("removeBindCustomerEvent", newChannel)
+    }
     const addChannelEvent = (newChannel: OfficialChannel) => {
       dispatch(addChannel(newChannel))
       console.log("addChannelEvent", newChannel)
@@ -46,6 +54,8 @@ const CSAgentWebSocket: React.FC = () => {
       webSocket.subscribe<OfficialChannel>("/topic/channel_update", updateChannelEvent)
       webSocket.subscribe<number>("/topic/channel_delete", deleteChannelEvent)
       webSocket.subscribe<FriendInfo>("/user/queue/friend_add", addFriendEvent)
+      webSocket.subscribe<OfficialChannel>("/user/queue/bind_customer_add", addBindCustomerEvent)
+      webSocket.subscribe<OfficialChannel>("/user/queue/bind_customer_remove", removeBindCustomerEvent)
       webSocket.subscribe<LiveCall>("/user/queue/live_call", addCallEvent)
       webSocket.subscribe<string>("/user/queue/error", addErrorEvent)
     }

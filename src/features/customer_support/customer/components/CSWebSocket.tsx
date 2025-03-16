@@ -13,6 +13,14 @@ const CSWebSocket: React.FC = () => {
   const tokenInfo = useAppSelector(selectTokenInfo)
 
   useEffect(() => {
+    const addBindAgentEvent = (newChannel: OfficialChannel) => {
+      dispatch(addChannel(newChannel))
+      console.log("addBindAgentEvent", newChannel)
+    }
+    const removeBindAgentEvent = (newChannel: OfficialChannel) => {
+      dispatch(addChannel(newChannel))
+      console.log("removeBindAgentEvent", newChannel)
+    }
     const addChannelEvent = (newChannel: OfficialChannel) => {
       dispatch(addChannel(newChannel))
       console.log("addChannelEvent", newChannel)
@@ -38,6 +46,8 @@ const CSWebSocket: React.FC = () => {
       dispatch(loadChannels())
       dispatch(loadCustomerAgents())
 
+      webSocket.subscribe<OfficialChannel>("/user/queue/bind_agent_add", addBindAgentEvent)
+      webSocket.subscribe<OfficialChannel>("/user/queue/bind_agent_remove", removeBindAgentEvent)
       webSocket.subscribe<OfficialChannel>("/topic/channel_add", addChannelEvent)
       webSocket.subscribe<OfficialChannel>("/topic/channel_update", updateChannelEvent)
       webSocket.subscribe<number>("/topic/channel_delete", deleteChannelEvent)
