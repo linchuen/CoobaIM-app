@@ -21,12 +21,18 @@ export const channelSlice = createAppSlice({
     initialState,
     reducers: create => ({
         addChannel: create.reducer((state, action: PayloadAction<OfficialChannel>) => {
-            state.channelList.push(action.payload)
+            const addChannel = action.payload
+            let channel = state.channelList.find(channel => channel.id === addChannel.id)
+            if (!channel) state.channelList.push(action.payload)
+        }),
+        updateChannel: create.reducer((state, action: PayloadAction<OfficialChannel>) => {
+            const updateChannel = action.payload
+            let channel = state.channelList.find(channel => channel.id === updateChannel.id)
+            if (channel) channel.isPublic = updateChannel.isPublic
         }),
         deleteChannel: create.reducer((state, action: PayloadAction<number>) => {
             const channelId = action.payload
-            const channelList = state.channelList
-            state.channelList = channelList.filter(channel => channel.id !== channelId)
+            state.channelList = state.channelList.filter(channel => channel.id !== channelId)
         }),
         addChannelThunk: create.asyncThunk(
             async (request: ChannelCreateRequest, { getState, dispatch }): Promise<OfficialChannel> => {
@@ -74,11 +80,10 @@ export const channelSlice = createAppSlice({
             {
                 pending: () => { },
                 fulfilled: (state, action: PayloadAction<OfficialChannel>) => {
-                    const updateChannel = action.payload
-                    let channel = state.channelList.find(channel => channel.id === updateChannel.id);
-                    if (channel) {
-                        channel.isPublic = updateChannel.isPublic;
-                    }
+                    channelSlice.caseReducers.updateChannel(state, {
+                        payload: action.payload,
+                        type: "updateChannel"
+                    })
                 },
                 rejected: () => { },
             },
@@ -134,6 +139,7 @@ export const channelSlice = createAppSlice({
 export const {
     addChannel,
     addChannelThunk,
+    updateChannel,
     updateChannelThunk,
     deleteChannel,
     deleteChannelThunk,

@@ -5,8 +5,7 @@ import type { OfficialChannel } from "../../../../services/cs/CsResponseInterfac
 import type { LiveCall } from "../../../../services/ResponseInterface"
 import { WebSocketManager } from "../../../../services/websocketApi"
 import { selectTokenInfo, setCallDialogOpen, setLiveCall, setErrorMessage, setErrorDialogOpen } from "../../../globalSlice"
-import { addRoom } from "../../../chat/ChatPageSlice"
-import { loadChannels } from "../../ChannelSlice"
+import { addChannel, deleteChannel, loadChannels, updateChannel } from "../../ChannelSlice"
 import { loadAgentInfos } from "../../CustomerSlice"
 
 const CSWebSocket: React.FC = () => {
@@ -15,8 +14,16 @@ const CSWebSocket: React.FC = () => {
 
   useEffect(() => {
     const addChannelEvent = (newChannel: OfficialChannel) => {
-      dispatch(addRoom(newChannel))
+      dispatch(addChannel(newChannel))
       console.log("addChannelEvent", newChannel)
+    }
+    const updateChannelEvent = (channel: OfficialChannel) => {
+      dispatch(updateChannel(channel))
+      console.log("ipdateChannelEvent", channel)
+    }
+    const deleteChannelEvent = (channelId: number) => {
+      dispatch(deleteChannel(channelId))
+      console.log("deleteChannelEvent", channelId)
     }
     const addCallEvent = (newCall: LiveCall) => {
       dispatch(setCallDialogOpen(true))
@@ -31,7 +38,9 @@ const CSWebSocket: React.FC = () => {
       dispatch(loadChannels())
       dispatch(loadAgentInfos())
 
-      webSocket.subscribe<OfficialChannel>("/topic/channel", addChannelEvent)
+      webSocket.subscribe<OfficialChannel>("/topic/channel_add", addChannelEvent)
+      webSocket.subscribe<OfficialChannel>("/topic/channel_update", updateChannelEvent)
+      webSocket.subscribe<number>("/topic/channel_delete", deleteChannelEvent)
       webSocket.subscribe<LiveCall>("/user/queue/live_call", addCallEvent)
       webSocket.subscribe<string>("/user/queue/error", addErrorEvent)
     }

@@ -1,8 +1,9 @@
 import { Container, TextField, Button, Table, TableHead, TableRow, TableCell, TableBody, Switch, Box, Paper, Typography, TableContainer } from "@mui/material";
 import type React from "react";
 import { useEffect, useRef } from "react";
-import { addChannelThunk, deleteChannelThunk, loadChannels, selectChannelList, updateChannelThunk } from "../../ChannelSlice";
+import { deleteChannelThunk, loadChannels, selectChannelList, updateChannelThunk } from "../../ChannelSlice";
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
+import AddChannelDialog from "../components/AddChannelDiaLog";
 
 
 const ChannelManagement: React.FC = () => {
@@ -13,16 +14,6 @@ const ChannelManagement: React.FC = () => {
   useEffect(() => {
     dispatch(loadChannels());
   }, [dispatch]);
-
-  const createChannel = () => {
-    if (!channelNameRef.current?.value) return;
-
-    dispatch(addChannelThunk({
-      name: channelNameRef.current.value,
-      isPublic: false
-    }));
-    channelNameRef.current.value = "";
-  };
 
   return (
     <Container>
@@ -37,9 +28,7 @@ const ChannelManagement: React.FC = () => {
             fullWidth
             variant="outlined"
           />
-          <Button onClick={createChannel} variant="contained" color="primary" sx={{ minWidth: 120 }}>
-            建立頻道
-          </Button>
+          <AddChannelDialog />
         </Box>
 
         <Table>

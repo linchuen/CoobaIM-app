@@ -1,7 +1,7 @@
 import type React from "react";
 import { Box, Typography, Paper, Button, TextField, Table, TableHead, TableRow, TableCell, TableBody, Switch, Container, TableContainer } from "@mui/material";
 import { useEffect, useState } from "react";
-import CreateCustomerSupport from "../components/CreateCustomerSupportDiaLog";
+import AddCustomerSupport from "../components/AddCustomerSupportDiaLog";
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
 import { diableAgentThunk, selectAgentList, setAgentList } from "../../AgentSlice";
 import BindCustomer from "../components/BindCustomerDialog";
@@ -33,7 +33,7 @@ const CustomerSupport: React.FC = () => {
             fullWidth
             variant="outlined"
           />
-          <CreateCustomerSupport />
+          <AddCustomerSupport />
         </Box>
         <Table>
           <TableHead>

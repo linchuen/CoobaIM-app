@@ -4,7 +4,7 @@ import { Dialog, DialogTitle, DialogContent, TextField, DialogActions, Button } 
 import { addAgentThunk } from "../../AgentSlice";
 import { useAppDispatch } from "../../../../app/hooks";
 
-const CreateCustomerSupport: React.FC = () => {
+const AddCustomerSupport: React.FC = () => {
     const dispatch = useAppDispatch();
     const [open, setOpen] = useState(false);
     const [formData, setFormData] = useState({
@@ -48,4 +48,4 @@ const CreateCustomerSupport: React.FC = () => {
     );
 };
 
-export default CreateCustomerSupport;
+export default AddCustomerSupport;
