@@ -1,25 +1,44 @@
 import { Button, Table, TableHead, TableRow, TableCell, TableBody, Paper, TableContainer, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
 import type React from "react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
-import { bindCustomer, selectCustomerList, unbindCustomer } from "../../CustomerSlice";
+import { bindCustomerThunk, unbindCustomerThunk } from "../../CustomerSlice";
+import { handleFetch } from "../../../../services/common";
+import { fetchSearchBindCustomer } from "../../../../services/cs/AgentApi";
+import { selectTokenInfo } from "../../../globalSlice";
+import type { CustomerInfo, CustomerSearchResponse } from "../../../../services/cs/CsResponseInterface";
 
+interface BindCustomerProps {
+    agentUserId: number
+}
 
-const BindCustomer: React.FC = () => {
+const BindCustomer: React.FC<BindCustomerProps> = ({ agentUserId }) => {
     const dispatch = useAppDispatch();
-    const customers = useAppSelector(selectCustomerList);
+    const tokenInfo = useAppSelector(selectTokenInfo)
+    const [customers, setCustomers] = useState<CustomerInfo[]>([]);
     const userIdRef = useRef<HTMLInputElement>(null);
     const [open, setOpen] = useState(false);
 
+    useEffect(() => {
+        if (!tokenInfo) return
+        handleFetch<CustomerSearchResponse>(
+            dispatch,
+            fetchSearchBindCustomer({ agentUserId: agentUserId }, tokenInfo?.token ?? ""),
+            data => {
+                setCustomers(data.customerInfos)
+            },
+        )
+    }, [agentUserId, dispatch, tokenInfo])
+
     const handleBind = () => {
         if (!userIdRef.current) return
-        dispatch(bindCustomer({ userIds: [Number(userIdRef.current.value)] }));
+        dispatch(bindCustomerThunk({ userIds: [Number(userIdRef.current.value)] }));
         handleClose();
     };
 
     const handleUnbind = () => {
         if (!userIdRef.current) return
-        dispatch(unbindCustomer({ userIds: [Number(userIdRef.current.value)] }));
+        dispatch(unbindCustomerThunk({ userIds: [Number(userIdRef.current.value)] }));
         handleClose();
     };
 

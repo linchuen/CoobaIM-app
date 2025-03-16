@@ -23,13 +23,13 @@ import type { CustomerEnterResponse, OfficialChannel } from "../../../services/c
 import { handleFetch } from "../../../services/common";
 import { selectRoomSubscribeSet, subscribeGroups, setCurrentRoomId, setCurrentRoomName, loadChats, setChatType } from "../../chat/ChatPageSlice";
 import { selectChannelList, selectChannelLoaded } from "../ChannelSlice";
-import { selectAgentList } from "../CustomerSlice";
 import { fetchEnterRoom } from "../../../services/cs/CustomerApi";
+import { selectCustomerAgents } from "../AgentSlice";
 
 const CustomerPage: React.FC = () => {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
-  const agentInfos = useAppSelector(selectAgentList)
+  const agentInfos = useAppSelector(selectCustomerAgents)
   const channelInfos = useAppSelector(selectChannelList)
   const roomSubscribeSet = useAppSelector(selectRoomSubscribeSet)
   const channelLoadedSet = useAppSelector(selectChannelLoaded)
@@ -144,3 +144,5 @@ const CustomerPage: React.FC = () => {
 };
 
 export default CustomerPage;
+
+

@@ -1,5 +1,5 @@
 import { callFetch } from "../common";
-import type { AgentCreateRequest, AgentUpdateRequest, AgentSearchRequest, CustomerTicketSearchRequest, AgentCustomerRequest, AgentDisableRequest, TicketTransferRequest } from "./CsRequestInterface";
+import type { AgentCreateRequest, AgentUpdateRequest, AgentSearchRequest, CustomerTicketSearchRequest, AgentCustomerRequest, AgentDisableRequest, TicketTransferRequest, BindCustomerSearchRequest } from "./CsRequestInterface";
 import type { AgentCreateResponse, AgentSearchResponse, CustomerBindResponse, CustomerSearchResponse, CustomerTicketSearchResponse, TicketSearchResponse, TicketTransferResponse } from "./CsResponseInterface";
 import type { ApiResponse } from "../ResponseInterface";
 import config from "../../app/config";
@@ -74,7 +74,8 @@ export const fetchSearchAgent = async (
     }) : callFetch("/agent/search", "POST", token, data);
 };
 
-export const fetchSearchCustomer = async (
+export const fetchSearchBindCustomer = async (
+  data: BindCustomerSearchRequest,
   token?: string
 ): Promise<ApiResponse<CustomerSearchResponse>> => {
   return config.useFake
@@ -93,7 +94,7 @@ export const fetchSearchCustomer = async (
           roomId: 5002,
         }
       ],
-    }) : callFetch("/agent/customer/search", "GET", token);
+    }) : callFetch("/agent/customer/search", "POST", token, data);
 };
 
 export const fetchSearchCustomerTicket = async (

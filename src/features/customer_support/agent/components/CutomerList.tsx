@@ -3,21 +3,21 @@ import { useEffect, useState } from "react";
 import { Box, Drawer, List, ListItem, ListItemText, Typography, Divider, IconButton } from "@mui/material";
 import { ChevronRight, ChevronLeft, SupervisedUserCircle } from "@mui/icons-material";
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
-import { selectCustomerList, setCustomerList, setCustomerUserId } from "../../CustomerSlice";
+import { selectBindCustomerList, loadBindCustomerList, setCustomerUserId } from "../../CustomerSlice";
 import { handleLoadChat } from "../../../../services/common";
 import { ChatType } from "../../../../services/constant";
 import { switchPage, PageType } from "../../PageSlice";
 
 const CustomerList: React.FC = () => {
     const dispatch = useAppDispatch()
-    const customerInfos = useAppSelector(selectCustomerList)
+    const customerInfos = useAppSelector(selectBindCustomerList)
     const [openDrawer, setOpenDrawer] = useState<boolean>(false);
 
     const onOpen = () => setOpenDrawer(true)
     const onClose = () => setOpenDrawer(false)
 
     useEffect(() => {
-        dispatch(setCustomerList())
+        dispatch(loadBindCustomerList)
     }, [dispatch])
 
     const loadChat = (roomId: number, name: string, type: ChatType, userId: number) => {

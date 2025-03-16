@@ -37,6 +37,10 @@ export interface ChannelDeleteRequest {
     channelId: number;
 }
 
+export interface BindCustomerSearchRequest{
+    agentUserId?: number;
+}
+
 export interface CustomerEnterRequest {
     channelId: number;
     isUsePreviousChat?: boolean;

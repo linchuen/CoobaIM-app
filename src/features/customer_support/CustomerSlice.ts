@@ -1,18 +1,17 @@
 import { createAppSlice } from "../../app/createAppSlice"
 import type { PayloadAction } from "@reduxjs/toolkit"
-import type { CustomerAgentInfo, CustomerInfo } from "../../services/cs/CsResponseInterface"
+import type { CustomerInfo } from "../../services/cs/CsResponseInterface"
 import { selectTokenInfo, setErrorDialogOpen, setErrorMessage } from "../globalSlice"
 import type { RootState } from "../../app/store"
-import { fetchBindCustomer, fetchSearchCustomer, fetchUnbindCustomer } from "../../services/cs/AgentApi"
+import { fetchBindCustomer, fetchSearchBindCustomer, fetchUnbindCustomer } from "../../services/cs/AgentApi"
 import type { AgentCustomerRequest, CustomerDetailRequest } from "../../services/cs/CsRequestInterface"
-import { fetchGetDetails, fetchSearchAgent } from "../../services/cs/CustomerApi"
+import { fetchGetDetails } from "../../services/cs/CustomerApi"
 import type { UserDetail } from "../../services/ResponseInterface"
 
 type CustomerState = {
     customerUserId: number | null
     customerDetail: UserDetail
-    customerList: CustomerInfo[]
-    agentInfos: CustomerAgentInfo[]
+    bindCustomerList: CustomerInfo[]
     customerDetailList: UserDetail[]
 }
 
@@ -23,8 +22,7 @@ const initialState: CustomerState = {
         name: "",
         email: ""
     },
-    customerList: [],
-    agentInfos: [],
+    bindCustomerList: [],
     customerDetailList: [],
 }
 
@@ -32,16 +30,16 @@ export const customerSlice = createAppSlice({
     name: "customer",
     initialState,
     reducers: create => ({
-        addCustomer: create.reducer((state, action: PayloadAction<CustomerInfo>) => {
-            state.customerList.push(action.payload)
+        addBindCustomer: create.reducer((state, action: PayloadAction<CustomerInfo>) => {
+            state.bindCustomerList.push(action.payload)
         }),
-        deleteCustomer: create.reducer((state, action: PayloadAction<number[]>) => {
-            state.customerList = state.customerList.filter(customer => !action.payload.includes(customer.customerUserId))
+        removeBindCustomer: create.reducer((state, action: PayloadAction<number[]>) => {
+            state.bindCustomerList = state.bindCustomerList.filter(customer => !action.payload.includes(customer.customerUserId))
         }),
         setCustomerUserId: create.reducer((state, action: PayloadAction<number | null>) => {
             state.customerUserId = action.payload
         }),
-        bindCustomer: create.asyncThunk(
+        bindCustomerThunk: create.asyncThunk(
             async (request: AgentCustomerRequest, { getState, dispatch }): Promise<CustomerInfo[]> => {
                 const state = getState() as RootState
                 const tokenInfo = selectTokenInfo(state)
@@ -55,17 +53,12 @@ export const customerSlice = createAppSlice({
             {
                 pending: () => { },
                 fulfilled: (state, action: PayloadAction<CustomerInfo[]>) => {
-                    action.payload.forEach(customer =>
-                        customerSlice.caseReducers.addCustomer(state, {
-                            payload: customer,
-                            type: "addCustomer"
-                        })
-                    )
+
                 },
                 rejected: () => { },
             },
         ),
-        unbindCustomer: create.asyncThunk(
+        unbindCustomerThunk: create.asyncThunk(
             async (request: AgentCustomerRequest, { getState, dispatch }): Promise<number[]> => {
                 const state = getState() as RootState
                 const tokenInfo = selectTokenInfo(state)
@@ -79,19 +72,16 @@ export const customerSlice = createAppSlice({
             {
                 pending: () => { },
                 fulfilled: (state, action: PayloadAction<number[]>) => {
-                    customerSlice.caseReducers.deleteCustomer(state, {
-                        payload: action.payload,
-                        type: "deleteCustomer"
-                    })
+
                 },
                 rejected: () => { },
             },
         ),
-        setCustomerList: create.asyncThunk(
+        loadBindCustomerList: create.asyncThunk(
             async (request: void, { getState, dispatch }): Promise<CustomerInfo[]> => {
                 const state = getState() as RootState
                 const tokenInfo = selectTokenInfo(state)
-                const response = await fetchSearchCustomer(tokenInfo?.token ?? "")
+                const response = await fetchSearchBindCustomer({}, tokenInfo?.token ?? "")
                 if (response.errorMessage) {
                     dispatch(setErrorMessage(response.errorMessage))
                     dispatch(setErrorDialogOpen(true))
@@ -101,7 +91,7 @@ export const customerSlice = createAppSlice({
             {
                 pending: () => { },
                 fulfilled: (state, action: PayloadAction<CustomerInfo[]>) => {
-                    state.customerList = action.payload
+                    state.bindCustomerList = action.payload
                 },
                 rejected: () => { },
             },
@@ -136,46 +126,29 @@ export const customerSlice = createAppSlice({
                 rejected: () => { },
             },
         ),
-        loadAgentInfos: create.asyncThunk(
-            async (request: void, { getState }): Promise<CustomerAgentInfo[]> => {
-                const state = getState() as RootState
-                const tokenInfo = selectTokenInfo(state)
-                const response = await fetchSearchAgent(tokenInfo?.token ?? "")
-                return response.data.agentInfos;
-            },
-            {
-                pending: () => { },
-                fulfilled: (state, action: PayloadAction<CustomerAgentInfo[]>) => {
-                    state.agentInfos = action.payload
-                },
-                rejected: () => { },
-            },
-        ),
+
     }),
     selectors: {
         selectCustomerUserId: state => state.customerUserId,
-        selectCustomerList: state => state.customerList,
-        selectAgentList: state => state.agentInfos,
+        selectBindCustomerList: state => state.bindCustomerList,
         selectCustomerDetailList: state => state.customerDetailList,
         selectCurrentCustomerDetail: state => state.customerDetail,
     },
 })
 
 export const {
-    addCustomer,
-    deleteCustomer,
+    addBindCustomer,
+    removeBindCustomer,
     setCustomerUserId,
-    bindCustomer,
-    unbindCustomer,
-    setCustomerList,
+    bindCustomerThunk,
+    unbindCustomerThunk,
+    loadBindCustomerList,
     setCustomerDetailList,
     loadCustomerDetail,
-    loadAgentInfos,
 } = customerSlice.actions
 
 export const {
-    selectCustomerList,
-    selectAgentList,
+    selectBindCustomerList,
     selectCustomerDetailList,
     selectCustomerUserId,
     selectCurrentCustomerDetail,

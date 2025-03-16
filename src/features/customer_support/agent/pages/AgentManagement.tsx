@@ -47,7 +47,7 @@ const CustomerSupport: React.FC = () => {
           </TableHead>
           <TableBody>
             {agents.map((agent) => (
-              <TableRow key={"agent_"+agent.id}>
+              <TableRow key={"agent_" + agent.id}>
                 <TableCell>{agent.name}</TableCell>
                 <TableCell>{agent.department}</TableCell>
                 <TableCell>
@@ -55,7 +55,7 @@ const CustomerSupport: React.FC = () => {
                 </TableCell>
                 <TableCell>{new Date(agent.createdTime).toLocaleString()}</TableCell>
                 <TableCell>
-                  <BindCustomer />
+                  <BindCustomer agentUserId={agent.userId} />
                   <Button onClick={() => handleDisable(agent.userId)} color="secondary">停用</Button>
                 </TableCell>
               </TableRow>

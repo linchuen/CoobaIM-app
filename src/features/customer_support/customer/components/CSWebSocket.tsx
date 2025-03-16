@@ -6,7 +6,7 @@ import type { LiveCall } from "../../../../services/ResponseInterface"
 import { WebSocketManager } from "../../../../services/websocketApi"
 import { selectTokenInfo, setCallDialogOpen, setLiveCall, setErrorMessage, setErrorDialogOpen } from "../../../globalSlice"
 import { addChannel, deleteChannel, loadChannels, updateChannel } from "../../ChannelSlice"
-import { loadAgentInfos } from "../../CustomerSlice"
+import { loadCustomerAgents } from "../../AgentSlice"
 
 const CSWebSocket: React.FC = () => {
   const dispatch = useAppDispatch()
@@ -36,7 +36,7 @@ const CSWebSocket: React.FC = () => {
     }
     const loadData = (webSocket: WebSocketManager) => {
       dispatch(loadChannels())
-      dispatch(loadAgentInfos())
+      dispatch(loadCustomerAgents())
 
       webSocket.subscribe<OfficialChannel>("/topic/channel_add", addChannelEvent)
       webSocket.subscribe<OfficialChannel>("/topic/channel_update", updateChannelEvent)

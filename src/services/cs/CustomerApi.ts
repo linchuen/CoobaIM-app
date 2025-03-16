@@ -38,7 +38,7 @@ export const fetchEnterRoom = async (
     : callFetch("/customer/enter", "POST", token, data);
 };
 
-export const fetchSearchAgent = async (
+export const fetchSearchCustomerAgent = async (
   token?: string
 ): Promise<ApiResponse<CustomerAgentSearchResponse>> => {
   return config.useFake
