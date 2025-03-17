@@ -1,6 +1,6 @@
 import type React from "react";
 import { Box, Avatar, Typography, Divider, Chip } from "@mui/material";
-import { loadCustomerDetail, selectCurrentCustomerDetail, selectCustomerUserId, setCustomerList } from "../../CustomerSlice";
+import { loadCustomerDetail, selectCurrentCustomerDetail, selectCustomerUserId } from "../../CustomerSlice";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
 
