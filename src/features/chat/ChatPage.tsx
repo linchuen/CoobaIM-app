@@ -49,7 +49,7 @@ const ChatPage: React.FC = () => {
   const friendInfos = useAppSelector(selectFriendInfoList)
   const roomInfos = useAppSelector(selectRoomInfoList)
   const roomSubscribeSet = useAppSelector(selectRoomSubscribeSet)
-  const roomUnreadMap =  useAppSelector(selectRoomUnreadMap)
+  const roomUnreadMap = useAppSelector(selectRoomUnreadMap)
   const tokenInfo = useAppSelector(selectTokenInfo)
   const [openDialog, setOpenDialog] = useState(false)
   const [tabIndex, setTabIndex] = useState(0)
@@ -144,8 +144,9 @@ const ChatPage: React.FC = () => {
   })
 
   const friendList = friendInfos.map(info => {
-    const chat = roomUnreadMap[info.roomId].chat
-    const unreadCount = roomUnreadMap[info.roomId].unread
+    const roomUnread = roomUnreadMap[info.roomId]
+    const message = roomUnread ? roomUnread.chat.message : ""
+    const unreadCount = roomUnread ? roomUnread.unread : 0
     return (
       <ListItem
         sx={{ marginBottom: 1 }}
@@ -156,7 +157,7 @@ const ChatPage: React.FC = () => {
         }}
       >
         <Avatar sx={{ marginRight: 2 }}>{info.showName.charAt(0)}</Avatar>
-        <ListItemText primary={info.showName} secondary={chat.message} />
+        <ListItemText primary={info.showName} secondary={message ?? ""} />
         {unreadCount > 0 && (
           <Badge badgeContent={unreadCount > 99 ? "99+" : unreadCount} color="error" />
         )}
@@ -165,8 +166,9 @@ const ChatPage: React.FC = () => {
   })
 
   const roomList = roomInfos.map(info => {
-    const chat = roomUnreadMap[info.id].chat
-    const unreadCount = roomUnreadMap[info.id].unread
+    const roomUnread = roomUnreadMap[info.id]
+    const message = roomUnread ? roomUnread.chat.message : ""
+    const unreadCount = roomUnread ? roomUnread.unread : 0
     return (
       <ListItem
         key={"room_" + info.id}
@@ -178,7 +180,7 @@ const ChatPage: React.FC = () => {
         <Avatar sx={{ marginRight: 2, bgcolor: "#3f51b5" }}>
           <Chat />
         </Avatar>
-        <ListItemText primary={info.name} secondary={chat.message} />
+        <ListItemText primary={info.name} secondary={message ?? ""} />
         {unreadCount > 0 && (
           <Badge badgeContent={unreadCount > 99 ? "99+" : unreadCount} color="error" />
         )}
