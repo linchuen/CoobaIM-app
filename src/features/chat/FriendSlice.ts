@@ -3,6 +3,7 @@ import type {
   FriendInfo,
 } from "../../services/ResponseInterface"
 import {
+  fetchPermitFriend,
   fetchSearchFriend,
   fetchSearchFriendApply,
 } from "../../services/FriendApi"
@@ -10,11 +11,15 @@ import { createAppSlice } from "../../app/createAppSlice"
 import { selectTokenInfo } from "../globalSlice"
 import type { RootState } from "../../app/store"
 import type {
+  FriendRequest,
   FriendSearchRequest,
 } from "../../services/RequestInterface"
 import type { PayloadAction } from "@reduxjs/toolkit"
 
-
+interface FriendApplyState {
+  request: FriendRequest
+  name: string
+}
 type FriendState = {
   friendApplyInfoList: FriendApplyInfo[]
   friendInfoList: FriendInfo[]
@@ -70,6 +75,40 @@ export const friendSlice = createAppSlice({
         rejected: () => { },
       },
     ),
+    handleFriendApply: create.asyncThunk(
+      async (apply: FriendApplyState, { getState }) => {
+        const state = getState() as RootState
+        const tokenInfo = selectTokenInfo(state)
+        const response = await fetchPermitFriend(apply.request, tokenInfo?.token ?? "")
+        return {
+          request: apply.request,
+          roomId: response.data.roomId,
+          name: apply.name
+        }
+      },
+      {
+        pending: () => { },
+        fulfilled: (state, action) => {
+          const request = action.payload.request
+          friendSlice.caseReducers.removeFriendApply(state, {
+            payload: request.applyUserId,
+            type: "removeFriendApply"
+          })
+          if (request.isPermit) {
+            friendSlice.caseReducers.addFriend(state, {
+              payload: {
+                userId: request.permitUserId,
+                friendUserId: request.applyUserId,
+                showName: action.payload.name,
+                roomId: action.payload.roomId,
+              },
+              type: "addFriend"
+            })
+          }
+        },
+        rejected: () => { },
+      },
+    ),
   }),
   selectors: {
     selectFriendInfoList: state => state.friendInfoList,
@@ -83,6 +122,7 @@ export const {
   addFriend,
   addFriendApply,
   removeFriendApply,
+  handleFriendApply,
 } = friendSlice.actions
 
 export const {

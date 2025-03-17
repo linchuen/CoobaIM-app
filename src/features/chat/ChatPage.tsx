@@ -21,6 +21,7 @@ import { Chat } from "@mui/icons-material"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
 import {
   loadChats,
+  loadChatUnread,
   selectRoomInfoList,
   selectRoomSubscribeSet,
   selectRoomUnreadMap,
@@ -84,6 +85,12 @@ const ChatPage: React.FC = () => {
 
   }, [dispatch, roomInfos, roomSubscribeSet, tokenInfo])
 
+  useEffect(() => {
+    if (Object.keys(roomUnreadMap).length !== 0) return
+
+    dispatch(loadChatUnread({ roomIds: [] }))
+  }, [dispatch, roomUnreadMap])
+
 
   const handleLoadChat = (roomId: number, name: string, type: ChatType) => {
     dispatch(setChatType(type))
@@ -109,13 +116,12 @@ const ChatPage: React.FC = () => {
       data => {
         dispatch(removeFriendApply(applyUserId))
         if (isPermit) {
-          dispatch(
-            addFriend({
-              userId: tokenInfo.userId,
-              friendUserId: applyUserId,
-              showName: name,
-              roomId: data.roomId,
-            }),
+          dispatch(addFriend({
+            userId: tokenInfo.userId,
+            friendUserId: applyUserId,
+            showName: name,
+            roomId: data.roomId,
+          }),
           )
         }
       },

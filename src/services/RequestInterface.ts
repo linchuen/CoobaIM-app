@@ -63,7 +63,7 @@ export interface ChatLoadRequest {
 }
 
 export interface ChatLoadLastAndUnReadRequest{
-    roomIds: number;
+    roomIds: number[];
 }
 
 export interface LiveBuildRequest {

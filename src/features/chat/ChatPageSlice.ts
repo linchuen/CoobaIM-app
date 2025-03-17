@@ -113,6 +113,7 @@ export const chatSlice = createAppSlice({
         const userId = action.payload.userId
         const roomId = action.payload.roomId
         const message = action.payload.message
+        const lastChatAndUnRead = state.roomUnreadMap[roomId]
 
         console.log("room: %s received message %s", roomId, message.body)
         const arr = state.roomChatMap[roomId] ?? []
@@ -120,6 +121,12 @@ export const chatSlice = createAppSlice({
         arr.push(newChat)
 
         state.roomChatMap[roomId] = arr.slice(-100)
+
+        state.roomUnreadMap[roomId] = {
+          roomId: roomId,
+          chat: newChat,
+          unread: state.currentRoomId === roomId ? 0 : lastChatAndUnRead.unread + 1
+        }
 
         if (state.currentRoomId === roomId && userId !== newChat.userId) {
           state.chatInfoList.push(newChat)
@@ -255,6 +262,7 @@ export const chatSlice = createAppSlice({
 export const {
   loadGroups,
   loadChats,
+  loadChatUnread,
   subscribeGroups,
   setChatType,
   setCurrentRoomId,
