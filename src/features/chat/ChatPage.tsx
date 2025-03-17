@@ -37,7 +37,7 @@ import AddRoomDiaLog from "./components/AddRoomDiaLog"
 import WebSocket from "./components/WebSocket"
 import { handleFetch } from "../../services/common"
 import { fetchPermitFriend } from "../../services/FriendApi"
-import type { PermitFriendResponse } from "../../services/ResponseInterface"
+import type { ChatInfo, PermitFriendResponse } from "../../services/ResponseInterface"
 import { WebSocketManager } from "../../services/websocketApi"
 import type { IMessage } from "@stomp/stompjs"
 import { ChatType } from "../../services/constant"
@@ -63,8 +63,8 @@ const ChatPage: React.FC = () => {
       const roomId = friendInfo.roomId
       if (roomSubscribeSet.includes(roomId)) return
 
-      stompClient.subscribe(("/group/" + roomId), (message: IMessage) => {
-        dispatch(subscribeGroups({ userId: tokenInfo.userId, roomId: roomId, message: message }))
+      stompClient.subscribe<ChatInfo>(("/group/" + roomId), (newChat: ChatInfo) => {
+        dispatch(subscribeGroups({ userId: tokenInfo.userId, roomId: roomId, newChat: newChat }))
       })
     })
 
@@ -78,18 +78,18 @@ const ChatPage: React.FC = () => {
       const roomId = roomInfo.id
       if (roomSubscribeSet.includes(roomId)) return
 
-      stompClient.subscribe(("/group/" + roomId), (message: IMessage) => {
-        dispatch(subscribeGroups({ userId: tokenInfo.userId, roomId: roomId, message: message }))
+      stompClient.subscribe<ChatInfo>(("/group/" + roomId), (newChat: ChatInfo) => {
+        dispatch(subscribeGroups({ userId: tokenInfo.userId, roomId: roomId, newChat: newChat }))
       })
     })
 
   }, [dispatch, roomInfos, roomSubscribeSet, tokenInfo])
 
   useEffect(() => {
-    if (Object.keys(roomUnreadMap).length !== 0) return
+    if (!tokenInfo) return
 
     dispatch(loadChatUnread({ roomIds: [] }))
-  }, [dispatch, roomUnreadMap])
+  }, [dispatch, tokenInfo])
 
 
   const handleLoadChat = (roomId: number, name: string, type: ChatType) => {

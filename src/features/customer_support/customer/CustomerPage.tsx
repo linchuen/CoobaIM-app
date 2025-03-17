@@ -25,6 +25,7 @@ import { selectRoomSubscribeSet, subscribeGroups, setCurrentRoomId, setCurrentRo
 import { selectChannelList, selectChannelLoaded } from "../ChannelSlice";
 import { fetchEnterRoom } from "../../../services/cs/CustomerApi";
 import { selectCustomerAgents } from "../AgentSlice";
+import type { ChatInfo } from "../../../services/ResponseInterface";
 
 const CustomerPage: React.FC = () => {
   const navigate = useNavigate()
@@ -43,8 +44,8 @@ const CustomerPage: React.FC = () => {
       const roomId = agentInfo.roomId
       if (roomSubscribeSet.includes(roomId)) return
 
-      stompClient.subscribe(("/group/" + roomId), (message: IMessage) => {
-        dispatch(subscribeGroups({ userId: tokenInfo.userId, roomId: roomId, message: message }))
+      stompClient.subscribe<ChatInfo>(("/group/" + roomId), (newChat: ChatInfo) => {
+        dispatch(subscribeGroups({ userId: tokenInfo.userId, roomId: roomId, newChat: newChat }))
       })
     })
 

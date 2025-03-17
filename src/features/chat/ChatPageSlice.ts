@@ -15,13 +15,12 @@ import type {
   SpeakRequest,
 } from "../../services/RequestInterface"
 import type { PayloadAction } from "@reduxjs/toolkit"
-import type { IMessage } from "@stomp/stompjs"
 import { WebSocketManager } from "../../services/websocketApi"
 import config from "../../app/config"
 import { ChatType } from "../../services/constant"
 
 type MessageState = {
-  message: IMessage
+  newChat: ChatInfo
   roomId: number
   userId: number
 }
@@ -112,12 +111,11 @@ export const chatSlice = createAppSlice({
       (state, action: PayloadAction<MessageState>) => {
         const userId = action.payload.userId
         const roomId = action.payload.roomId
-        const message = action.payload.message
+        const newChat = action.payload.newChat
         const lastChatAndUnRead = state.roomUnreadMap[roomId]
 
-        console.log("room: %s received message %s", roomId, message.body)
+        console.log("room: %s received message %s", roomId, newChat)
         const arr = state.roomChatMap[roomId] ?? []
-        const newChat = JSON.parse(message.body) as ChatInfo
         arr.push(newChat)
 
         state.roomChatMap[roomId] = arr.slice(-100)
@@ -231,7 +229,10 @@ export const chatSlice = createAppSlice({
       async (request: ChatLoadLastAndUnReadRequest, { getState }): Promise<LastChatAndUnRead[]> => {
         const state = getState() as RootState
         const tokenInfo = selectTokenInfo(state)
-
+        const roomUnreadMap = selectRoomUnreadMap(state)
+        const isEmpty = Object.keys(roomUnreadMap).length === 0;
+        if(!isEmpty) return []
+ 
         const response = await fetchLoadChatUnread(request, tokenInfo?.token)
         return response.data.chatAndUnReads
       },
