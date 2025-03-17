@@ -1,19 +1,24 @@
 import type React from "react"
 import { useEffect } from "react"
 import { useAppDispatch, useAppSelector } from "../../../../app/hooks"
-import type { CustomerInfo, OfficialChannel } from "../../../../services/cs/CsResponseInterface"
+import type { CustomerInfo, OfficialChannel, Ticket } from "../../../../services/cs/CsResponseInterface"
 import type { FriendInfo, LiveCall } from "../../../../services/ResponseInterface"
 import { WebSocketManager } from "../../../../services/websocketApi"
 import { selectTokenInfo, setCallDialogOpen, setLiveCall, setErrorMessage, setErrorDialogOpen } from "../../../globalSlice"
 import { addFriend, loadFriends } from "../../../chat/FriendSlice"
 import { addChannel, deleteChannel, loadChannels, updateChannel } from "../../ChannelSlice"
 import { addBindCustomer, removeBindCustomer } from "../../CustomerSlice"
+import { addRecentTicket } from "../../TicketSlice"
 
 const CSAgentWebSocket: React.FC = () => {
   const dispatch = useAppDispatch()
   const tokenInfo = useAppSelector(selectTokenInfo)
 
   useEffect(() => {
+    const addRecentTicketEvent = (newChannel: Ticket) => {
+      dispatch(addRecentTicket(newChannel))
+      console.log("addaddRecentTicketEventChannelEvent", newChannel)
+    }
     const addFriendEvent = (newFriend: FriendInfo) => {
       dispatch(addFriend(newFriend))
       console.log("addFriendEvent", newFriend)
@@ -51,6 +56,7 @@ const CSAgentWebSocket: React.FC = () => {
       dispatch(loadFriends({ friendUserIds: [] }))
       dispatch(loadChannels())
 
+      webSocket.subscribe<Ticket>("/user/queue/ticket_add", addRecentTicketEvent)
       webSocket.subscribe<OfficialChannel>("/topic/channel_add", addChannelEvent)
       webSocket.subscribe<OfficialChannel>("/topic/channel_update", updateChannelEvent)
       webSocket.subscribe<number>("/topic/channel_delete", deleteChannelEvent)
