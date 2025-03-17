@@ -1,6 +1,6 @@
 import { callFetch } from "../common";
 import type { AgentCreateRequest, AgentUpdateRequest, AgentSearchRequest, CustomerTicketSearchRequest, AgentCustomerRequest, AgentDisableRequest, TicketTransferRequest, BindCustomerSearchRequest } from "./CsRequestInterface";
-import type { AgentCreateResponse, AgentSearchResponse, CustomerBindResponse, CustomerSearchResponse, CustomerTicketSearchResponse, TicketSearchResponse, TicketTransferResponse } from "./CsResponseInterface";
+import type { AgentCreateResponse, AgentSearchResponse, CustomerBindResponse, CustomerDetailResponse, CustomerSearchResponse, CustomerTicketSearchResponse, TicketSearchResponse, TicketTransferResponse } from "./CsResponseInterface";
 import type { ApiResponse } from "../ResponseInterface";
 import config from "../../app/config";
 import { FakeSuccessResponse } from "../FakeSuccessResponse";
@@ -95,6 +95,23 @@ export const fetchSearchBindCustomer = async (
         }
       ],
     }) : callFetch("/agent/customer/search", "POST", token, data);
+};
+
+export const fetchsearchBindCustomerDetail = async (
+  data: BindCustomerSearchRequest,
+  token?: string
+): Promise<ApiResponse<CustomerDetailResponse>> => {
+  return config.useFake
+    ? new FakeSuccessResponse({
+      userDetails: Array.from({ length: 10 }, (_, i) => ({
+        userId: i + 1,
+        name: `User${i + 1}`,
+        email: `user${i + 1}@example.com`,
+        tags: `tag${i + 1}-1,tag${i + 1}-2,tag${i + 1}-3`,
+        remark: `Remark for User${i + 1}`,
+      })),
+    })
+    : callFetch("/agent/customer/detail/search", "POST", token, data);
 };
 
 export const fetchSearchCustomerTicket = async (

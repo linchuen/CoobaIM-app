@@ -37,7 +37,7 @@ const UserManagement: React.FC = () => {
   const [newUser, setNewUser] = useState<RegisterRequest>({ name: "", email: "", password: "" });
 
   useEffect(() => {
-    dispatch(setCustomerDetailList({ userIds: [] }));
+    dispatch(setCustomerDetailList({}));
   }, [dispatch]);
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {

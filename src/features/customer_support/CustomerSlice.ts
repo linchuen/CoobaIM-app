@@ -3,8 +3,8 @@ import type { PayloadAction } from "@reduxjs/toolkit"
 import type { CustomerInfo } from "../../services/cs/CsResponseInterface"
 import { selectTokenInfo, setErrorDialogOpen, setErrorMessage } from "../globalSlice"
 import type { RootState } from "../../app/store"
-import { fetchBindCustomer, fetchSearchBindCustomer, fetchUnbindCustomer } from "../../services/cs/AgentApi"
-import type { AgentCustomerRequest, CustomerDetailRequest } from "../../services/cs/CsRequestInterface"
+import { fetchBindCustomer, fetchSearchBindCustomer, fetchsearchBindCustomerDetail, fetchUnbindCustomer } from "../../services/cs/AgentApi"
+import type { AgentCustomerRequest, BindCustomerSearchRequest, CustomerDetailRequest } from "../../services/cs/CsRequestInterface"
 import { fetchGetDetails } from "../../services/cs/CustomerApi"
 import type { UserDetail } from "../../services/ResponseInterface"
 
@@ -98,10 +98,10 @@ export const customerSlice = createAppSlice({
             },
         ),
         setCustomerDetailList: create.asyncThunk(
-            async (request: CustomerDetailRequest, { getState }): Promise<UserDetail[]> => {
+            async (request: BindCustomerSearchRequest, { getState }): Promise<UserDetail[]> => {
                 const state = getState() as RootState
                 const tokenInfo = selectTokenInfo(state)
-                const response = await fetchGetDetails(request, tokenInfo?.token ?? "")
+                const response = await fetchsearchBindCustomerDetail(request, tokenInfo?.token ?? "")
                 return response.data.userDetails;
             },
             {
