@@ -2,6 +2,7 @@ import type React from "react"
 import { useEffect, useState } from "react"
 import {
   Avatar,
+  Badge,
   Box,
   Button,
   Dialog,
@@ -22,6 +23,7 @@ import {
   loadChats,
   selectRoomInfoList,
   selectRoomSubscribeSet,
+  selectRoomUnreadMap,
   setChatType,
   setCurrentRoomId,
   setCurrentRoomName,
@@ -47,6 +49,7 @@ const ChatPage: React.FC = () => {
   const friendInfos = useAppSelector(selectFriendInfoList)
   const roomInfos = useAppSelector(selectRoomInfoList)
   const roomSubscribeSet = useAppSelector(selectRoomSubscribeSet)
+  const roomUnreadMap =  useAppSelector(selectRoomUnreadMap)
   const tokenInfo = useAppSelector(selectTokenInfo)
   const [openDialog, setOpenDialog] = useState(false)
   const [tabIndex, setTabIndex] = useState(0)
@@ -141,6 +144,8 @@ const ChatPage: React.FC = () => {
   })
 
   const friendList = friendInfos.map(info => {
+    const chat = roomUnreadMap[info.roomId].chat
+    const unreadCount = roomUnreadMap[info.roomId].unread
     return (
       <ListItem
         sx={{ marginBottom: 1 }}
@@ -151,12 +156,17 @@ const ChatPage: React.FC = () => {
         }}
       >
         <Avatar sx={{ marginRight: 2 }}>{info.showName.charAt(0)}</Avatar>
-        <ListItemText primary={info.showName} secondary={info.friendUserId} />
+        <ListItemText primary={info.showName} secondary={chat.message} />
+        {unreadCount > 0 && (
+          <Badge badgeContent={unreadCount > 99 ? "99+" : unreadCount} color="error" />
+        )}
       </ListItem>
     )
   })
 
   const roomList = roomInfos.map(info => {
+    const chat = roomUnreadMap[info.id].chat
+    const unreadCount = roomUnreadMap[info.id].unread
     return (
       <ListItem
         key={"room_" + info.id}
@@ -168,7 +178,10 @@ const ChatPage: React.FC = () => {
         <Avatar sx={{ marginRight: 2, bgcolor: "#3f51b5" }}>
           <Chat />
         </Avatar>
-        <ListItemText primary={info.name} secondary={info.id} />
+        <ListItemText primary={info.name} secondary={chat.message} />
+        {unreadCount > 0 && (
+          <Badge badgeContent={unreadCount > 99 ? "99+" : unreadCount} color="error" />
+        )}
       </ListItem>
     )
   })
@@ -269,4 +282,3 @@ const ChatPage: React.FC = () => {
 }
 
 export default ChatPage
-

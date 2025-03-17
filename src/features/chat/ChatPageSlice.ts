@@ -1,13 +1,15 @@
 import type {
   ChatInfo,
+  LastChatAndUnRead,
   RoomInfo,
 } from "../../services/ResponseInterface"
 import { createAppSlice } from "../../app/createAppSlice"
 import { fetchSearchRoom } from "../../services/RoomApi"
 import { selectTokenInfo } from "../globalSlice"
 import type { RootState } from "../../app/store"
-import { fetchLoadChat } from "../../services/MessageApi"
+import { fetchLoadChat, fetchLoadChatUnread } from "../../services/MessageApi"
 import type {
+  ChatLoadLastAndUnReadRequest,
   ChatLoadRequest,
   RoomSearchRequest,
   SpeakRequest,
@@ -33,6 +35,7 @@ type ChatRoomState = {
   roomInfoList: RoomInfo[]
   chatInfoList: ChatInfo[]
   roomChatMap: Record<number, ChatInfo[]>
+  roomUnreadMap: Record<number, LastChatAndUnRead>
   roomSubscribeSet: number[]
   roomChatLoaded: number[]
   eventSubscribeSet: string[]
@@ -47,6 +50,7 @@ const initialState: ChatRoomState = {
   roomInfoList: [],
   chatInfoList: [],
   roomChatMap: {},
+  roomUnreadMap: [],
   roomSubscribeSet: [],
   roomChatLoaded: [],
   eventSubscribeSet: [],
@@ -216,11 +220,28 @@ export const chatSlice = createAppSlice({
         rejected: () => { },
       },
     ),
+    loadChatUnread: create.asyncThunk(
+      async (request: ChatLoadLastAndUnReadRequest, { getState }): Promise<LastChatAndUnRead[]> => {
+        const state = getState() as RootState
+        const tokenInfo = selectTokenInfo(state)
+
+        const response = await fetchLoadChatUnread(request, tokenInfo?.token)
+        return response.data.chatAndUnReads
+      },
+      {
+        pending: () => { },
+        fulfilled: (state, action) => {
+          state.roomUnreadMap = action.payload
+        },
+        rejected: () => { },
+      },
+    ),
   }),
   selectors: {
     selectRoomInfoList: state => state.roomInfoList,
     selectChatInfoList: state => state.chatInfoList,
     selectRoomChatMap: state => state.roomChatMap,
+    selectRoomUnreadMap: state => state.roomUnreadMap,
     selectRoomChatLoaded: state => state.roomChatLoaded,
     selectRoomSubscribeSet: state => state.roomSubscribeSet,
     selectEventSubscribeSet: state => state.eventSubscribeSet,
@@ -249,6 +270,7 @@ export const {
   selectRoomInfoList,
   selectChatInfoList,
   selectRoomChatMap,
+  selectRoomUnreadMap,
   selectRoomChatLoaded,
   selectRoomSubscribeSet,
   selectEventSubscribeSet,

@@ -116,6 +116,16 @@ export interface LiveCall {
   type: string
 }
 
+export interface LastChatAndUnRead{
+  roomId: number
+  chat: ChatInfo
+  unread: number
+}
+
+export interface ChatLoadLastAndUnReadResponse{
+  chatAndUnReads: LastChatAndUnRead[]
+}
+
 export interface ApiResponse<T> {
   traceId: string
   code: number

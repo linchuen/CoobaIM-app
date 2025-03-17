@@ -62,6 +62,10 @@ export interface ChatLoadRequest {
     roomId: number;
 }
 
+export interface ChatLoadLastAndUnReadRequest{
+    roomIds: number;
+}
+
 export interface LiveBuildRequest {
     roomId: number;
     passcode?: string;
