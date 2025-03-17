@@ -17,7 +17,7 @@ const CSAgentWebSocket: React.FC = () => {
   useEffect(() => {
     const addRecentTicketEvent = (newChannel: Ticket) => {
       dispatch(addRecentTicket(newChannel))
-      console.log("addaddRecentTicketEventChannelEvent", newChannel)
+      console.log("addRecentTicketEvent", newChannel)
     }
     const addFriendEvent = (newFriend: FriendInfo) => {
       dispatch(addFriend(newFriend))
