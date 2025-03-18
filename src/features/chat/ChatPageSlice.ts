@@ -80,6 +80,7 @@ export const chatSlice = createAppSlice({
       state.currentRoomId = 0
       state.chatInfoList = []
       state.currentRoomName = ""
+      state.roomUnreadMap = []
     }),
     resetUnreadCount: create.reducer((state, action: PayloadAction<number>) => {
       const roomId = action.payload
