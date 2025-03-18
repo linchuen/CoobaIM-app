@@ -1,4 +1,4 @@
-import type { ChatLoadLastAndUnReadRequest, ChatLoadRequest } from "./RequestInterface"
+import type { ChatIsReadRequest, ChatLoadLastAndUnReadRequest, ChatLoadRequest } from "./RequestInterface"
 import type { ApiResponse, ChatLoadLastAndUnReadResponse, ChatLoadResponse } from "./ResponseInterface"
 import { callFetch } from "./common"
 import config from "../app/config"
@@ -242,4 +242,13 @@ export const fetchLoadChatUnread = async (
         },]
     })
     : callFetch("/chat/unread", "POST", token, data)
+}
+
+export const fetchSetChatIsRead = async (
+  data: ChatIsReadRequest,
+  token?: string,
+): Promise<ApiResponse<boolean>> => {
+  return config.useFake
+  ? new FakeSuccessResponse(true)
+  : callFetch("/chat/read", "POST", token, data)
 }

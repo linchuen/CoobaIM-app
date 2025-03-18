@@ -78,3 +78,8 @@ export interface ParticipantTokenRequest {
     roomName: string;
     passcode: string;
 }
+
+export interface ChatIsReadRequest{
+    roomId: number;
+    chatId: number;
+}

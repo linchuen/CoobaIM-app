@@ -7,7 +7,7 @@ import { createAppSlice } from "../../app/createAppSlice"
 import { fetchSearchRoom } from "../../services/RoomApi"
 import { selectTokenInfo } from "../globalSlice"
 import type { RootState } from "../../app/store"
-import { fetchLoadChat, fetchLoadChatUnread } from "../../services/MessageApi"
+import { fetchLoadChat, fetchLoadChatUnread, fetchSetChatIsRead } from "../../services/MessageApi"
 import type {
   ChatLoadLastAndUnReadRequest,
   ChatLoadRequest,
@@ -81,10 +81,6 @@ export const chatSlice = createAppSlice({
       state.chatInfoList = []
       state.currentRoomName = ""
       state.roomUnreadMap = []
-    }),
-    resetUnreadCount: create.reducer((state, action: PayloadAction<number>) => {
-      const roomId = action.payload
-      state.roomUnreadMap[roomId].unread = 0
     }),
     setEmoji: create.reducer((state, action: PayloadAction<string>) => {
       console.log("emoji", action.payload)
@@ -250,6 +246,25 @@ export const chatSlice = createAppSlice({
         rejected: () => { },
       },
     ),
+    resetUnreadCount: create.asyncThunk(
+      async (request: number, { getState }): Promise<number> => {
+        const roomId = request
+        const state = getState() as RootState
+        const tokenInfo = selectTokenInfo(state)
+        const roomUnreadMap = selectRoomUnreadMap(state)
+        const chatId = roomUnreadMap[roomId] ? roomUnreadMap[roomId].chat.id : 0
+        await fetchSetChatIsRead({ roomId: roomId, chatId: chatId }, tokenInfo?.token)
+        return roomId
+      },
+      {
+        pending: () => { },
+        fulfilled: (state, action) => {
+          const roomId = action.payload
+          state.roomUnreadMap[roomId].unread = 0
+        },
+        rejected: () => { },
+      },
+    )
   }),
   selectors: {
     selectRoomInfoList: state => state.roomInfoList,
