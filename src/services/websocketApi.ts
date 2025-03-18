@@ -31,9 +31,10 @@ export class WebSocketManager {
             return
         }
 
-        const socket = new SockJS(config.apiUrl + this.endpoint + "?" + userId);
+        // const socket = new SockJS(config.apiUrl + this.endpoint + "?" + userId);
         this.stompClient = new Client({
-            webSocketFactory: () => socket,
+            // webSocketFactory: () => socket,
+            brokerURL: config.wsUrl + this.endpoint + "?" + userId,
             reconnectDelay: 5000, // 自動重連間隔（5秒）
             connectHeaders: {
                 Authorization: `Bearer ${token}`
