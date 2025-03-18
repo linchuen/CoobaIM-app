@@ -39,7 +39,7 @@ const FloatingModal: React.FC = () => {
         name: "Alice",
         roomId: 1,
         userId: 2,
-        message: "Hello World",
+        message: "This is test message",
         type: "TEXT"
       },
       roomId: 1,

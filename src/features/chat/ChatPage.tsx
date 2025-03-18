@@ -14,6 +14,7 @@ import {
   Paper,
   Tab,
   Tabs,
+  Tooltip,
   Typography,
 } from "@mui/material"
 import VisibilityIcon from "@mui/icons-material/Visibility"
@@ -22,6 +23,7 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks"
 import {
   loadChats,
   loadChatUnread,
+  resetUnreadCount,
   selectRoomInfoList,
   selectRoomSubscribeSet,
   selectRoomUnreadMap,
@@ -90,6 +92,7 @@ const ChatPage: React.FC = () => {
     dispatch(setCurrentRoomId(roomId))
     dispatch(setCurrentRoomName(name))
     dispatch(loadChats({ roomId: roomId }))
+    dispatch(resetUnreadCount(roomId))
   }
 
   const handleFriendApply = async (
@@ -156,7 +159,19 @@ const ChatPage: React.FC = () => {
         }}
       >
         <Avatar sx={{ marginRight: 2 }}>{info.showName.charAt(0)}</Avatar>
-        <ListItemText primary={info.showName} secondary={message ?? ""} />
+        <ListItemText primary={info.showName} secondary={
+          <Typography
+            variant="body2"
+            noWrap
+            sx={{
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              maxWidth: "200px",
+              display: "block",
+            }}
+          >
+            {message}
+          </Typography>} />
         {unreadCount > 0 && (
           <Badge badgeContent={unreadCount > 99 ? "99+" : unreadCount} color="error" />
         )}
@@ -179,7 +194,19 @@ const ChatPage: React.FC = () => {
         <Avatar sx={{ marginRight: 2, bgcolor: "#3f51b5" }}>
           <Chat />
         </Avatar>
-        <ListItemText primary={info.name} secondary={message ?? ""} />
+        <ListItemText primary={info.name} secondary={
+            <Typography
+              variant="body2"
+              noWrap
+              sx={{
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                maxWidth: "200px",
+                display: "block",
+              }}
+            >
+              {message}
+            </Typography>} />
         {unreadCount > 0 && (
           <Badge badgeContent={unreadCount > 99 ? "99+" : unreadCount} color="error" />
         )}

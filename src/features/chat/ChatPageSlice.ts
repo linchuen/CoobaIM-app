@@ -81,6 +81,10 @@ export const chatSlice = createAppSlice({
       state.chatInfoList = []
       state.currentRoomName = ""
     }),
+    resetUnreadCount: create.reducer((state, action: PayloadAction<number>) => {
+      const roomId = action.payload
+      state.roomUnreadMap[roomId].unread = 0
+    }),
     setEmoji: create.reducer((state, action: PayloadAction<string>) => {
       console.log("emoji", action.payload)
       state.emoji = action.payload
@@ -229,17 +233,18 @@ export const chatSlice = createAppSlice({
       async (request: ChatLoadLastAndUnReadRequest, { getState }): Promise<LastChatAndUnRead[]> => {
         const state = getState() as RootState
         const tokenInfo = selectTokenInfo(state)
-        const roomUnreadMap = selectRoomUnreadMap(state)
-        const isEmpty = Object.keys(roomUnreadMap).length === 0;
-        if(!isEmpty) return []
- 
         const response = await fetchLoadChatUnread(request, tokenInfo?.token)
         return response.data.chatAndUnReads
       },
       {
         pending: () => { },
         fulfilled: (state, action) => {
-          state.roomUnreadMap = action.payload
+          const lastChats = action.payload
+
+          state.roomUnreadMap = lastChats.reduce((acc, chat) => {
+            acc[chat.roomId] = chat;
+            return acc;
+          }, {} as Record<number, LastChatAndUnRead>);
         },
         rejected: () => { },
       },
@@ -272,7 +277,8 @@ export const {
   addRoom,
   addSubscribeEvent,
   setEmoji,
-  reset
+  reset,
+  resetUnreadCount
 } = chatSlice.actions
 
 export const {
