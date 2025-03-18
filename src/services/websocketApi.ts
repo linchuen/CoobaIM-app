@@ -1,7 +1,9 @@
-import SockJS from 'sockjs-client';
+// import SockJS from 'sockjs-client';
 import type { IMessage } from '@stomp/stompjs';
 import { Client } from '@stomp/stompjs';
 import config from '../app/config';
+import { compress, decompress } from './lz4';
+
 export class WebSocketManager {
     private static instance: WebSocketManager;
     private stompClient: Client | null = null;
@@ -79,7 +81,11 @@ export class WebSocketManager {
 
         this.stompClient.subscribe(destination, (message: IMessage) => {
             try {
-                const parsedMessage: T = JSON.parse(message.body);
+                const compressedArrayBuffer = message.binaryBody;
+                const compressedData = new Uint8Array(compressedArrayBuffer);
+                const decompressedJson = new TextDecoder().decode(compressedData);
+                const parsedMessage: T = JSON.parse(decompressedJson);
+                // const parsedMessage: T = JSON.parse(message.body);
 
                 console.log("📩 Received:", parsedMessage);
 
@@ -100,9 +106,14 @@ export class WebSocketManager {
             return;
         }
 
+        const jsonString = JSON.stringify(message)
+        const input = new TextEncoder().encode(jsonString);
+        // const compressedData = compress(jsonString);
         this.stompClient.publish({
             destination: destination,
-            body: JSON.stringify(message),
+            binaryBody: input,
+            headers: { "content-type": "application/lz4-json" },
+            // body: JSON.stringify(message),
         });
         console.log(`📤 Sent message to ${destination}:`, message);
     }
