@@ -55,7 +55,7 @@ export class WebSocketManager {
         };
 
         this.stompClient.onStompError = (frame) => {
-            console.error("STOMP Error:", frame);
+            console.error("STOMP Error:", this.stompClient?.connected, frame);
         };
 
         this.stompClient.activate();
@@ -79,9 +79,9 @@ export class WebSocketManager {
         this.stompClient.subscribe(destination, (message: IMessage) => {
             try {
                 const parsedMessage: T = JSON.parse(message.body);
-                
+
                 console.log("📩 Received:", parsedMessage);
-    
+
                 // 调用泛型 callback
                 callback(parsedMessage);
             } catch (error) {
