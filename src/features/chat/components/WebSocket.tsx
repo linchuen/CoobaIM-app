@@ -3,6 +3,7 @@ import { useEffect } from "react"
 import { useAppDispatch, useAppSelector } from "../../../app/hooks"
 import {
   addRoom,
+  loadChatUnread,
   loadGroups,
 } from "../ChatPageSlice"
 import { selectTokenInfo, setCallDialogOpen, setErrorDialogOpen, setErrorMessage, setLiveCall } from "../../globalSlice"
@@ -41,6 +42,7 @@ const WebSocket: React.FC = () => {
       dispatch(loadFriends({ friendUserIds: [] }))
       dispatch(loadGroups({ roomIds: [] }))
       dispatch(loadFriendApply(null))
+      dispatch(loadChatUnread({ roomIds: [] }))
 
       webSocket.subscribe<FriendApplyInfo>("/user/queue/friend_apply", addFriendApplyEvent)
       webSocket.subscribe<FriendInfo>("/user/queue/friend_add", addFriendEvent)

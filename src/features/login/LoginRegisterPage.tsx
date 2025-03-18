@@ -19,6 +19,7 @@ import { useAppDispatch } from "../../app/hooks"
 import { handleFetch } from "../../services/common"
 import type { LoginResponse } from "../../services/ResponseInterface"
 import { reset } from "../chat/ChatPageSlice"
+import { reset as friendReset} from "../chat/FriendSlice"
 import { RoleType } from "../../services/constant"
 
 const LoginRegisterPage: React.FC = () => {
@@ -31,6 +32,7 @@ const LoginRegisterPage: React.FC = () => {
 
   const handleLogin = () => {
     dispatch(reset())
+    dispatch(friendReset())
     handleFetch<LoginResponse>(
       dispatch,
       fetchLogin({

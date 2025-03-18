@@ -39,7 +39,6 @@ import { handleFetch } from "../../services/common"
 import { fetchPermitFriend } from "../../services/FriendApi"
 import type { ChatInfo, PermitFriendResponse } from "../../services/ResponseInterface"
 import { WebSocketManager } from "../../services/websocketApi"
-import type { IMessage } from "@stomp/stompjs"
 import { ChatType } from "../../services/constant"
 import { addFriend, removeFriendApply, selectFriendApplyInfoList, selectFriendInfoList } from "./FriendSlice"
 
@@ -84,12 +83,6 @@ const ChatPage: React.FC = () => {
     })
 
   }, [dispatch, roomInfos, roomSubscribeSet, tokenInfo])
-
-  useEffect(() => {
-    if (!tokenInfo) return
-
-    dispatch(loadChatUnread({ roomIds: [] }))
-  }, [dispatch, tokenInfo])
 
 
   const handleLoadChat = (roomId: number, name: string, type: ChatType) => {

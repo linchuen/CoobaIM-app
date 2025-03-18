@@ -34,6 +34,10 @@ export const friendSlice = createAppSlice({
   name: "friend",
   initialState,
   reducers: create => ({
+    reset: create.reducer((state, action: PayloadAction<void>) => {
+      state.friendApplyInfoList = []
+      state.friendInfoList = []
+    }),
     addFriendApply: create.reducer((state, action: PayloadAction<FriendApplyInfo>) => {
       state.friendApplyInfoList.push(action.payload)
     }),
@@ -117,6 +121,7 @@ export const friendSlice = createAppSlice({
 })
 
 export const {
+  reset,
   loadFriends,
   loadFriendApply,
   addFriend,
