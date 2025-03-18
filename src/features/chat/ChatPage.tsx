@@ -93,6 +93,8 @@ const ChatPage: React.FC = () => {
     dispatch(setCurrentRoomName(name))
     dispatch(loadChats({ roomId: roomId }))
     dispatch(resetUnreadCount(roomId))
+
+    console.log("websocket connection", WebSocketManager.getInstance().isConnected())
   }
 
   const handleFriendApply = async (
@@ -195,18 +197,18 @@ const ChatPage: React.FC = () => {
           <Chat />
         </Avatar>
         <ListItemText primary={info.name} secondary={
-            <Typography
-              variant="body2"
-              noWrap
-              sx={{
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                maxWidth: "200px",
-                display: "block",
-              }}
-            >
-              {message}
-            </Typography>} />
+          <Typography
+            variant="body2"
+            noWrap
+            sx={{
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              maxWidth: "200px",
+              display: "block",
+            }}
+          >
+            {message}
+          </Typography>} />
         {unreadCount > 0 && (
           <Badge badgeContent={unreadCount > 99 ? "99+" : unreadCount} color="error" />
         )}
