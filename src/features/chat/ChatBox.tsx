@@ -63,6 +63,11 @@ const ChatBox: React.FC = () => {
         }),
       )
       inputRef.current.value = ""
+
+      const chatContainer = chatContainerRef.current;
+      if (chatContainer) {
+        chatContainer.scrollTo({ top: chatContainer.scrollHeight, behavior: "smooth" });
+      }
     }
   }
 

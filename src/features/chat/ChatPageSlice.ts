@@ -19,6 +19,11 @@ import { WebSocketManager } from "../../services/websocketApi"
 import config from "../../app/config"
 import { ChatType } from "../../services/constant"
 
+type UnreadState = {
+  chatAndUnReads: LastChatAndUnRead[]
+  userId: number
+}
+
 type MessageState = {
   newChat: ChatInfo
   roomId: number
@@ -234,19 +239,24 @@ export const chatSlice = createAppSlice({
       },
     ),
     loadChatUnread: create.asyncThunk(
-      async (request: ChatLoadLastAndUnReadRequest, { getState }): Promise<LastChatAndUnRead[]> => {
+      async (request: ChatLoadLastAndUnReadRequest, { getState }): Promise<UnreadState> => {
         const state = getState() as RootState
         const tokenInfo = selectTokenInfo(state)
         const response = await fetchLoadChatUnread(request, tokenInfo?.token)
-        return response.data.chatAndUnReads
+        return {
+          chatAndUnReads: response.data.chatAndUnReads,
+          userId: tokenInfo?.userId ?? 0
+        }
       },
       {
         pending: () => { },
         fulfilled: (state, action) => {
-          const lastChats = action.payload
+          const chatAndUnReads = action.payload.chatAndUnReads
 
-          state.roomUnreadMap = lastChats.reduce((acc, chat) => {
+          state.roomUnreadMap = chatAndUnReads.reduce((acc, chat) => {
             acc[chat.roomId] = chat;
+            const isSelf = chat.chat.userId === action.payload.userId
+            chat.unread = isSelf ? 0 : chat.unread
             return acc;
           }, {} as Record<number, LastChatAndUnRead>);
         },
