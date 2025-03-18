@@ -201,6 +201,20 @@ export const fetchLoadChatUnread = async (
   data: ChatLoadLastAndUnReadRequest,
   token?: string,
 ): Promise<ApiResponse<ChatLoadLastAndUnReadResponse>> => {
-
-  return callFetch("/chat/unread", "POST", token, data)
+  return config.useFake
+    ? new FakeSuccessResponse({
+      chatAndUnReads: [{
+        roomId: 1,
+        chat: {
+          id: 22,
+          name: "Bob",
+          roomId: 1,
+          userId: 1,
+          message: "Spring Boot（Java）或 NestJS（Node.js）都是不錯的選擇，看你的技術棧。",
+          type: "TEXT",
+        },
+        unread: 22
+      }]
+    })
+    : callFetch("/chat/unread", "POST", token, data)
 }

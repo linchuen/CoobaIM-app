@@ -1,11 +1,13 @@
 import type React from "react";
 import { useState } from "react";
 import { Modal, Box, Typography, IconButton, Paper, Button } from "@mui/material";
+import Grid from "@mui/material/Grid2"; // Import MUI Grid v2
 import Draggable from "react-draggable";
 import { Close, ChatBubble } from "@mui/icons-material";
 import { useAppDispatch } from "../app/hooks";
 import { setCallDialogOpen } from "../features/globalSlice";
 import { addFriendApply, addFriend } from "../features/chat/FriendSlice";
+import { subscribeGroups } from "../features/chat/ChatPageSlice";
 
 const FloatingModal: React.FC = () => {
   const dispatch = useAppDispatch()
@@ -28,6 +30,21 @@ const FloatingModal: React.FC = () => {
 
   const addPhoneEvent = () => {
     dispatch(setCallDialogOpen(true))
+  }
+
+  const addMessageEvent = () => {
+    dispatch(subscribeGroups({
+      newChat: {
+        id: 23,
+        name: "Alice",
+        roomId: 1,
+        userId: 2,
+        message: "Hello World",
+        type: "TEXT"
+      },
+      roomId: 1,
+      userId: 2,
+    }))
   }
 
   return (
@@ -79,13 +96,16 @@ const FloatingModal: React.FC = () => {
             </Typography>
           </Box>
           <Box sx={{ display: "flex", justifyContent: "space-between", mt: 3 }}>
-            <Button variant="contained" color="primary" onClick={addFriendApplyEvent}>送出好友</Button>
-            <Button variant="contained" color="secondary" onClick={addFriendEvent}>添加好友</Button>
-            <Button variant="contained" color="warning">添加成員</Button>
-            <Button variant="contained" color="primary" onClick={addPhoneEvent}>播打電話</Button>
-          </Box>
-        </Paper>
-      </Modal>
+            <Grid container spacing={1}>
+              <Grid size={{ xs: 6, md: 3 }}><Button variant="contained" color="primary" onClick={addFriendApplyEvent}>送出好友</Button></Grid>
+              <Grid size={{ xs: 6, md: 3 }}><Button variant="contained" color="secondary" onClick={addFriendEvent}>添加好友</Button> </Grid>
+              <Grid size={{ xs: 6, md: 3 }}><Button variant="contained" color="warning">添加成員</Button> </Grid>
+              <Grid size={{ xs: 6, md: 3 }}><Button variant="contained" color="success" onClick={addPhoneEvent}>播打電話</Button> </Grid>
+              <Grid size={{ xs: 6, md: 3 }}><Button variant="contained" color="info" onClick={addMessageEvent}>新的訊息</Button> </Grid>
+            </Grid >
+          </Box >
+        </Paper >
+      </Modal >
     </>
   );
 };
