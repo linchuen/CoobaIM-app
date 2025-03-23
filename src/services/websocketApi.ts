@@ -2,7 +2,8 @@
 import type { IMessage } from '@stomp/stompjs';
 import { Client } from '@stomp/stompjs';
 import config from '../app/config';
-import { compress, decompress } from './lz4';
+import lz4 from "lz4js";
+import LZUTF8 from "lzutf8";
 
 export class WebSocketManager {
     private static instance: WebSocketManager;
@@ -107,11 +108,14 @@ export class WebSocketManager {
         }
 
         const jsonString = JSON.stringify(message)
-        const input = new TextEncoder().encode(jsonString);
-        // const compressedData = compress(jsonString);
+        console.log("jsonString", jsonString)
+        const compressedData = LZUTF8.compress(jsonString);
+        console.log("compressedData", compressedData)
+        const decompressedJson =  LZUTF8.decompress(compressedData);
+        console.log("decompressedJson", decompressedJson)
         this.stompClient.publish({
             destination: destination,
-            binaryBody: input,
+            binaryBody: compressedData,
             headers: { "content-type": "application/lz4-json" },
             // body: JSON.stringify(message),
         });
