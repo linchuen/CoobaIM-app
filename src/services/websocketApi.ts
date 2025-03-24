@@ -2,8 +2,7 @@
 import type { IMessage } from '@stomp/stompjs';
 import { Client } from '@stomp/stompjs';
 import config from '../app/config';
-import lz4 from "lz4js";
-import LZUTF8 from "lzutf8";
+import * as pb_1 from "google-protobuf";
 
 export class WebSocketManager {
     private static instance: WebSocketManager;
@@ -82,16 +81,31 @@ export class WebSocketManager {
 
         this.stompClient.subscribe(destination, (message: IMessage) => {
             try {
-                const compressedArrayBuffer = message.binaryBody;
-                const compressedData = new Uint8Array(compressedArrayBuffer);
-                const decompressedJson = new TextDecoder().decode(compressedData);
-                const parsedMessage: T = JSON.parse(decompressedJson);
-                // const parsedMessage: T = JSON.parse(message.body);
+                const parsedMessage: T = JSON.parse(message.body);
 
                 console.log("📩 Received:", parsedMessage);
 
                 // 调用泛型 callback
                 callback(parsedMessage);
+            } catch (error) {
+                console.error("❌ Failed to process incoming message:", error);
+            }
+        });
+        console.log(`📩 Subscribed to: ${destination}`);
+    }
+
+    public subscribeBinary<T extends pb_1.Message>(destination: string, callback: (message: T) => void): void {
+        if (config.useFake) return
+
+        if (!this.stompClient || !this.stompClient.connected) {
+            console.warn("⚠️ WebSocket is not connected. Cannot subscribe.");
+            return;
+        }
+
+        this.stompClient.subscribe(destination, (message: IMessage) => {
+            try {
+                const msg = pb_1.Message.deserializeBinary(message.binaryBody)
+                callback(msg.toObject() as T);
             } catch (error) {
                 console.error("❌ Failed to process incoming message:", error);
             }
@@ -107,17 +121,25 @@ export class WebSocketManager {
             return;
         }
 
-        const jsonString = JSON.stringify(message)
-        console.log("jsonString", jsonString)
-        const compressedData = LZUTF8.compress(jsonString);
-        console.log("compressedData", compressedData)
-        const decompressedJson =  LZUTF8.decompress(compressedData);
-        console.log("decompressedJson", decompressedJson)
         this.stompClient.publish({
             destination: destination,
-            binaryBody: compressedData,
-            headers: { "content-type": "application/lz4-json" },
-            // body: JSON.stringify(message),
+            body: JSON.stringify(message),
+        });
+        console.log(`📤 Sent message to ${destination}:`, message);
+    }
+
+    public sendBinaryMessage(destination: string, message: pb_1.Message): void {
+        if (config.useFake) return
+
+        if (!this.stompClient || !this.stompClient.connected) {
+            console.warn("⚠️ WebSocket is not connected. Cannot send message.");
+            return;
+        }
+
+        this.stompClient.publish({
+            destination: destination,
+            binaryBody: message.serializeBinary(),
+            headers: { "content-type": "application/protobuf" },
         });
         console.log(`📤 Sent message to ${destination}:`, message);
     }

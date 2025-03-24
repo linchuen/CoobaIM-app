@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+message ChatInfo {
+  string uuid = 1;         // optional
+  int32 id = 2;
+  string name = 3;
+  int32 roomId = 4;
+  int32 userId = 5;
+  string message = 6;
+  string url = 7;          // optional
+  string type = 8;
+  bool success = 9;        // optional
+}

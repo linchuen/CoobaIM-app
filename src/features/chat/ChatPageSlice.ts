@@ -18,6 +18,7 @@ import type { PayloadAction } from "@reduxjs/toolkit"
 import { WebSocketManager } from "../../services/websocketApi"
 import config from "../../app/config"
 import { ChatType } from "../../services/constant"
+import { SpeakRequest as Speak} from "../../../proto/Speak "
 
 type UnreadState = {
   chatAndUnReads: LastChatAndUnRead[]
@@ -155,7 +156,7 @@ export const chatSlice = createAppSlice({
 
         if (publishType && !config.useFake) {
           const stompClient = WebSocketManager.getInstance()
-          stompClient.sendMessage(publishType, request)
+          stompClient.sendBinaryMessage(publishType, Speak.fromObject(request))
           success = true
         }
 

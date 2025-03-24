@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+message SpeakRequest {
+  string uuid = 1;
+  int64 roomId = 2;
+  int64 userId = 3;
+  string message = 4;
+  string url = 5;      // optional
+  string type = 6;     // optional
+}
