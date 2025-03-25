@@ -41,7 +41,7 @@ import type { ChatInfo, PermitFriendResponse } from "../../services/ResponseInte
 import { WebSocketManager } from "../../services/websocketApi"
 import { ChatType } from "../../services/constant"
 import { addFriend, removeFriendApply, selectFriendApplyInfoList, selectFriendInfoList } from "./FriendSlice"
-import type { ChatInfo as ChatProto } from "../../../proto/ChatProto"
+import { ChatInfo as ChatProto } from "../../../proto/ChatProto"
 
 
 const ChatPage: React.FC = () => {
@@ -63,8 +63,10 @@ const ChatPage: React.FC = () => {
       const roomId = friendInfo.roomId
       if (roomSubscribeSet.includes(roomId)) return
 
-      stompClient.subscribeBinary<ChatProto>(("/group/" + roomId), (newChat: ChatProto) => {
-        dispatch(subscribeGroups({ userId: tokenInfo.userId, roomId: roomId, newChat: newChat }))
+      stompClient.subscribeBinary(("/group/" + roomId), (body) => {
+        const newChat =  ChatProto.deserializeBinary(body)
+        console.log(newChat)
+        dispatch(subscribeGroups({ userId: tokenInfo.userId, roomId: roomId, newChat: ChatProto.deserializeBinary(body) }))
       })
     })
 
@@ -78,8 +80,10 @@ const ChatPage: React.FC = () => {
       const roomId = roomInfo.id
       if (roomSubscribeSet.includes(roomId)) return
 
-      stompClient.subscribeBinary<ChatProto>(("/group/" + roomId), (newChat: ChatProto) => {
-        dispatch(subscribeGroups({ userId: tokenInfo.userId, roomId: roomId, newChat: newChat }))
+      stompClient.subscribeBinary(("/group/" + roomId), (body) => {
+        const newChat =  ChatProto.deserializeBinary(body)
+        console.log(newChat)
+        dispatch(subscribeGroups({ userId: tokenInfo.userId, roomId: roomId, newChat: ChatProto.deserializeBinary(body) }))
       })
     })
 

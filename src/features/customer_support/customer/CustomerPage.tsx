@@ -26,7 +26,7 @@ import { selectChannelList, selectChannelLoaded } from "../ChannelSlice";
 import { fetchEnterRoom } from "../../../services/cs/CustomerApi";
 import { selectCustomerAgents } from "../AgentSlice";
 import type { ChatInfo } from "../../../services/ResponseInterface";
-import type { ChatInfo as ChatProto } from "../../../../proto/ChatProto"
+import { ChatInfo as ChatProto } from "../../../../proto/ChatProto"
 
 const CustomerPage: React.FC = () => {
   const navigate = useNavigate()
@@ -45,8 +45,8 @@ const CustomerPage: React.FC = () => {
       const roomId = agentInfo.roomId
       if (roomSubscribeSet.includes(roomId)) return
 
-      stompClient.subscribeBinary<ChatProto>(("/group/" + roomId), (newChat: ChatProto) => {
-        dispatch(subscribeGroups({ userId: tokenInfo.userId, roomId: roomId, newChat: newChat }))
+      stompClient.subscribeBinary(("/group/" + roomId), (body) => {
+        dispatch(subscribeGroups({ userId: tokenInfo.userId, roomId: roomId, newChat: ChatProto.deserializeBinary(body) }))
       })
     })
 

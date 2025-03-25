@@ -2,7 +2,7 @@
 import type { IMessage } from '@stomp/stompjs';
 import { Client } from '@stomp/stompjs';
 import config from '../app/config';
-import * as pb_1 from "google-protobuf";
+import type * as pb_1 from "google-protobuf";
 
 export class WebSocketManager {
     private static instance: WebSocketManager;
@@ -94,7 +94,7 @@ export class WebSocketManager {
         console.log(`📩 Subscribed to: ${destination}`);
     }
 
-    public subscribeBinary<T extends pb_1.Message>(destination: string, callback: (message: T) => void): void {
+    public subscribeBinary(destination: string, callback: (message: Uint8Array) => void): void {
         if (config.useFake) return
 
         if (!this.stompClient || !this.stompClient.connected) {
@@ -104,8 +104,7 @@ export class WebSocketManager {
 
         this.stompClient.subscribe(destination, (message: IMessage) => {
             try {
-                const msg = pb_1.Message.deserializeBinary(message.binaryBody)
-                callback(msg.toObject() as T);
+                callback(message.binaryBody);
             } catch (error) {
                 console.error("❌ Failed to process incoming message:", error);
             }
