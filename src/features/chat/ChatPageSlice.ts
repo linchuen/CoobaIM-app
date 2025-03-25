@@ -18,7 +18,7 @@ import type { PayloadAction } from "@reduxjs/toolkit"
 import { WebSocketManager } from "../../services/websocketApi"
 import config from "../../app/config"
 import { ChatType } from "../../services/constant"
-import { SpeakRequest as Speak} from "../../../proto/Speak "
+import { SpeakRequest as Speak} from "../../../proto/SpeakProto"
 
 type UnreadState = {
   chatAndUnReads: LastChatAndUnRead[]
@@ -170,6 +170,7 @@ export const chatSlice = createAppSlice({
           url: request.url,
           type: request.type ?? "TEXT",
           success: success,
+          createdTime: new Date().toISOString()
         }
       },
       {

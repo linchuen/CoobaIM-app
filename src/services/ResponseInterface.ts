@@ -97,6 +97,7 @@ export interface ChatInfo {
   url?: string
   type: string
   success?: boolean | undefined
+  createdTime: string
 }
 
 export interface ChatLoadResponse {
