@@ -14,7 +14,6 @@ import {
   Paper,
   Tab,
   Tabs,
-  Tooltip,
   Typography,
 } from "@mui/material"
 import VisibilityIcon from "@mui/icons-material/Visibility"
@@ -22,7 +21,6 @@ import { Chat } from "@mui/icons-material"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
 import {
   loadChats,
-  loadChatUnread,
   resetUnreadCount,
   selectRoomInfoList,
   selectRoomSubscribeSet,
@@ -43,6 +41,7 @@ import type { ChatInfo, PermitFriendResponse } from "../../services/ResponseInte
 import { WebSocketManager } from "../../services/websocketApi"
 import { ChatType } from "../../services/constant"
 import { addFriend, removeFriendApply, selectFriendApplyInfoList, selectFriendInfoList } from "./FriendSlice"
+import type { ChatInfo as ChatProto } from "../../../proto/ChatProto"
 
 
 const ChatPage: React.FC = () => {
@@ -64,7 +63,7 @@ const ChatPage: React.FC = () => {
       const roomId = friendInfo.roomId
       if (roomSubscribeSet.includes(roomId)) return
 
-      stompClient.subscribe<ChatInfo>(("/group/" + roomId), (newChat: ChatInfo) => {
+      stompClient.subscribeBinary<ChatProto>(("/group/" + roomId), (newChat: ChatProto) => {
         dispatch(subscribeGroups({ userId: tokenInfo.userId, roomId: roomId, newChat: newChat }))
       })
     })
@@ -79,7 +78,7 @@ const ChatPage: React.FC = () => {
       const roomId = roomInfo.id
       if (roomSubscribeSet.includes(roomId)) return
 
-      stompClient.subscribe<ChatInfo>(("/group/" + roomId), (newChat: ChatInfo) => {
+      stompClient.subscribeBinary<ChatProto>(("/group/" + roomId), (newChat: ChatProto) => {
         dispatch(subscribeGroups({ userId: tokenInfo.userId, roomId: roomId, newChat: newChat }))
       })
     })
