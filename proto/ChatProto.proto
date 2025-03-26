@@ -2,7 +2,7 @@ syntax = "proto3";
 
 message ChatInfo {
   string uuid = 1;         // optional
-  int64 id = 2;
+  string id = 2;
   string name = 3;
   int64 roomId = 4;
   int64 userId = 5;

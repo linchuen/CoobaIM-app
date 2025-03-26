@@ -20,12 +20,11 @@ import { ChatType } from "../../../services/constant";
 import { WebSocketManager } from "../../../services/websocketApi";
 import { selectTokenInfo } from "../../globalSlice";
 import type { CustomerEnterResponse, OfficialChannel } from "../../../services/cs/CsResponseInterface";
-import { handleFetch } from "../../../services/common";
+import { handleFetch, transferChat } from "../../../services/common";
 import { selectRoomSubscribeSet, subscribeGroups, setCurrentRoomId, setCurrentRoomName, loadChats, setChatType } from "../../chat/ChatPageSlice";
 import { selectChannelList, selectChannelLoaded } from "../ChannelSlice";
 import { fetchEnterRoom } from "../../../services/cs/CustomerApi";
 import { selectCustomerAgents } from "../AgentSlice";
-import type { ChatInfo } from "../../../services/ResponseInterface";
 import { ChatInfo as ChatProto } from "../../../../proto/ChatProto"
 
 const CustomerPage: React.FC = () => {
@@ -46,7 +45,8 @@ const CustomerPage: React.FC = () => {
       if (roomSubscribeSet.includes(roomId)) return
 
       stompClient.subscribeBinary(("/group/" + roomId), (body) => {
-        dispatch(subscribeGroups({ userId: tokenInfo.userId, roomId: roomId, newChat: ChatProto.deserializeBinary(body) }))
+        const chatProto = ChatProto.deserializeBinary(body)
+        dispatch(subscribeGroups({ userId: tokenInfo.userId, roomId: roomId, newChat: transferChat(chatProto) }))
       })
     })
 

@@ -7,6 +7,7 @@ import type { AppDispatch } from "../app/store"
 import config from "../app/config"
 import type { ChatType } from "./constant"
 import { loadChats, setChatType, setCurrentRoomId, setCurrentRoomName } from "../features/chat/ChatPageSlice"
+import type { ChatInfo as ChatProto } from "../../proto/ChatProto"
 
 export async function callFetch(
   url: string,
@@ -49,7 +50,7 @@ export async function callFetch(
   }
 }
 
-export async function handleLoadChat(dispatch: AppDispatch, roomId: number, name: string, type: ChatType){
+export async function handleLoadChat(dispatch: AppDispatch, roomId: number, name: string, type: ChatType) {
   dispatch(setChatType(type))
   dispatch(setCurrentRoomId(roomId))
   dispatch(setCurrentRoomName(name))
@@ -75,4 +76,20 @@ export async function handleFetch<T>(
 
   const data = apiResponse.data
   successCallback(data)
+}
+
+export function transferChat(chatProto: ChatProto) {
+  console.log("new chat", chatProto)
+  return {
+    uuid: chatProto.uuid,
+    id: Number(chatProto.id),
+    name: chatProto.name,
+    roomId: chatProto.roomId,
+    userId: chatProto.userId,
+    message: chatProto.message,
+    url: chatProto.url === "" ? undefined : chatProto.url,
+    type: chatProto.type,
+    success: chatProto.success,
+    createdTime: chatProto.createdTime,
+  }
 }

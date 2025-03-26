@@ -83,8 +83,8 @@ export interface RoomUser {
   showName: string
 }
 
-export interface RoomMemberResponse{
-  roomUsers: RoomUser[] 
+export interface RoomMemberResponse {
+  roomUsers: RoomUser[]
 }
 
 export interface ChatInfo {
@@ -117,13 +117,13 @@ export interface LiveCall {
   type: string
 }
 
-export interface LastChatAndUnRead{
+export interface LastChatAndUnRead {
   roomId: number
   chat: ChatInfo
   unread: number
 }
 
-export interface ChatLoadLastAndUnReadResponse{
+export interface ChatLoadLastAndUnReadResponse {
   chatAndUnReads: LastChatAndUnRead[]
 }
 
