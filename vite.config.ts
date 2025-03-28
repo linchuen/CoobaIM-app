@@ -10,6 +10,9 @@ export default defineConfig({
   server: {
     open: true,
   },
+  build: {
+    outDir: 'dist', // 打包輸出的資料夾，可自訂
+  },
   test: {
     globals: true,
     environment: "jsdom",

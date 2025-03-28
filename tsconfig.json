@@ -16,5 +16,7 @@
     "jsx": "react-jsx",
     "types": ["vitest/globals"]
   },
+  "include": ["src"], // 只包含 source folder 和 config
+  "exclude": ["dist", "node_modules", "*.d.ts"], // 避免誤編譯產生的聲明檔
   "references": [{ "path": "./tsconfig.node.json" }]
 }

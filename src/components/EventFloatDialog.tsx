@@ -40,7 +40,8 @@ const FloatingModal: React.FC = () => {
         roomId: 1,
         userId: 2,
         message: "This is test message",
-        type: "TEXT"
+        type: "TEXT",
+        createdTime: new Date().toISOString()
       },
       roomId: 1,
       userId: 2,
