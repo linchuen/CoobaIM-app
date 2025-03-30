@@ -48,8 +48,8 @@ export interface LoginResponse {
   name: string
   token: string
   role: string
+  avatar?: string
   platform: string
-  ip?: string
   loginTime: string
   expireTime: string
 }

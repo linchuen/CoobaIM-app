@@ -236,7 +236,7 @@ const ChatPage: React.FC = () => {
         >
           {/* Person Info Box */}
           <Box display="flex" alignItems="center" mb={2}>
-            <Avatar src="/path-to-avatar.jpg" sx={{ width: 50, height: 50, mr: 2 }} />
+            <Avatar src={tokenInfo?.avatar} sx={{ width: 50, height: 50, mr: 2 }} />
             <Box>
               <Typography variant="h6">{tokenInfo?.name}</Typography>
               <Typography variant="body2" color="gray">{"ID:" + tokenInfo?.userId}</Typography>

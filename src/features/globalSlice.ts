@@ -8,6 +8,7 @@ interface TokenInfo {
   token: string
   role: string
   platform: string
+  avatar?: string
   loginTime: string
   expireTime: string
 }

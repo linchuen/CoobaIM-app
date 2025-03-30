@@ -24,6 +24,7 @@ export const fetchLogin = async (
         token: "token",
         role: config.testRole,
         platform: "PC",
+        avatar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8vUnmnpz4XsDeqVMAa6bL0dUxqV3wdPwB6w&s",
         loginTime: "string",
         expireTime: "string",
       })
