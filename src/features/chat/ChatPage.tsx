@@ -64,7 +64,7 @@ const ChatPage: React.FC = () => {
       if (roomSubscribeSet.includes(roomId)) return
 
       stompClient.subscribeBinary(("/group/" + roomId), (body) => {
-        const chatProto =  ChatProto.deserializeBinary(body)
+        const chatProto = ChatProto.deserializeBinary(body)
         dispatch(subscribeGroups({ userId: tokenInfo.userId, roomId: roomId, newChat: transferChat(chatProto) }))
       })
     })
@@ -80,7 +80,7 @@ const ChatPage: React.FC = () => {
       if (roomSubscribeSet.includes(roomId)) return
 
       stompClient.subscribeBinary(("/group/" + roomId), (body) => {
-        const chatProto =  ChatProto.deserializeBinary(body)
+        const chatProto = ChatProto.deserializeBinary(body)
         dispatch(subscribeGroups({ userId: tokenInfo.userId, roomId: roomId, newChat: transferChat(chatProto) }))
       })
     })
@@ -239,7 +239,7 @@ const ChatPage: React.FC = () => {
             <Avatar src="/path-to-avatar.jpg" sx={{ width: 50, height: 50, mr: 2 }} />
             <Box>
               <Typography variant="h6">{tokenInfo?.name}</Typography>
-              <Typography variant="body2" color="gray">{tokenInfo?.userId}</Typography>
+              <Typography variant="body2" color="gray">{"ID:" + tokenInfo?.userId}</Typography>
             </Box>
           </Box>
           <Divider sx={{ my: 2, bgcolor: "#282c34" }} />

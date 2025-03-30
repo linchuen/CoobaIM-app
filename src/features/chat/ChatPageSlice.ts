@@ -18,7 +18,7 @@ import type { PayloadAction } from "@reduxjs/toolkit"
 import { WebSocketManager } from "../../services/websocketApi"
 import config from "../../app/config"
 import { ChatType } from "../../services/constant"
-import { SpeakRequest as Speak} from "../../../proto/SpeakProto"
+import { SpeakRequest as Speak } from "../../../proto/SpeakProto"
 
 type UnreadState = {
   chatAndUnReads: LastChatAndUnRead[]
@@ -255,11 +255,12 @@ export const chatSlice = createAppSlice({
         fulfilled: (state, action) => {
           const chatAndUnReads = action.payload.chatAndUnReads
 
-          state.roomUnreadMap = chatAndUnReads.reduce((acc, chat) => {
-            acc[chat.roomId] = chat;
+          state.roomUnreadMap = chatAndUnReads.reduce((accumulator, chat) => {
+            accumulator[chat.roomId] = chat;
             const isSelf = chat.chat.userId === action.payload.userId
+            console.log(chat.roomId, isSelf)
             chat.unread = isSelf ? 0 : chat.unread
-            return acc;
+            return accumulator;
           }, {} as Record<number, LastChatAndUnRead>);
         },
         rejected: () => { },
