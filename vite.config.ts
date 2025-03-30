@@ -18,7 +18,7 @@ export default defineConfig({
       '/api': {
         target: 'http://localhost:8080',
         changeOrigin: true,
-        rewrite: path => path.replace(/^\/api/, '') // 可選：重寫路徑
+        rewrite: path => path.replace(/^\/api/, ''), // 可選：重寫路徑
       },
       'livekit': {
         target: 'http://localhost',

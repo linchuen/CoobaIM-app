@@ -7,6 +7,7 @@ RUN npm install
 
 COPY proto ./proto
 COPY src ./src
+COPY .env .
 COPY index.html .
 COPY vite.config.ts .
 COPY tsconfig.json .
