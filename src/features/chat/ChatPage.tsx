@@ -6,7 +6,6 @@ import {
   Box,
   Button,
   Dialog,
-  Divider,
   IconButton,
   List,
   ListItem,
@@ -42,6 +41,7 @@ import { WebSocketManager } from "../../services/websocketApi"
 import { ChatType } from "../../services/constant"
 import { addFriend, removeFriendApply, selectFriendApplyInfoList, selectFriendInfoList } from "./FriendSlice"
 import { ChatInfo as ChatProto } from "../../../proto/ChatProto"
+import { t } from "i18next"
 
 
 const ChatPage: React.FC = () => {
@@ -233,21 +233,21 @@ const ChatPage: React.FC = () => {
               <IconButton onClick={() => setActiveTab("friendApply")}>
                 <EmojiPeople sx={{ color: "white" }} />
               </IconButton>
-              <Typography variant="caption" sx={{ color: "white" }}>好友申請</Typography>
+              <Typography variant="caption" sx={{ color: "white" }}>{t("friendApply")}</Typography>
             </Box>
 
             <Box display="flex" flexDirection="column" alignItems="center">
               <IconButton onClick={() => setActiveTab("personal")}>
                 <Person sx={{ color: "white" }} />
               </IconButton>
-              <Typography variant="caption" sx={{ color: "white" }}>個人訊息</Typography>
+              <Typography variant="caption" sx={{ color: "white" }}>{t("personChat")}</Typography>
             </Box>
 
             <Box display="flex" flexDirection="column" alignItems="center">
               <IconButton onClick={() => setActiveTab("group")}>
                 <People sx={{ color: "white" }} />
               </IconButton>
-              <Typography variant="caption" sx={{ color: "white" }}>群組訊息</Typography>
+              <Typography variant="caption" sx={{ color: "white" }}>{t("groupChat")}</Typography>
             </Box>
           </Box>
           <IconButton ><ExitToApp sx={{ color: "white" }} /></IconButton>
@@ -256,7 +256,7 @@ const ChatPage: React.FC = () => {
         {/* menu List */}
         <Paper
           sx={{
-            width: 250,
+            width: 280,
             padding: 2,
             overflow: "auto",
             bgcolor: "#161b22",
@@ -270,7 +270,7 @@ const ChatPage: React.FC = () => {
           {activeTab === "friendApply" && (
             <>
               <Box display="flex" justifyContent="space-between" alignItems="center">
-                <Typography variant="h6">Friend Apply</Typography>
+                <Typography variant="h6">{t("friendApply")}</Typography>
               </Box>
               <List>{friendApplyList}</List>
             </>
@@ -280,7 +280,7 @@ const ChatPage: React.FC = () => {
           {activeTab === "personal" && (
             <>
               <Box display="flex" justifyContent="space-between" alignItems="center">
-                <Typography variant="h6">Personal Chats</Typography>
+                <Typography variant="h6">{t("personChat")}</Typography>
                 <Box>
                   <AddFriendDiaLog />
                   <IconButton
@@ -300,7 +300,7 @@ const ChatPage: React.FC = () => {
           {activeTab === "group" && (
             <>
               <Box display="flex" justifyContent="space-between" alignItems="center">
-                <Typography variant="h6">Group Chats</Typography>
+                <Typography variant="h6">{t("groupChat")}</Typography>
                 <Box>
                   <AddRoomDiaLog />
                   <IconButton
