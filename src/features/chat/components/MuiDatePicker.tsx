@@ -23,7 +23,7 @@ const MuiDatePicker: React.FC = () => {
             </IconButton>
 
             {pickerOpen && (
-                <Paper elevation={3} sx={{ position: 'absolute', top: 50, left: 200, zIndex: 10 }}>
+                <Paper elevation={3} sx={{ position: 'absolute', top: 50, right: 200, zIndex: 10 }}>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DateCalendar
                             value={value}
