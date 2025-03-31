@@ -17,7 +17,7 @@ import {
   Typography,
 } from "@mui/material"
 import VisibilityIcon from "@mui/icons-material/Visibility"
-import { Chat } from "@mui/icons-material"
+import { Chat, EmojiPeople, ExitToApp, People, Person } from "@mui/icons-material"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
 import {
   loadChats,
@@ -52,6 +52,7 @@ const ChatPage: React.FC = () => {
   const roomSubscribeSet = useAppSelector(selectRoomSubscribeSet)
   const roomUnreadMap = useAppSelector(selectRoomUnreadMap)
   const tokenInfo = useAppSelector(selectTokenInfo)
+  const [activeTab, setActiveTab] = useState("personal");
   const [openDialog, setOpenDialog] = useState(false)
   const [tabIndex, setTabIndex] = useState(0)
 
@@ -221,10 +222,41 @@ const ChatPage: React.FC = () => {
     <>
       <WebSocket />
       <Box display="flex" height="100vh" bgcolor="#0d1117" color="white">
-        {/* Chat List */}
+        {/* Sidebar */}
+        <Box width={80} bgcolor="#1C252C" p={2} display="flex" flexDirection="column" alignItems="center" justifyContent="space-between">
+          <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
+            <Typography variant="h6">{tokenInfo?.name}</Typography>
+            <Box display="flex" alignItems="center">
+              <Avatar src={tokenInfo?.avatar} sx={{ width: 40, height: 40 }} />
+            </Box>
+            <Box display="flex" flexDirection="column" alignItems="center">
+              <IconButton onClick={() => setActiveTab("friendApply")}>
+                <EmojiPeople sx={{ color: "white" }} />
+              </IconButton>
+              <Typography variant="caption" sx={{ color: "white" }}>好友申請</Typography>
+            </Box>
+
+            <Box display="flex" flexDirection="column" alignItems="center">
+              <IconButton onClick={() => setActiveTab("personal")}>
+                <Person sx={{ color: "white" }} />
+              </IconButton>
+              <Typography variant="caption" sx={{ color: "white" }}>個人訊息</Typography>
+            </Box>
+
+            <Box display="flex" flexDirection="column" alignItems="center">
+              <IconButton onClick={() => setActiveTab("group")}>
+                <People sx={{ color: "white" }} />
+              </IconButton>
+              <Typography variant="caption" sx={{ color: "white" }}>群組訊息</Typography>
+            </Box>
+          </Box>
+          <IconButton ><ExitToApp sx={{ color: "white" }} /></IconButton>
+        </Box>
+
+        {/* menu List */}
         <Paper
           sx={{
-            width: 300,
+            width: 250,
             padding: 2,
             overflow: "auto",
             bgcolor: "#161b22",
@@ -234,56 +266,55 @@ const ChatPage: React.FC = () => {
             borderRadius: 2,
           }}
         >
-          {/* Person Info Box */}
-          <Box display="flex" alignItems="center" mb={2}>
-            <Avatar src={tokenInfo?.avatar} sx={{ width: 50, height: 50, mr: 2 }} />
-            <Box>
-              <Typography variant="h6">{tokenInfo?.name}</Typography>
-              <Typography variant="body2" color="gray">{"ID:" + tokenInfo?.userId}</Typography>
-            </Box>
-          </Box>
-          <Divider sx={{ my: 2, bgcolor: "#282c34" }} />
+          {/* Friend Request */}
+          {activeTab === "friendApply" && (
+            <>
+              <Box display="flex" justifyContent="space-between" alignItems="center">
+                <Typography variant="h6">Friend Apply</Typography>
+              </Box>
+              <List>{friendApplyList}</List>
+            </>
+          )}
 
-          {/* Friend Request Box */}
-          <Box display="flex" justifyContent="space-between" alignItems="center">
-            <Typography variant="h6">Friend Apply</Typography>
-          </Box>
-          <List>{friendApplyList}</List>
+          {/* Personal Chats */}
+          {activeTab === "personal" && (
+            <>
+              <Box display="flex" justifyContent="space-between" alignItems="center">
+                <Typography variant="h6">Personal Chats</Typography>
+                <Box>
+                  <AddFriendDiaLog />
+                  <IconButton
+                    sx={{ color: "white" }}
+                    size="small"
+                    onClick={() => setOpenDialog(true)}
+                  >
+                    <VisibilityIcon />
+                  </IconButton>
+                </Box>
+              </Box>
+              <List>{friendList.slice(0, 4)}</List>
+            </>
+          )}
 
-          <Divider sx={{ my: 2, bgcolor: "#282c34" }} />
-
-          {/* Personal Chats Header */}
-          <Box display="flex" justifyContent="space-between" alignItems="center">
-            <Typography variant="h6">Personal Chats</Typography>
-            <Box>
-              <AddFriendDiaLog />
-              <IconButton
-                sx={{ color: "white" }}
-                size="small"
-                onClick={() => setOpenDialog(true)}
-              >
-                <VisibilityIcon />
-              </IconButton>
-            </Box>
-          </Box>
-          <List>{friendList.slice(0, 4)}</List>
-          <Divider sx={{ my: 2, bgcolor: "#282c34" }} />
-
-          {/* Group Chats Header */}
-          <Box display="flex" justifyContent="space-between" alignItems="center">
-            <Typography variant="h6">Group Chats</Typography>
-            <Box>
-              <AddRoomDiaLog />
-              <IconButton
-                sx={{ color: "white" }}
-                size="small"
-                onClick={() => setOpenDialog(true)}
-              >
-                <VisibilityIcon />
-              </IconButton>
-            </Box>
-          </Box>
-          <List>{roomList.slice(0, 4)}</List>
+          {/* Group Chats */}
+          {activeTab === "group" && (
+            <>
+              <Box display="flex" justifyContent="space-between" alignItems="center">
+                <Typography variant="h6">Group Chats</Typography>
+                <Box>
+                  <AddRoomDiaLog />
+                  <IconButton
+                    sx={{ color: "white" }}
+                    size="small"
+                    onClick={() => setOpenDialog(true)}
+                  >
+                    <VisibilityIcon />
+                  </IconButton>
+                </Box>
+              </Box>
+              <List>{roomList.slice(0, 4)}</List>
+            </>
+          )}
         </Paper>
 
         {/* Dialog for viewing all contacts and chats */}
@@ -307,9 +338,10 @@ const ChatPage: React.FC = () => {
         </Dialog>
 
         <ChatBox />
-      </Box>
+      </Box >
     </>
   )
+
 }
 
 export default ChatPage
