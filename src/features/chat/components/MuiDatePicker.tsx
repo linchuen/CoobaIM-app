@@ -8,6 +8,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateRange } from "@mui/icons-material";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import Paper from "@mui/material/Paper";
+import { Button } from "@mui/material";
 
 
 const MuiDatePicker: React.FC = () => {
@@ -28,10 +29,15 @@ const MuiDatePicker: React.FC = () => {
                             value={value}
                             onChange={(newValue) => {
                                 setValue(newValue);
-                                setPickerOpen(false);
                             }}
                         />
                     </LocalizationProvider>
+                    <Button variant="contained" sx={{ margin: 1, float: "right" }} onClick={() => setPickerOpen(false)}>
+                        Cancel
+                    </Button>
+                    <Button variant="contained" sx={{ margin: 1, float: "right" }} onClick={() => setPickerOpen(false)}>
+                        OK
+                    </Button>
                 </Paper>
             )}
         </>
