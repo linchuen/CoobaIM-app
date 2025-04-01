@@ -64,6 +64,8 @@ export interface SpeakRequest {
 
 export interface ChatLoadRequest {
     roomId: number;
+    chatId?: number;
+    searchAfter?: boolean;
 }
 
 export interface ChatLoadLastAndUnReadRequest{
@@ -93,6 +95,7 @@ export interface ChatLoadDateRequest{
     date?: string;
     startTime?: string;
     endTime?: string;
+    dateBefore?: boolean;
 }
 
 export interface ChatSearchRequest{

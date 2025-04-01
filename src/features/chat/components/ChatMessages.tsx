@@ -9,7 +9,6 @@ const ChatMessages: React.FC = () => {
     const chatInfos = useAppSelector(selectChatInfoList)
     const pastChatInfos = useAppSelector(selectPastChatInfoList)
     const usePast = useAppSelector(selectUsePast)
-
     const tokenInfo = useAppSelector(selectTokenInfo)
     const userId = tokenInfo?.userId
 

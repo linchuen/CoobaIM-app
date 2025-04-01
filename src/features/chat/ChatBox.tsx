@@ -39,6 +39,7 @@ import AddMemberDialog from "./components/AddMemberDialog"
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import RemoveMemberDialog from "./components/RemoveMemberDialog"
 import MuiDatePicker from "./components/MuiDatePicker"
+import ChatSearchBox from "./components/ChatSearchBox"
 
 const ChatBox: React.FC = () => {
   const navigate = useNavigate()
@@ -125,19 +126,7 @@ const ChatBox: React.FC = () => {
           </Box>
         </Toolbar>
         <Toolbar>
-          <InputBase
-            placeholder="Search messages..."
-            fullWidth
-            sx={{
-              bgcolor: "#0d1117",
-              borderRadius: 2,
-              paddingX: 2,
-              color: "white",
-            }}
-          />
-          <IconButton sx={{ color: "white" }}>
-            <Search />
-          </IconButton>
+          <ChatSearchBox/>
           <MuiDatePicker />
           <AddMemberDialog />
           <RemoveMemberDialog />

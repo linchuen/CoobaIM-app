@@ -22,7 +22,7 @@ const MuiDatePicker: React.FC = () => {
     const submit = () => {
         const isBeforToday = date.isBefore(dayjs(), 'day')
         if (isBeforToday) {
-            dispatch(loadPastChats({ roomId: currentRoomId, date: date.format("YYYY/MM/DD") }))
+            dispatch(loadPastChats({ roomId: currentRoomId, date: date.format("YYYY/MM/DD")}))
         } else {
             dispatch(loadChats({ roomId: currentRoomId }))
         }
