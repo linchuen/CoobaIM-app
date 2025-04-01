@@ -37,6 +37,8 @@ import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import RemoveMemberDialog from "./components/RemoveMemberDialog"
 import MuiDatePicker from "./components/MuiDatePicker"
 import ChatSearchBox from "./components/ChatSearchBox"
+import { TabType } from "../../services/constant"
+import { selectIsPersonal } from "./FriendSlice"
 
 const ChatBox: React.FC = () => {
   const navigate = useNavigate()
@@ -46,6 +48,7 @@ const ChatBox: React.FC = () => {
   const tokenInfo = useAppSelector(selectTokenInfo)
   const currentRoomId = useAppSelector(selectCurrentRoomId)
   const roomName = useAppSelector(selectCurrentRoomName)
+  const isPersonal = useAppSelector(selectIsPersonal)
   const emoji = useAppSelector(selectEmoji)
   const [open, setOpen] = useState(false)
 
@@ -103,7 +106,7 @@ const ChatBox: React.FC = () => {
       }
     }
   }, [handleScroll])
-
+  console.log(isPersonal)
   return (
     <Box flex={1} display="flex" flexDirection="column" padding={2}>
       {/* Search Bar */}
@@ -123,13 +126,16 @@ const ChatBox: React.FC = () => {
           </Box>
         </Toolbar>
         <Toolbar>
-          <ChatSearchBox/>
+          <ChatSearchBox />
           <MuiDatePicker />
-          <AddMemberDialog />
-          <RemoveMemberDialog />
-          <IconButton sx={{ color: "white" }}>
-            <SwapHorizIcon />
-          </IconButton>
+          {isPersonal ? <></>
+            : <>
+              <AddMemberDialog />
+              <RemoveMemberDialog />
+              <IconButton sx={{ color: "white" }}>
+                <SwapHorizIcon />
+              </IconButton>
+            </>}
         </Toolbar>
       </AppBar>
 

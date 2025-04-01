@@ -23,11 +23,13 @@ interface FriendApplyState {
 type FriendState = {
   friendApplyInfoList: FriendApplyInfo[]
   friendInfoList: FriendInfo[]
+  isPersonal: boolean
 }
 
 const initialState: FriendState = {
   friendApplyInfoList: [],
   friendInfoList: [],
+  isPersonal: true
 }
 
 export const friendSlice = createAppSlice({
@@ -37,6 +39,9 @@ export const friendSlice = createAppSlice({
     reset: create.reducer((state, action: PayloadAction<void>) => {
       state.friendApplyInfoList = []
       state.friendInfoList = []
+    }),
+    setIsPersonal: create.reducer((state, action: PayloadAction<boolean>) => {
+      state.isPersonal = action.payload
     }),
     addFriendApply: create.reducer((state, action: PayloadAction<FriendApplyInfo>) => {
       state.friendApplyInfoList.push(action.payload)
@@ -117,11 +122,13 @@ export const friendSlice = createAppSlice({
   selectors: {
     selectFriendInfoList: state => state.friendInfoList,
     selectFriendApplyInfoList: state => state.friendApplyInfoList,
+    selectIsPersonal: state => state.isPersonal,
   },
 })
 
 export const {
   reset,
+  setIsPersonal,
   loadFriends,
   loadFriendApply,
   addFriend,
@@ -133,4 +140,5 @@ export const {
 export const {
   selectFriendInfoList,
   selectFriendApplyInfoList,
+  selectIsPersonal,
 } = friendSlice.selectors

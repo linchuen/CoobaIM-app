@@ -38,8 +38,8 @@ import { handleFetch, transferChat } from "../../services/common"
 import { fetchPermitFriend } from "../../services/FriendApi"
 import type { PermitFriendResponse } from "../../services/ResponseInterface"
 import { WebSocketManager } from "../../services/websocketApi"
-import { ChatType } from "../../services/constant"
-import { addFriend, removeFriendApply, selectFriendApplyInfoList, selectFriendInfoList } from "./FriendSlice"
+import { ChatType, TabType } from "../../services/constant"
+import { addFriend, removeFriendApply, selectFriendApplyInfoList, selectFriendInfoList, setIsPersonal } from "./FriendSlice"
 import { ChatInfo as ChatProto } from "../../../proto/ChatProto"
 import { t } from "i18next"
 
@@ -52,7 +52,7 @@ const ChatPage: React.FC = () => {
   const roomSubscribeSet = useAppSelector(selectRoomSubscribeSet)
   const roomUnreadMap = useAppSelector(selectRoomUnreadMap)
   const tokenInfo = useAppSelector(selectTokenInfo)
-  const [activeTab, setActiveTab] = useState("personal");
+  const [activeTab, setActiveTab] = useState(TabType.PERSONAL);
   const [openDialog, setOpenDialog] = useState(false)
   const [tabIndex, setTabIndex] = useState(0)
 
@@ -158,6 +158,7 @@ const ChatPage: React.FC = () => {
         sx={{ marginBottom: 1 }}
         key={"friend_" + info.friendUserId}
         onClick={() => {
+          dispatch(setIsPersonal(true))
           handleLoadChat(info.roomId, info.showName, ChatType.ToUser)
           setOpenDialog(false)
         }}
@@ -191,6 +192,7 @@ const ChatPage: React.FC = () => {
       <ListItem
         key={"room_" + info.id}
         onClick={() => {
+          dispatch(setIsPersonal(false))
           handleLoadChat(info.id, info.name, ChatType.ToRoom)
           setOpenDialog(false)
         }}
@@ -230,21 +232,21 @@ const ChatPage: React.FC = () => {
               <Avatar src={tokenInfo?.avatar} sx={{ width: 40, height: 40 }} />
             </Box>
             <Box display="flex" flexDirection="column" alignItems="center">
-              <IconButton onClick={() => setActiveTab("friendApply")}>
+              <IconButton onClick={() => setActiveTab(TabType.FRIEND_APPLY)}>
                 <EmojiPeople sx={{ color: "white" }} />
               </IconButton>
               <Typography variant="caption" sx={{ color: "white" }}>{t("friendApply")}</Typography>
             </Box>
 
             <Box display="flex" flexDirection="column" alignItems="center">
-              <IconButton onClick={() => setActiveTab("personal")}>
+              <IconButton onClick={() => setActiveTab(TabType.PERSONAL)}>
                 <Person sx={{ color: "white" }} />
               </IconButton>
               <Typography variant="caption" sx={{ color: "white" }}>{t("personChat")}</Typography>
             </Box>
 
             <Box display="flex" flexDirection="column" alignItems="center">
-              <IconButton onClick={() => setActiveTab("group")}>
+              <IconButton onClick={() => setActiveTab(TabType.GROUP)}>
                 <People sx={{ color: "white" }} />
               </IconButton>
               <Typography variant="caption" sx={{ color: "white" }}>{t("groupChat")}</Typography>
@@ -267,7 +269,7 @@ const ChatPage: React.FC = () => {
           }}
         >
           {/* Friend Request */}
-          {activeTab === "friendApply" && (
+          {activeTab === TabType.FRIEND_APPLY && (
             <>
               <Box display="flex" justifyContent="space-between" alignItems="center">
                 <Typography variant="h6">{t("friendApply")}</Typography>
@@ -277,7 +279,7 @@ const ChatPage: React.FC = () => {
           )}
 
           {/* Personal Chats */}
-          {activeTab === "personal" && (
+          {activeTab === TabType.PERSONAL && (
             <>
               <Box display="flex" justifyContent="space-between" alignItems="center">
                 <Typography variant="h6">{t("personChat")}</Typography>
@@ -297,7 +299,7 @@ const ChatPage: React.FC = () => {
           )}
 
           {/* Group Chats */}
-          {activeTab === "group" && (
+          {activeTab === TabType.GROUP && (
             <>
               <Box display="flex" justifyContent="space-between" alignItems="center">
                 <Typography variant="h6">{t("groupChat")}</Typography>

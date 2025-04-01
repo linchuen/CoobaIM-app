@@ -11,3 +11,9 @@ export enum RoleType {
     GUEST = "GUEST",
     USER = "USER",
 }
+
+export enum TabType {
+    GROUP = "group",
+    PERSONAL = "personal",
+    FRIEND_APPLY = "friendApply",
+}
