@@ -312,6 +312,7 @@ export const chatSlice = createAppSlice({
   selectors: {
     selectRoomInfoList: state => state.roomInfoList,
     selectChatInfoList: state => state.chatInfoList,
+    selectPastChatInfoList: state => state.pastChatInfoList,
     selectRoomChatMap: state => state.roomChatMap,
     selectRoomUnreadMap: state => state.roomUnreadMap,
     selectRoomChatLoaded: state => state.roomChatLoaded,
@@ -320,6 +321,7 @@ export const chatSlice = createAppSlice({
     selectCurrentRoomId: state => state.currentRoomId,
     selectCurrentRoomName: state => state.currentRoomName,
     selectEmoji: state => state.emoji,
+    selectUsePast: state => state.usePast,
   },
 })
 
@@ -343,6 +345,7 @@ export const {
 export const {
   selectRoomInfoList,
   selectChatInfoList,
+  selectPastChatInfoList,
   selectRoomChatMap,
   selectRoomUnreadMap,
   selectRoomChatLoaded,
@@ -351,4 +354,5 @@ export const {
   selectCurrentRoomId,
   selectCurrentRoomName,
   selectEmoji,
+  selectUsePast,
 } = chatSlice.selectors

@@ -2,16 +2,20 @@ import { Box, Paper, Typography, Link, ImageList, ImageListItem } from "@mui/mat
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import { useAppSelector } from "../../../app/hooks";
-import { selectChatInfoList } from "../ChatPageSlice";
+import { selectChatInfoList, selectPastChatInfoList, selectUsePast } from "../ChatPageSlice";
 import { selectTokenInfo } from "../../globalSlice";
 
 const ChatMessages: React.FC = () => {
     const chatInfos = useAppSelector(selectChatInfoList)
+    const pastChatInfos = useAppSelector(selectPastChatInfoList)
+    const usePast = useAppSelector(selectUsePast)
+
     const tokenInfo = useAppSelector(selectTokenInfo)
     const userId = tokenInfo?.userId
+
     return (
         <Box display="flex" flexDirection="column" gap={1}>
-            {chatInfos.map((chat) => {
+            {(usePast ? pastChatInfos : chatInfos).map((chat) => {
                 const isSelf = chat.userId === userId;
                 const fileUrls = [chat.url];
                 return (

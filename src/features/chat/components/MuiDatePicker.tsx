@@ -10,7 +10,7 @@ import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import Paper from "@mui/material/Paper";
 import { Button } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import { loadPastChats, selectCurrentRoomId } from "../ChatPageSlice";
+import { loadChats, loadPastChats, selectCurrentRoomId } from "../ChatPageSlice";
 
 
 const MuiDatePicker: React.FC = () => {
@@ -20,7 +20,12 @@ const MuiDatePicker: React.FC = () => {
 
     const [pickerOpen, setPickerOpen] = useState(false);
     const submit = () => {
-        dispatch(loadPastChats({ roomId: currentRoomId, date: date.format("YYYY/MM/DD") }))
+        const isBeforToday = date.isBefore(dayjs(), 'day')
+        if (isBeforToday) {
+            dispatch(loadPastChats({ roomId: currentRoomId, date: date.format("YYYY/MM/DD") }))
+        } else {
+            dispatch(loadChats({ roomId: currentRoomId }))
+        }
         setPickerOpen(false)
     }
     return (
