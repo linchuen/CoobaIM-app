@@ -1,4 +1,4 @@
-import type { LoginRequest, RegisterRequest } from "./RequestInterface"
+import type { LoginRequest, RefreshRequest, RegisterRequest } from "./RequestInterface"
 import type {
   ApiResponse,
   LoginResponse,
@@ -29,4 +29,22 @@ export const fetchLogin = async (
         expireTime: "string",
       })
     : callFetch("/user/login", "POST", undefined, data)
+}
+
+export const fetchFreshToken = async (
+  data: RefreshRequest,
+  token?: string,
+): Promise<ApiResponse<LoginResponse>> => {
+  return config.useFake
+    ? new FakeSuccessResponse({
+        userId: 1,
+        name: "Bob",
+        token: "token",
+        role: config.testRole,
+        platform: "PC",
+        avatar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8vUnmnpz4XsDeqVMAa6bL0dUxqV3wdPwB6w&s",
+        loginTime: "string",
+        expireTime: "string",
+      })
+    : callFetch("/user/refresh", "POST", token, data)
 }

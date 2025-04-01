@@ -17,6 +17,10 @@ export interface LoginRequest {
     password: string;
 }
 
+export interface RefreshRequest {
+    platform: string;
+}
+
 export interface LogoutRequest {
     userId: number;
 }
