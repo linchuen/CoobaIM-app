@@ -9,13 +9,20 @@ import { DateRange } from "@mui/icons-material";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import Paper from "@mui/material/Paper";
 import { Button } from "@mui/material";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
+import { loadPastChats, selectCurrentRoomId } from "../ChatPageSlice";
 
 
 const MuiDatePicker: React.FC = () => {
-    const [value, setValue] = React.useState<Dayjs | null>(dayjs(new Date().toLocaleDateString()));
+    const dispatch = useAppDispatch()
+    const currentRoomId = useAppSelector(selectCurrentRoomId)
+    const [date, setDate] = React.useState<Dayjs>(dayjs(new Date().toLocaleDateString()));
 
     const [pickerOpen, setPickerOpen] = useState(false);
-
+    const submit = () => {
+        dispatch(loadPastChats({ roomId: currentRoomId, date: date.format("YYYY/MM/DD") }))
+        setPickerOpen(false)
+    }
     return (
         <>
             <IconButton sx={{ color: "white" }} onClick={() => setPickerOpen(true)}>
@@ -26,16 +33,16 @@ const MuiDatePicker: React.FC = () => {
                 <Paper elevation={3} sx={{ position: 'absolute', top: 50, right: 200, zIndex: 10 }}>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DateCalendar
-                            value={value}
+                            value={date}
                             onChange={(newValue) => {
-                                setValue(newValue);
+                                setDate(newValue);
                             }}
                         />
                     </LocalizationProvider>
                     <Button variant="contained" sx={{ margin: 1, float: "right" }} onClick={() => setPickerOpen(false)}>
                         Cancel
                     </Button>
-                    <Button variant="contained" sx={{ margin: 1, float: "right" }} onClick={() => setPickerOpen(false)}>
+                    <Button variant="contained" sx={{ margin: 1, float: "right" }} onClick={submit}>
                         OK
                     </Button>
                 </Paper>

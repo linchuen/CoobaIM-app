@@ -7,8 +7,9 @@ import { createAppSlice } from "../../app/createAppSlice"
 import { fetchSearchRoom } from "../../services/RoomApi"
 import { selectTokenInfo } from "../globalSlice"
 import type { RootState } from "../../app/store"
-import { fetchLoadChat, fetchLoadChatUnread, fetchSetChatIsRead } from "../../services/MessageApi"
+import { fetchLoadChat, fetchLoadChatByDate, fetchLoadChatUnread, fetchSetChatIsRead } from "../../services/MessageApi"
 import type {
+  ChatLoadDateRequest,
   ChatLoadLastAndUnReadRequest,
   ChatLoadRequest,
   RoomSearchRequest,
@@ -39,31 +40,33 @@ type ChatState = {
 type ChatRoomState = {
   roomInfoList: RoomInfo[]
   chatInfoList: ChatInfo[]
+  pastChatInfoList: ChatInfo[]
   roomChatMap: Record<number, ChatInfo[]>
   roomUnreadMap: Record<number, LastChatAndUnRead>
   roomSubscribeSet: number[]
   roomChatLoaded: number[]
   eventSubscribeSet: string[]
-  status: string
   chatType: ChatType;
   currentRoomId: number
   currentRoomName: string
   emoji: string
+  usePast: boolean
 }
 
 const initialState: ChatRoomState = {
   roomInfoList: [],
   chatInfoList: [],
+  pastChatInfoList:[],
   roomChatMap: {},
   roomUnreadMap: [],
   roomSubscribeSet: [],
   roomChatLoaded: [],
   eventSubscribeSet: [],
-  status: "",
   chatType: ChatType.ToNobody,
   currentRoomId: 0,
   currentRoomName: "",
-  emoji: ""
+  emoji: "",
+  usePast: false
 }
 
 function getPublishType(chatType: ChatType): string {
@@ -176,7 +179,6 @@ export const chatSlice = createAppSlice({
       {
         pending: () => { },
         fulfilled: (state, action: PayloadAction<ChatInfo>) => {
-          state.status = "idle"
           const chatInfo = action.payload
           console.log("new chat", chatInfo)
 
@@ -197,7 +199,6 @@ export const chatSlice = createAppSlice({
       {
         pending: () => { },
         fulfilled: (state, action) => {
-          state.status = "idle"
           state.roomInfoList = action.payload
         },
         rejected: () => { },
@@ -208,14 +209,14 @@ export const chatSlice = createAppSlice({
         const state = getState() as RootState
         const tokenInfo = selectTokenInfo(state)
         const roomChatLoaded = selectRoomChatLoaded(state)
-        const roomChats = selectRoomChatMap(state)
-        const roomChat = roomChats[request.roomId]
+        const roomChatMap = selectRoomChatMap(state)
+        const roomChats = roomChatMap[request.roomId]
 
         const isLoaded = roomChatLoaded.includes(request.roomId)
-        const isMessageFull = roomChat && roomChat.length >= 100
+        const isMessageFull = roomChats && roomChats.length >= 100
         if (isLoaded || isMessageFull) {
           return {
-            chats: roomChat,
+            chats: roomChats,
             roomId: request.roomId,
           }
         }
@@ -229,13 +230,35 @@ export const chatSlice = createAppSlice({
       {
         pending: () => { },
         fulfilled: (state, action) => {
-          state.status = "idle"
           const chats = action.payload.chats
           const roomId = action.payload.roomId
 
           state.chatInfoList = chats
           state.roomChatLoaded.push(roomId)
           state.roomChatMap[roomId] = chats
+          state.usePast = false
+        },
+        rejected: () => { },
+      },
+    ),
+    loadPastChats: create.asyncThunk(
+      async (request: ChatLoadDateRequest, { getState }): Promise<ChatState> => {
+        const state = getState() as RootState
+        const tokenInfo = selectTokenInfo(state)
+
+        const response = await fetchLoadChatByDate(request, tokenInfo?.token)
+        return {
+          chats: response.data.chats,
+          roomId: request.roomId,
+        }
+      },
+      {
+        pending: () => { },
+        fulfilled: (state, action) => {
+          const chats = action.payload.chats
+
+          state.pastChatInfoList = chats
+          state.usePast = true
         },
         rejected: () => { },
       },
@@ -294,7 +317,6 @@ export const chatSlice = createAppSlice({
     selectRoomChatLoaded: state => state.roomChatLoaded,
     selectRoomSubscribeSet: state => state.roomSubscribeSet,
     selectEventSubscribeSet: state => state.eventSubscribeSet,
-    selectStatus: state => state.status,
     selectCurrentRoomId: state => state.currentRoomId,
     selectCurrentRoomName: state => state.currentRoomName,
     selectEmoji: state => state.emoji,
@@ -304,6 +326,7 @@ export const chatSlice = createAppSlice({
 export const {
   loadGroups,
   loadChats,
+  loadPastChats,
   loadChatUnread,
   subscribeGroups,
   setChatType,
@@ -325,7 +348,6 @@ export const {
   selectRoomChatLoaded,
   selectRoomSubscribeSet,
   selectEventSubscribeSet,
-  selectStatus,
   selectCurrentRoomId,
   selectCurrentRoomName,
   selectEmoji,

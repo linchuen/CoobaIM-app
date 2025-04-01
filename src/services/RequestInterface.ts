@@ -90,9 +90,9 @@ export interface ChatIsReadRequest{
 
 export interface ChatLoadDateRequest{
     roomId: number;
-    date: string;
-    startTime: string;
-    endTime: string;
+    date?: string;
+    startTime?: string;
+    endTime?: string;
 }
 
 export interface ChatSearchRequest{
