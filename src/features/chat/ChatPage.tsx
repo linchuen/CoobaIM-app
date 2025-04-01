@@ -229,10 +229,6 @@ const ChatPage: React.FC = () => {
         <Box width={80} bgcolor="#1C252C" p={2} display="flex" flexDirection="column" alignItems="center" justifyContent="space-between">
           <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
             <UserDetailDialog />
-            <Typography variant="h6">{tokenInfo?.name}</Typography>
-            <Box display="flex" alignItems="center">
-              <Avatar src={tokenInfo?.avatar} sx={{ width: 40, height: 40 }} />
-            </Box>
             <Box display="flex" flexDirection="column" alignItems="center">
               <IconButton onClick={() => setActiveTab(TabType.FRIEND_APPLY)}>
                 <EmojiPeople sx={{ color: "white" }} />

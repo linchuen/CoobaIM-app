@@ -11,6 +11,12 @@ import {
     IconButton,
     Box,
     Typography,
+    Paper,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableRow,
 } from "@mui/material";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
@@ -47,13 +53,13 @@ const UserDetailDialog: React.FC = () => {
         <>
             <Typography variant="h6">{tokenInfo?.name}</Typography>
             <Box display="flex" alignItems="center">
-                <Avatar src={tokenInfo?.avatar} sx={{ width: 40, height: 40 }} />
+                <Avatar src={tokenInfo?.avatar} sx={{ width: 40, height: 40 }} onClick={() => setOpen(true)} />
             </Box>
             <Dialog open={open} onClose={() => setOpen(false)} fullWidth maxWidth="sm">
                 <DialogTitle>User Details</DialogTitle>
                 <DialogContent>
-                    <div style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "16px" }}>
-                        <Avatar src={avatar || "/default-avatar.png"} sx={{ width: 80, height: 80 }} />
+                    <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
+                        <Avatar src={avatar || "/default-avatar.png"} sx={{ width: 100, height: 100 }} />
                         <input
                             accept="image/*"
                             id="avatar-upload"
@@ -66,13 +72,36 @@ const UserDetailDialog: React.FC = () => {
                                 <PhotoCamera />
                             </IconButton>
                         </label>
-                    </div>
-                    <TextField label="User ID" fullWidth margin="dense" value={user.userId} disabled />
-                    <TextField label="Email" fullWidth margin="dense" value={user.email} disabled />
-                    <TextField label="Name" fullWidth margin="dense" value={user.name} disabled />
-                    <TextField label="Tags" fullWidth margin="dense" value={user.tags || ""} disabled />
-                    <TextField label="Remark" fullWidth margin="dense" value={user.remark || ""} disabled />
-                    <TextField label="Created Time" fullWidth margin="dense" value={user.createdTime} disabled />
+                        <Typography variant="h6">{user.name}</Typography>
+                    </Box>
+
+                    <TableContainer component={Paper}>
+                        <Table>
+                            <TableBody>
+                                <TableRow>
+                                    <TableCell variant="head">Email</TableCell>
+                                    <TableCell>{user.email}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell variant="head">User ID</TableCell>
+                                    <TableCell>{user.userId}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell variant="head">Tags</TableCell>
+                                    <TableCell>{user.tags || "N/A"}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell variant="head">Remark</TableCell>
+                                    <TableCell>{user.remark || "N/A"}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell variant="head">Joined</TableCell>
+                                    <TableCell>{user.createdTime}</TableCell>
+                                </TableRow>
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => setOpen(false)} color="primary">Close</Button>
