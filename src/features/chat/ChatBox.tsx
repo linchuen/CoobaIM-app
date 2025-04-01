@@ -107,7 +107,7 @@ const ChatBox: React.FC = () => {
       }
     }
   }, [handleScroll])
-  console.log(isPersonal)
+
   return (
     <Box flex={1} display="flex" flexDirection="column" padding={2}>
       {/* Search Bar */}

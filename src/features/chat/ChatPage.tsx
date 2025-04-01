@@ -42,6 +42,7 @@ import { ChatType, TabType } from "../../services/constant"
 import { addFriend, removeFriendApply, selectFriendApplyInfoList, selectFriendInfoList, setIsPersonal } from "./FriendSlice"
 import { ChatInfo as ChatProto } from "../../../proto/ChatProto"
 import { t } from "i18next"
+import UserDetailDialog from "./components/UserDetailDialog"
 
 
 const ChatPage: React.FC = () => {
@@ -227,6 +228,7 @@ const ChatPage: React.FC = () => {
         {/* Sidebar */}
         <Box width={80} bgcolor="#1C252C" p={2} display="flex" flexDirection="column" alignItems="center" justifyContent="space-between">
           <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
+            <UserDetailDialog />
             <Typography variant="h6">{tokenInfo?.name}</Typography>
             <Box display="flex" alignItems="center">
               <Avatar src={tokenInfo?.avatar} sx={{ width: 40, height: 40 }} />
