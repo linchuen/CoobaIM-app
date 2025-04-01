@@ -9,5 +9,6 @@
     "send": "發送",
     "upload": "上傳",
     "cancel": "取消",
-    "uploadPicture": "上傳圖片"
+    "uploadPicture": "上傳圖片",
+    "alertWord": "請輸入２個字以上!"
 }

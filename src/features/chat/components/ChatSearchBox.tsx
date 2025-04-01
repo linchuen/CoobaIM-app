@@ -11,6 +11,8 @@ import {
     CircularProgress,
     InputBase,
     IconButton,
+    Alert,
+    Snackbar,
 } from '@mui/material';
 import { Search } from '@mui/icons-material';
 import { handleFetch } from '../../../services/common';
@@ -28,12 +30,14 @@ const ChatSearchBox: React.FC = () => {
     const currentRoomId = useAppSelector(selectCurrentRoomId)
     const [results, setResults] = useState<ChatInfo[]>([]);
     const [open, setOpen] = useState(false);
+    const [alertOpen, setAlertOpen] = useState(false);
     const anchorRef = useRef<HTMLInputElement>(null);
 
     const handleSendSearch = async () => {
         if (!anchorRef.current || !tokenInfo || currentRoomId === 0) return
         const value = anchorRef.current.value
         if (value.length < 2) {
+            setAlertOpen(true)
             return
         }
 
@@ -94,6 +98,17 @@ const ChatSearchBox: React.FC = () => {
                     </List>
                 </Paper>
             </Popper>
+            {/* Snackbar 提示 */}
+            <Snackbar
+                open={alertOpen}
+                autoHideDuration={1000}
+                onClose={() => setAlertOpen(false)}
+                anchorOrigin={{ vertical: "top", horizontal: "center" }}
+            >
+                <Alert onClose={() => setAlertOpen(false)} severity="warning">
+                    {t("alertWord")}
+                </Alert>
+            </Snackbar>
         </>
     );
 };
