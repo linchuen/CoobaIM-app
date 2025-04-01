@@ -6,6 +6,7 @@ import { useAppDispatch } from "../../../app/hooks";
 import { setEmoji } from "../ChatPageSlice";
 import { InsertEmoticon } from "@mui/icons-material";
 import { useState } from "react";
+import { t } from "i18next";
 
 const EmojiChatDialog: React.FC = () => {
   const dispatch = useAppDispatch()
@@ -24,13 +25,13 @@ const EmojiChatDialog: React.FC = () => {
         <InsertEmoticon />
       </IconButton>
       <Dialog open={emojiOpen} onClose={onClose}>
-        <DialogTitle>選擇表情</DialogTitle>
+        <DialogTitle>{t("chooseEmoji")}</DialogTitle>
         <DialogContent>
           <Picker onEmojiClick={onEmojiClick} />
         </DialogContent>
         <DialogActions>
           <Button onClick={onClose} color="primary">
-            關閉
+            {t("close")}
           </Button>
         </DialogActions>
       </Dialog>

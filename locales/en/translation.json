@@ -11,10 +11,15 @@
     "cancel": "Cancel",
     "uploadPicture": "Upload Picture",
     "uploadFile": "Upload File",
-    "alertWord": "Please type more than two letters!",
+    "alertWord": "Please type more than two letters!!",
     "uploadScuuess": "Upload scuuessful",
     "selectedFile": "Selected file",
     "clickFile": "click and select file",
     "dragFile": "drag picture to here",
-    "or": "or"
+    "or": "or",
+    "close": "close",
+    "chooseEmoji": "Choose your Emoji",
+    "add": "Add",
+    "member": "member",
+    "chatRoom": "Chat Room"
 }
