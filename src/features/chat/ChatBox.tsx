@@ -39,6 +39,7 @@ import MuiDatePicker from "./components/MuiDatePicker"
 import ChatSearchBox from "./components/ChatSearchBox"
 import { TabType } from "../../services/constant"
 import { selectIsPersonal } from "./FriendSlice"
+import TransferPermissionDialog from "./components/TransferPermissionDialog"
 
 const ChatBox: React.FC = () => {
   const navigate = useNavigate()
@@ -132,9 +133,7 @@ const ChatBox: React.FC = () => {
             : <>
               <AddMemberDialog />
               <RemoveMemberDialog />
-              <IconButton sx={{ color: "white" }}>
-                <SwapHorizIcon />
-              </IconButton>
+              <TransferPermissionDialog />
             </>}
         </Toolbar>
       </AppBar>
