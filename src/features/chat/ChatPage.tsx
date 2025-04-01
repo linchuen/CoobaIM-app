@@ -7,6 +7,7 @@ import {
   Button,
   Dialog,
   IconButton,
+  InputBase,
   List,
   ListItem,
   ListItemText,
@@ -16,7 +17,7 @@ import {
   Typography,
 } from "@mui/material"
 import VisibilityIcon from "@mui/icons-material/Visibility"
-import { Chat, EmojiPeople, ExitToApp, People, Person } from "@mui/icons-material"
+import { Chat, EmojiPeople, ExitToApp, People, Person, Search } from "@mui/icons-material"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
 import {
   loadChats,
@@ -271,8 +272,8 @@ const ChatPage: React.FC = () => {
           {/* Friend Request */}
           {activeTab === TabType.FRIEND_APPLY && (
             <>
-              <Box display="flex" justifyContent="space-between" alignItems="center">
-                <Typography variant="h6">{t("friendApply")}</Typography>
+              <Box display="flex" flexDirection="column" gap={1}>
+                <Typography variant="h6" sx={{ pl: 1 }}>{t("friendApply")}</Typography>
               </Box>
               <List>{friendApplyList}</List>
             </>
@@ -281,63 +282,53 @@ const ChatPage: React.FC = () => {
           {/* Personal Chats */}
           {activeTab === TabType.PERSONAL && (
             <>
-              <Box display="flex" justifyContent="space-between" alignItems="center">
-                <Typography variant="h6">{t("personChat")}</Typography>
-                <Box>
-                  <AddFriendDiaLog />
-                  <IconButton
-                    sx={{ color: "white" }}
-                    size="small"
-                    onClick={() => setOpenDialog(true)}
-                  >
-                    <VisibilityIcon />
+              <Box display="flex" flexDirection="column" gap={1}>
+                <Typography variant="h6" sx={{ pl: 1 }}>{t("personChat")}</Typography>
+                <Box display="flex" alignItems="center" gap={1}>
+                  <InputBase
+                    placeholder={t("searchMessage")}
+                    sx={{
+                      bgcolor: "#0d1117",
+                      borderRadius: 2,
+                      paddingX: 2,
+                      color: "white",
+                    }}
+                  />
+                  <IconButton sx={{ color: "white" }} onClick={() => { }}>
+                    <Search />
                   </IconButton>
+                  <AddFriendDiaLog />
                 </Box>
               </Box>
-              <List>{friendList.slice(0, 4)}</List>
+              <List>{friendList}</List>
             </>
           )}
 
           {/* Group Chats */}
           {activeTab === TabType.GROUP && (
             <>
-              <Box display="flex" justifyContent="space-between" alignItems="center">
-                <Typography variant="h6">{t("groupChat")}</Typography>
-                <Box>
-                  <AddRoomDiaLog />
-                  <IconButton
-                    sx={{ color: "white" }}
-                    size="small"
-                    onClick={() => setOpenDialog(true)}
-                  >
-                    <VisibilityIcon />
+              <Box display="flex" flexDirection="column" gap={1}>
+                <Typography variant="h6" sx={{ pl: 1 }}>{t("groupChat")}</Typography>
+                <Box display="flex" alignItems="center" gap={1}>
+                  <InputBase
+                    placeholder={t("searchMessage")}
+                    sx={{
+                      bgcolor: "#0d1117",
+                      borderRadius: 2,
+                      paddingX: 2,
+                      color: "white",
+                    }}
+                  />
+                  <IconButton sx={{ color: "white" }} onClick={() => { }}>
+                    <Search />
                   </IconButton>
+                  <AddRoomDiaLog />
                 </Box>
               </Box>
-              <List>{roomList.slice(0, 4)}</List>
+              <List>{roomList}</List>
             </>
           )}
         </Paper>
-
-        {/* Dialog for viewing all contacts and chats */}
-        <Dialog
-          open={openDialog}
-          onClose={() => setOpenDialog(false)}
-          fullWidth
-          maxWidth="sm"
-        >
-          <Tabs
-            value={tabIndex}
-            onChange={(event: any, newValue: number) => setTabIndex(newValue)}
-            variant="fullWidth"
-          >
-            <Tab label="My Friend" />
-            <Tab label="My Chat" />
-          </Tabs>
-          <Box p={2}>
-            {tabIndex === 0 ? <List>{friendList}</List> : <List>{roomList}</List>}
-          </Box>
-        </Dialog>
 
         <ChatBox />
       </Box >
