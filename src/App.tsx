@@ -11,6 +11,7 @@ import CallDialoag from "./components/CallDiaLog"
 import CustomerSupportPage from "./features/customer_support/agent/CustomerSupportPage"
 import CustomerPage from "./features/customer_support/customer/CustomerPage"
 import CustomerChatBox from "./features/customer_support/customer/CustomerChatBox"
+import './app/i18n';
 
 const App = () => {
   const dispatch = useAppDispatch()
