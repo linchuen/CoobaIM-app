@@ -83,3 +83,15 @@ export interface ChatIsReadRequest{
     roomId: number;
     chatId: number;
 }
+
+export interface ChatLoadDateRequest{
+    roomId: number;
+    date: string;
+    startTime: string;
+    endTime: string;
+}
+
+export interface ChatSearchRequest{
+    roomId: number;
+    word: string;
+}
