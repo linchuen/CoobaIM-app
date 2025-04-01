@@ -55,8 +55,6 @@ const ChatPage: React.FC = () => {
   const roomUnreadMap = useAppSelector(selectRoomUnreadMap)
   const tokenInfo = useAppSelector(selectTokenInfo)
   const [activeTab, setActiveTab] = useState(TabType.PERSONAL);
-  const [openDialog, setOpenDialog] = useState(false)
-  const [tabIndex, setTabIndex] = useState(0)
 
   useEffect(() => {
     if (friendInfos.length === 0 || !tokenInfo) return
@@ -164,7 +162,6 @@ const ChatPage: React.FC = () => {
         onClick={() => {
           dispatch(setIsPersonal(true))
           handleLoadChat(info.roomId, info.showName, ChatType.ToUser)
-          setOpenDialog(false)
         }}
       >
         <Avatar sx={{ marginRight: 2 }}>{info.showName.charAt(0)}</Avatar>
@@ -198,7 +195,6 @@ const ChatPage: React.FC = () => {
         onClick={() => {
           dispatch(setIsPersonal(false))
           handleLoadChat(info.id, info.name, ChatType.ToRoom)
-          setOpenDialog(false)
         }}
       >
         <Avatar sx={{ marginRight: 2, bgcolor: "#3f51b5" }}>
