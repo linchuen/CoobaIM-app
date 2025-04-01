@@ -133,19 +133,21 @@ const ChatPage: React.FC = () => {
     return (
       <ListItem sx={{ marginBottom: 1 }} key={"friend_" + info.id}>
         <Avatar sx={{ marginRight: 2 }}>{info.name.charAt(0)}</Avatar>
-        <ListItemText primary={info.name} secondary={info.applyId} />
-        <Button
-          sx={{ bgcolor: "green", color: "white", marginRight: 1 }}
-          onClick={() => handleFriendApply(info.applyId, true, info.name)}
-        >
-          Accept
-        </Button>
-        <Button
-          sx={{ bgcolor: "red", color: "white" }}
-          onClick={() => handleFriendApply(info.applyId, false, info.name)}
-        >
-          Reject
-        </Button>
+        <ListItemText primary={info.name} secondary={
+          <>
+            <Button
+              sx={{ bgcolor: "green", color: "white", marginRight: 1 }}
+              onClick={() => handleFriendApply(info.applyId, true, info.name)}
+            >
+              {t("accept")}
+            </Button>
+            <Button
+              sx={{ bgcolor: "red", color: "white" }}
+              onClick={() => handleFriendApply(info.applyId, false, info.name)}
+            >
+              {t("reject")}
+            </Button>
+          </>} />
       </ListItem>
     )
   })

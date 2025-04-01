@@ -1,5 +1,7 @@
 {
     "friendApply": "Friend Apply",
     "personChat": "Personal Chat",
-    "groupChat": "Group Chat"
+    "groupChat": "Group Chat",
+    "accept": "Accept",
+    "reject": "Reject"
 }
