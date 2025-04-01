@@ -21,6 +21,7 @@ import { selectCurrentRoomId, sendMessage } from "../ChatPageSlice";
 import { handleFetch } from "../../../services/common";
 import type { UploadFileResponse } from "../../../services/ResponseInterface";
 import { fetchFileUpload } from "../../../services/FileApi";
+import { t } from "i18next";
 
 const UploadImageDialog: React.FC = () => {
     const dispatch = useAppDispatch()
@@ -78,7 +79,7 @@ const UploadImageDialog: React.FC = () => {
             </IconButton>
             <Dialog open={pictureOpen} onClose={onClose} fullWidth maxWidth="sm">
                 <DialogTitle>
-                    上傳圖片
+                    {t("uploadPicture")}
                     <IconButton onClick={onClose} sx={{ position: "absolute", right: 8, top: 8 }}>
                         <Close />
                     </IconButton>
@@ -115,8 +116,8 @@ const UploadImageDialog: React.FC = () => {
                     </Box>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={onClose} color="secondary">取消</Button>
-                    <Button onClick={handleUpload} color="primary" disabled={!file} startIcon={<CloudUpload />}>上傳</Button>
+                    <Button onClick={onClose} color="secondary">{t("cancel")}</Button>
+                    <Button onClick={handleUpload} color="primary" disabled={!file} startIcon={<CloudUpload />}>{t("upload")}</Button>
                 </DialogActions>
             </Dialog>
         </>

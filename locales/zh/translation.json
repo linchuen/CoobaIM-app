@@ -3,5 +3,11 @@
     "personChat": "個人訊息",
     "groupChat": "群組訊息",
     "accept": "同意",
-    "reject": "拒絕"
+    "reject": "拒絕",
+    "searchMessage": "搜尋訊息...",
+    "typeMessage": "請輸入訊息...",
+    "send": "發送",
+    "upload": "上傳",
+    "cancel": "取消",
+    "uploadPicture": "上傳圖片"
 }

@@ -20,6 +20,7 @@ import { fetchSearchChat } from '../../../services/MessageApi';
 import { loadPastChats, selectCurrentRoomId } from '../ChatPageSlice';
 import { selectTokenInfo } from '../../globalSlice';
 import dayjs from 'dayjs';
+import { t } from 'i18next';
 
 const ChatSearchBox: React.FC = () => {
     const dispatch = useAppDispatch()
@@ -56,7 +57,7 @@ const ChatSearchBox: React.FC = () => {
     return (
         <>
             <InputBase
-                placeholder="Search messages..."
+                placeholder={t("searchMessage")}
                 fullWidth
                 onKeyDown={(event) => {
                     if (event.key === "Enter") {

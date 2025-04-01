@@ -40,6 +40,7 @@ import ChatSearchBox from "./components/ChatSearchBox"
 import { TabType } from "../../services/constant"
 import { selectIsPersonal } from "./FriendSlice"
 import TransferPermissionDialog from "./components/TransferPermissionDialog"
+import { t } from "i18next"
 
 const ChatBox: React.FC = () => {
   const navigate = useNavigate()
@@ -189,7 +190,7 @@ const ChatBox: React.FC = () => {
           <TextField
             inputRef={inputRef}
             fullWidth
-            placeholder="Type a message..."
+            placeholder={t("typeMessage")}
             variant="outlined"
             size="small"
             sx={{
@@ -209,7 +210,7 @@ const ChatBox: React.FC = () => {
             sx={{ bgcolor: "#3f51b5", color: "white" }}
             onClick={handleSendMessage}
           >
-            Send
+            {t("send")}
           </Button>
         </Paper> : <></>}
     </Box>

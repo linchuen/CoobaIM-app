@@ -3,5 +3,11 @@
     "personChat": "Personal Chat",
     "groupChat": "Group Chat",
     "accept": "Accept",
-    "reject": "Reject"
+    "reject": "Reject",
+    "searchMessage": "Search messages...",
+    "typeMessage": "Type a message....",
+    "send": "Send",
+    "upload": "Upload",
+    "cancel": "Cancel",
+    "uploadPicture": "Upload Picture"
 }
