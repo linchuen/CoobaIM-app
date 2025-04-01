@@ -100,9 +100,9 @@ const UploadImageDialog: React.FC = () => {
                             <img src={image} alt="Preview" style={{ width: "100%", borderRadius: 8 }} />
                         ) : (
                             <Typography>
-                                拖放圖片到這裡或
+                                {t("dragPicture")}
                                 <label htmlFor="file-upload" style={{ color: "blue", cursor: "pointer" }}>
-                                    點擊選擇文件
+                                    {t("clickFile")}
                                 </label>
                                 <input
                                     id="file-upload"

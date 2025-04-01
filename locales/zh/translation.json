@@ -1,6 +1,6 @@
 {
     "friendApply": "好友申請",
-    "personChat": "個人訊息",
+    "personChat": "好友訊息",
     "groupChat": "群組訊息",
     "accept": "同意",
     "reject": "拒絕",
@@ -10,5 +10,10 @@
     "upload": "上傳",
     "cancel": "取消",
     "uploadPicture": "上傳圖片",
-    "alertWord": "請輸入２個字以上!"
+    "uploadFile": "上傳檔案",
+    "alertWord": "請輸入２個字以上!",
+    "uploadScuuess": "上傳成功",
+    "selectedFile": "已選擇檔案",
+    "clickFile": "點擊選擇文件",
+    "dragPicture": "拖放圖片到這裡"
 }

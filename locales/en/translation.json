@@ -1,6 +1,6 @@
 {
     "friendApply": "Friend Apply",
-    "personChat": "Personal Chat",
+    "personChat": "Friend Chat",
     "groupChat": "Group Chat",
     "accept": "Accept",
     "reject": "Reject",
@@ -10,5 +10,10 @@
     "upload": "Upload",
     "cancel": "Cancel",
     "uploadPicture": "Upload Picture",
-    "alertWord": "Please type more than two letters!"
+    "uploadFile": "Upload File",
+    "alertWord": "Please type more than two letters!",
+    "uploadScuuess": "Upload scuuessful",
+    "selectedFile": "Selected file",
+    "clickFile": "click and select file",
+    "dragFile": "drag picture to here"
 }

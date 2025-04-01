@@ -9,6 +9,7 @@ import { selectCurrentRoomId, sendMessage } from "../ChatPageSlice";
 import { AttachFile } from "@mui/icons-material";
 import { handleFetch } from "../../../services/common";
 import type { UploadFileResponse } from "../../../services/ResponseInterface";
+import { t } from "i18next";
 
 const UploadDialog: React.FC = () => {
     const dispatch = useAppDispatch()
@@ -56,19 +57,19 @@ const UploadDialog: React.FC = () => {
                 <AttachFile />
             </IconButton>
             <Dialog open={fileOpen} onClose={onClose}>
-                <DialogTitle>上傳檔案</DialogTitle>
+                <DialogTitle>{t("uploadFile")}</DialogTitle>
                 <div style={{ padding: 20, textAlign: "center" }}>
                     <input type="file" onChange={handleFileChange} />
-                    {file && <Typography>已選擇檔案: {file.name}</Typography>}
+                    {file && <Typography>{t("selectedFile")}: {file.name}</Typography>}
 
                     {uploadProgress > 0 && <LinearProgress variant="determinate" value={uploadProgress} style={{ marginTop: 10 }} />}
 
-                    {uploadedFileName && <Typography color="green">上傳成功: {uploadedFileName}</Typography>}
+                    {uploadedFileName && <Typography color="green">{t("uploadScuuess")}:{uploadedFileName}</Typography>}
                 </div>
                 <DialogActions>
-                    <Button onClick={onClose}>取消</Button>
+                    <Button onClick={onClose}>{t("cancel")}</Button>
                     <Button onClick={handleUpload} color="primary" disabled={!file}>
-                        上傳
+                        {t("upload")}
                     </Button>
                 </DialogActions>
             </Dialog>
