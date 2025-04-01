@@ -36,7 +36,7 @@ const AddMemberDialog: React.FC = () => {
     const [userIds, setUserIds] = useState<number[]>([])
 
     const onOpen = () => {
-        if (!tokenInfo) return
+        if (!tokenInfo || currentRoomId === 0) return
 
         handleFetch<RoomMemberResponse>(
             dispatch,

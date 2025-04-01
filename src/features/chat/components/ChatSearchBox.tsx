@@ -30,7 +30,7 @@ const ChatSearchBox: React.FC = () => {
     const anchorRef = useRef<HTMLInputElement>(null);
 
     const handleSendSearch = async () => {
-        if (!anchorRef.current || !tokenInfo) return
+        if (!anchorRef.current || !tokenInfo || currentRoomId === 0) return
         const value = anchorRef.current.value
         if (value.length < 2) {
             return

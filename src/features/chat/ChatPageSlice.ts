@@ -56,7 +56,7 @@ type ChatRoomState = {
 const initialState: ChatRoomState = {
   roomInfoList: [],
   chatInfoList: [],
-  pastChatInfoList:[],
+  pastChatInfoList: [],
   roomChatMap: {},
   roomUnreadMap: [],
   roomSubscribeSet: [],
@@ -88,6 +88,7 @@ export const chatSlice = createAppSlice({
       console.log("reset")
       state.roomInfoList = []
       state.chatInfoList = []
+      state.pastChatInfoList = []
       state.roomChatMap = {}
       state.roomUnreadMap = []
       state.roomSubscribeSet = []
@@ -97,6 +98,7 @@ export const chatSlice = createAppSlice({
       state.currentRoomId = 0
       state.currentRoomName = ""
       state.emoji = ""
+      state.usePast = false
     }),
     setEmoji: create.reducer((state, action: PayloadAction<string>) => {
       console.log("emoji", action.payload)

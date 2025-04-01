@@ -5,7 +5,6 @@ import {
   AppBar,
   Toolbar,
   IconButton,
-  InputBase,
   Paper,
   Box,
   Button,
@@ -15,8 +14,6 @@ import {
   Typography,
 } from "@mui/material"
 import {
-  Search,
-  DateRange,
   ArrowBack,
 } from "@mui/icons-material"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"

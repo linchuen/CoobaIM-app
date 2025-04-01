@@ -34,7 +34,7 @@ const TransferPermissionDialog: React.FC = () => {
     const [roomUsers, setRoomUsers] = useState<RoomUser[]>([])
 
     const onOpen = () => {
-        if (!tokenInfo) return
+        if (!tokenInfo || currentRoomId === 0) return
 
         handleFetch<RoomMemberResponse>(
             dispatch,

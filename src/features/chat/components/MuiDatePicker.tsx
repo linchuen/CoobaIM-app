@@ -11,18 +11,22 @@ import Paper from "@mui/material/Paper";
 import { Button } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { loadChats, loadPastChats, selectCurrentRoomId } from "../ChatPageSlice";
+import { selectTokenInfo } from "../../globalSlice";
 
 
 const MuiDatePicker: React.FC = () => {
     const dispatch = useAppDispatch()
+    const tokenInfo = useAppSelector(selectTokenInfo)
     const currentRoomId = useAppSelector(selectCurrentRoomId)
     const [date, setDate] = React.useState<Dayjs>(dayjs(new Date().toLocaleDateString()));
 
     const [pickerOpen, setPickerOpen] = useState(false);
     const submit = () => {
+        if (!tokenInfo || currentRoomId === 0) return
+
         const isBeforToday = date.isBefore(dayjs(), 'day')
         if (isBeforToday) {
-            dispatch(loadPastChats({ roomId: currentRoomId, date: date.format("YYYY/MM/DD")}))
+            dispatch(loadPastChats({ roomId: currentRoomId, date: date.format("YYYY/MM/DD") }))
         } else {
             dispatch(loadChats({ roomId: currentRoomId }))
         }
