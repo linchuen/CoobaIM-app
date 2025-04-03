@@ -13,6 +13,9 @@ import {
     IconButton,
     Alert,
     Snackbar,
+    Box,
+    Typography,
+    ClickAwayListener,
 } from '@mui/material';
 import { Search } from '@mui/icons-material';
 import { handleFetch } from '../../../services/common';
@@ -32,6 +35,7 @@ const ChatSearchBox: React.FC = () => {
     const [open, setOpen] = useState(false);
     const [alertOpen, setAlertOpen] = useState(false);
     const anchorRef = useRef<HTMLInputElement>(null);
+    const iconRef = useRef<HTMLButtonElement>(null);
 
     const handleSendSearch = async () => {
         if (!anchorRef.current || !tokenInfo || currentRoomId === 0) return
@@ -77,29 +81,74 @@ const ChatSearchBox: React.FC = () => {
                     color: "white",
                 }}
             />
-            <IconButton sx={{ color: "white" }} onClick={() => handleSendSearch()}>
+            <IconButton ref={iconRef} sx={{ color: "white" }} onClick={() => handleSendSearch()}>
                 <Search />
             </IconButton>
-            <Popper
-                open={open && results.length > 0}
-                anchorEl={anchorRef.current}
-                placement="bottom-start"
-                style={{ zIndex: 1300, width: anchorRef.current?.offsetWidth }}
-            >
-                <Paper elevation={3}>
-                    <List>
-                        {results.map((item) => (
-                            <ListItem key={item.id} disablePadding>
-                                <ListItemButton onClick={() => handleSelect(item)}>
-                                    <ListItemText primary={item.message} />
-                                </ListItemButton>
-                            </ListItem>
-                        ))}
-                    </List>
-                </Paper>
-            </Popper>
+            <ClickAwayListener onClickAway={(event) => {
+                const target = event.target as Node;
+                if (
+                    anchorRef.current?.contains(target) ||
+                    iconRef.current?.contains(target)
+                ) {
+                    return; // 點到 Input 或 IconButton 就不要關閉
+                }
+                setOpen(false);
+            }}>
+                <Popper
+                    open={open && results.length > 0}
+                    anchorEl={anchorRef.current}
+                    placement="bottom-start"
+                    style={{ zIndex: 1300, width: anchorRef.current?.offsetWidth }}
+                >
+                    <Paper
+                        elevation={3}
+                        sx={{
+                            backgroundColor: "#161b22", // 主背景色
+                            color: "white",
+                            borderRadius: 2,
+                            overflow: "hidden",
+                        }}
+                    >
+                        <List>
+                            {results.map((item: ChatInfo) => (
+                                <ListItem key={item.id} disablePadding divider>
+                                    <ListItemButton
+                                        onClick={() => handleSelect(item)}
+                                        sx={{
+                                            alignItems: "flex-start",
+                                            paddingY: 1.5,
+                                            paddingX: 2,
+                                            "&:hover": {
+                                                backgroundColor: "#21262d",
+                                            },
+                                        }}
+                                    >
+                                        <ListItemText
+                                            primary={
+                                                <Box display="flex" justifyContent="space-between">
+                                                    <Typography variant="subtitle2" color="gray">
+                                                        {item.name}
+                                                    </Typography>
+                                                    <Typography variant="caption" color="gray">
+                                                        {new Date(item.createdTime).toLocaleString()}
+                                                    </Typography>
+                                                </Box>
+                                            }
+                                            secondary={
+                                                <Typography variant="body2" color="white">
+                                                    {item.message}
+                                                </Typography>
+                                            }
+                                        />
+                                    </ListItemButton>
+                                </ListItem>
+                            ))}
+                        </List>
+                    </Paper>
+                </Popper>
+            </ClickAwayListener >
             {/* Snackbar 提示 */}
-            <Snackbar
+            < Snackbar
                 open={alertOpen}
                 autoHideDuration={1000}
                 onClose={() => setAlertOpen(false)}
@@ -108,7 +157,7 @@ const ChatSearchBox: React.FC = () => {
                 <Alert onClose={() => setAlertOpen(false)} severity="warning">
                     {t("alertWord")}
                 </Alert>
-            </Snackbar>
+            </Snackbar >
         </>
     );
 };

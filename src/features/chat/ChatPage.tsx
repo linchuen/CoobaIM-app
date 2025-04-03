@@ -44,10 +44,12 @@ import { addFriend, removeFriendApply, selectFriendApplyInfoList, selectFriendIn
 import { ChatInfo as ChatProto } from "../../../proto/ChatProto"
 import { t } from "i18next"
 import UserDetailDialog from "./components/UserDetailDialog"
+import { useNavigate } from "react-router-dom"
 
 
 const ChatPage: React.FC = () => {
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
   const friendApplyInfos = useAppSelector(selectFriendApplyInfoList)
   const friendInfos = useAppSelector(selectFriendInfoList)
   const roomInfos = useAppSelector(selectRoomInfoList)
@@ -249,7 +251,7 @@ const ChatPage: React.FC = () => {
               <Typography variant="caption" sx={{ color: "white" }}>{t("groupChat")}</Typography>
             </Box>
           </Box>
-          <IconButton ><ExitToApp sx={{ color: "white" }} /></IconButton>
+          <IconButton onClick={() => navigate("/")}><ExitToApp sx={{ color: "white" }} /></IconButton>
         </Box>
 
         {/* menu List */}
