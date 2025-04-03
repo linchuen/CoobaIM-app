@@ -1,5 +1,5 @@
 import type React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
     Dialog,
     DialogTitle,
@@ -20,31 +20,43 @@ import {
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { selectTokenInfo } from "../../globalSlice";
+import { t } from "i18next";
+import { handleFetch } from "../../../services/common";
+import type { UploadFileResponse, UserDetail, UserDetailResponse } from "../../../services/ResponseInterface";
+import { fetchUserDetail } from "../../../services/UserAPI";
+import { fetchAvatarUpload } from "../../../services/FileApi";
 
 const UserDetailDialog: React.FC = () => {
-    const user = {
-        id: 1,
-        userId: 1,
-        email: "string",
-        name: "string",
-        tags: "string",
-        remark: "string",
-        createdTime: "string",
-        avatarUrl: "string",
-    }
     const dispatch = useAppDispatch()
     const tokenInfo = useAppSelector(selectTokenInfo)
     const [open, setOpen] = useState(false)
-    const [avatar, setAvatar] = useState<string | null>(user.avatarUrl || null);
+    const [detail, setDetail] = useState<UserDetail | undefined>();
+    const [avatar, setAvatar] = useState<string | undefined>(tokenInfo?.avatar);
+
+    useEffect(() => {
+        if (!tokenInfo) return
+
+        handleFetch<UserDetailResponse>(
+            dispatch,
+            fetchUserDetail(tokenInfo.token),
+            data => {
+                setDetail(data.userDetail)
+            },
+        )
+    }, [dispatch, tokenInfo])
 
     const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (event.target.files && event.target.files[0]) {
-            const file = event.target.files[0];
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setAvatar(reader.result as string);
-            };
-            reader.readAsDataURL(file);
+        if (!tokenInfo) return
+
+        const selectedFile = event.target.files?.[0];
+        if (selectedFile) {
+            handleFetch<UploadFileResponse>(
+                dispatch,
+                fetchAvatarUpload(selectedFile, tokenInfo.token),
+                data => {
+                    setAvatar(data.url)
+                },
+            )
         }
     };
 
@@ -52,13 +64,13 @@ const UserDetailDialog: React.FC = () => {
         <>
             <Typography variant="h6">{tokenInfo?.name}</Typography>
             <Box display="flex" alignItems="center">
-                <Avatar src={tokenInfo?.avatar} sx={{ width: 40, height: 40 }} onClick={() => setOpen(true)} />
+                <Avatar src={avatar} sx={{ width: 40, height: 40 }} onClick={() => setOpen(true)} />
             </Box>
             <Dialog open={open} onClose={() => setOpen(false)} fullWidth maxWidth="sm">
-                <DialogTitle>User Details</DialogTitle>
+                <DialogTitle>{t("userDetail")}</DialogTitle>
                 <DialogContent>
                     <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
-                        <Avatar src={avatar || "/default-avatar.png"} sx={{ width: 100, height: 100 }} />
+                        <Avatar src={avatar} sx={{ width: 100, height: 100 }} />
                         <input
                             accept="image/*"
                             id="avatar-upload"
@@ -70,8 +82,9 @@ const UserDetailDialog: React.FC = () => {
                             <IconButton color="primary" component="span">
                                 <PhotoCamera />
                             </IconButton>
+                            <Typography variant="caption">{t("uploadAvatar")}</Typography>
                         </label>
-                        <Typography variant="h6">{user.name}</Typography>
+                        <Typography variant="h6">{tokenInfo?.name}</Typography>
                     </Box>
 
                     <TableContainer component={Paper}>
@@ -79,23 +92,23 @@ const UserDetailDialog: React.FC = () => {
                             <TableBody>
                                 <TableRow>
                                     <TableCell variant="head">Email</TableCell>
-                                    <TableCell>{user.email}</TableCell>
+                                    <TableCell>{detail?.email}</TableCell>
                                 </TableRow>
                                 <TableRow>
                                     <TableCell variant="head">User ID</TableCell>
-                                    <TableCell>{user.userId}</TableCell>
+                                    <TableCell>{detail?.userId}</TableCell>
                                 </TableRow>
                                 <TableRow>
                                     <TableCell variant="head">Tags</TableCell>
-                                    <TableCell>{user.tags || "N/A"}</TableCell>
+                                    <TableCell>{detail?.tags || "N/A"}</TableCell>
                                 </TableRow>
                                 <TableRow>
                                     <TableCell variant="head">Remark</TableCell>
-                                    <TableCell>{user.remark || "N/A"}</TableCell>
+                                    <TableCell>{detail?.remark || "N/A"}</TableCell>
                                 </TableRow>
                                 <TableRow>
                                     <TableCell variant="head">Joined</TableCell>
-                                    <TableCell>{user.createdTime}</TableCell>
+                                    <TableCell>{detail?.createdTime}</TableCell>
                                 </TableRow>
                             </TableBody>
                         </Table>

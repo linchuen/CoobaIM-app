@@ -3,6 +3,7 @@ import type {
   ApiResponse,
   LoginResponse,
   RegisterResponse,
+  UserDetailResponse,
 } from "./ResponseInterface"
 import { callFetch } from "./common"
 import config from "../app/config"
@@ -19,15 +20,15 @@ export const fetchLogin = async (
 ): Promise<ApiResponse<LoginResponse>> => {
   return config.useFake
     ? new FakeSuccessResponse({
-        userId: 1,
-        name: "Bob",
-        token: "token",
-        role: config.testRole,
-        platform: "PC",
-        avatar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8vUnmnpz4XsDeqVMAa6bL0dUxqV3wdPwB6w&s",
-        loginTime: "string",
-        expireTime: "string",
-      })
+      userId: 1,
+      name: "Bob",
+      token: "token",
+      role: config.testRole,
+      platform: "PC",
+      avatar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8vUnmnpz4XsDeqVMAa6bL0dUxqV3wdPwB6w&s",
+      loginTime: "string",
+      expireTime: "string",
+    })
     : callFetch("/user/login", "POST", undefined, data)
 }
 
@@ -37,14 +38,32 @@ export const fetchFreshToken = async (
 ): Promise<ApiResponse<LoginResponse>> => {
   return config.useFake
     ? new FakeSuccessResponse({
-        userId: 1,
-        name: "Bob",
-        token: "token",
-        role: config.testRole,
-        platform: "PC",
-        avatar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8vUnmnpz4XsDeqVMAa6bL0dUxqV3wdPwB6w&s",
-        loginTime: "string",
-        expireTime: "string",
-      })
+      userId: 1,
+      name: "Bob",
+      token: "token",
+      role: config.testRole,
+      platform: "PC",
+      avatar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8vUnmnpz4XsDeqVMAa6bL0dUxqV3wdPwB6w&s",
+      loginTime: "string",
+      expireTime: "string",
+    })
     : callFetch("/user/refresh", "POST", token, data)
+}
+
+export const fetchUserDetail = async (
+  token?: string,
+): Promise<ApiResponse<UserDetailResponse>> => {
+  return config.useFake
+    ? new FakeSuccessResponse({
+      userDetail: {
+        id: 1,
+        userId: 1,
+        email: "Bob@cooba.com",
+        name: "Bob",
+        tags: "[GameMaster]",
+        remark: "Cooba member",
+        createdTime: new Date().toISOString(),
+      }
+    })
+    : callFetch("/user/detail", "GET", token)
 }

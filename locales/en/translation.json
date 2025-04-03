@@ -21,5 +21,7 @@
     "chooseEmoji": "Choose your Emoji",
     "add": "Add",
     "member": "member",
-    "chatRoom": "Chat Room"
+    "chatRoom": "Chat Room",
+    "userDetail": "User Detail",
+    "uploadAvatar": "Upload avatar"
 }

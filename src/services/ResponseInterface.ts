@@ -10,12 +10,17 @@ export interface FriendSearchResponse {
   friends: FriendInfo[]
 }
 
+export interface UserDetailResponse{
+  userDetail: UserDetail
+}
+
 export interface UserDetail {
   userId: number
   name: string
   email: string
   tags?: string
   remark?: string
+  createdTime: string
 }
 
 export interface FriendInfo {

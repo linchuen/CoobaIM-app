@@ -21,5 +21,7 @@
     "chooseEmoji": "選擇你的表情",
     "add": "新增",
     "member": "成員",
-    "chatRoom": "聊天室"
+    "chatRoom": "聊天室",
+    "userDetail": "個人詳情",
+    "uploadAvatar": "上傳頭像"
 }
