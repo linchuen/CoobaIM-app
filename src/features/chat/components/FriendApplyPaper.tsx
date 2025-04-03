@@ -42,29 +42,6 @@ const FriendApplyPaper: React.FC = () => {
         )
     }
 
-    const friendApplyList = friendApplyInfos.map(info => {
-        return (
-            <ListItem sx={{ marginBottom: 1 }} key={"friend_" + info.id}>
-                <Avatar sx={{ marginRight: 2 }}>{info.name.charAt(0)}</Avatar>
-                <ListItemText primary={info.name} secondary={
-                    <>
-                        <Button
-                            sx={{ bgcolor: "green", color: "white", marginRight: 1 }}
-                            onClick={() => handleFriendApply(info.applyId, true, info.name)}
-                        >
-                            {t("accept")}
-                        </Button>
-                        <Button
-                            sx={{ bgcolor: "red", color: "white" }}
-                            onClick={() => handleFriendApply(info.applyId, false, info.name)}
-                        >
-                            {t("reject")}
-                        </Button>
-                    </>} />
-            </ListItem>
-        )
-    })
-
     return (
         <>
             <Paper
@@ -82,7 +59,29 @@ const FriendApplyPaper: React.FC = () => {
                 <Box display="flex" flexDirection="column" gap={1}>
                     <Typography variant="h6" sx={{ pl: 1 }}>{t("friendApply")}</Typography>
                 </Box>
-                <List>{friendApplyList}</List>
+                <List>{
+                    friendApplyInfos.map(info => {
+                        return (
+                            <ListItem sx={{ marginBottom: 1 }} key={"friend_" + info.id}>
+                                <Avatar sx={{ marginRight: 2 }}>{info.name.charAt(0)}</Avatar>
+                                <ListItemText primary={info.name} secondary={<>
+                                    <Button
+                                        sx={{ bgcolor: "green", color: "white", marginRight: 1 }}
+                                        onClick={() => handleFriendApply(info.applyId, true, info.name)}
+                                    >
+                                        {t("accept")}
+                                    </Button>
+                                    <Button
+                                        sx={{ bgcolor: "red", color: "white" }}
+                                        onClick={() => handleFriendApply(info.applyId, false, info.name)}
+                                    >
+                                        {t("reject")}
+                                    </Button>
+                                </>} />
+                            </ListItem>
+                        )
+                    })
+                }</List>
             </Paper>
         </>
     )
