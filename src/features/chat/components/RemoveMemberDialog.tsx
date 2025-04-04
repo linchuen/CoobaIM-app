@@ -89,7 +89,7 @@ const RemoveMemberDialog: React.FC = () => {
                         alignItems: "center",
                     }}
                 >
-                    移除聊天室成員
+                    移除成員
                     <IconButton
                         onClick={onClose}
                         size="small"
@@ -101,7 +101,7 @@ const RemoveMemberDialog: React.FC = () => {
                 {/* 內容區 */}
                 <DialogContent dividers>
                     {/* 好友列表 */}
-                    <Typography variant="h6">選擇聊天室成員：</Typography>
+                    <Typography variant="h6">選擇成員：</Typography>
                     <List sx={{ columns: { xs: 1, sm: 2, md: 3 }, gap: 1 }}>
                         {roomUsers.filter(info => info.userId !== tokenInfo?.userId).map(info => (
                             <ListItem key={info.id} onClick={() => handleToggle(info.userId)}>

@@ -27,7 +27,8 @@ export interface FriendInfo {
   userId: number
   friendUserId: number
   showName: string
-  roomId: number
+  roomId: number,
+  avatar?: string
 }
 
 export interface FriendApplySearchResponse {

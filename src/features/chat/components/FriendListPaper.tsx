@@ -99,7 +99,7 @@ const FriendListPaper: React.FC = () => {
                   handleLoadChat(info.roomId, info.showName, ChatType.ToUser)
                 }}
               >
-                <Avatar sx={{ marginRight: 2 }}>{info.showName.charAt(0)}</Avatar>
+                <Avatar src={info.avatar} sx={{ marginRight: 2 }}>{info.showName.charAt(0)}</Avatar>
                 <ListItemText primary={info.showName} secondary={<Typography
                   variant="body2"
                   noWrap

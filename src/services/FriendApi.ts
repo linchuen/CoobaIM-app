@@ -51,7 +51,8 @@ export const fetchSearchFriend = async (
           userId: 1,
           friendUserId: 2,
           showName: "Alice",
-          roomId: 10
+          roomId: 10,
+          avatar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-Cmui-t5r132FoXLjHyPecZh8h3whgYBhCw&s"
         },
         {
           id: 2,

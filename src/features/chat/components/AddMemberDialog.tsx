@@ -13,6 +13,8 @@ import {
     Typography,
     Alert,
     Snackbar,
+    Avatar,
+    ListItemAvatar,
 } from "@mui/material";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import CloseIcon from "@mui/icons-material/Close"
@@ -21,8 +23,9 @@ import { selectTokenInfo } from "../../globalSlice";
 import { selectCurrentRoomId } from "../ChatPageSlice";
 import { handleFetch } from "../../../services/common";
 import { fetchInviteUser, fetchSearchRoomUsers } from "../../../services/RoomApi";
-import type { RoomMemberResponse} from "../../../services/ResponseInterface";
+import type { RoomMemberResponse } from "../../../services/ResponseInterface";
 import { selectFriendInfoList } from "../FriendSlice";
+import { t } from "i18next";
 
 
 const AddMemberDialog: React.FC = () => {
@@ -91,7 +94,7 @@ const AddMemberDialog: React.FC = () => {
                         alignItems: "center",
                     }}
                 >
-                    新增聊天室成員
+                    {t("addMember")}
                     <IconButton
                         onClick={onClose}
                         size="small"
@@ -102,20 +105,50 @@ const AddMemberDialog: React.FC = () => {
 
                 {/* 內容區 */}
                 <DialogContent dividers>
-                    {/* 好友列表 */}
-                    <Typography variant="h6">選擇好友：</Typography>
-                    <List sx={{ columns: { xs: 1, sm: 2, md: 3 }, gap: 1 }}>
-                        {friendInfoList.filter(info => !userIds.includes(info.friendUserId)).map(info => (
-                            <ListItem key={info.friendUserId} onClick={() => handleToggle(info.friendUserId)}>
-                                <Checkbox checked={selectedFriend === info.friendUserId} />
-                                <ListItemText primary={info.showName} />
-                            </ListItem>
-                        ))}
+                    <Typography variant="h6" gutterBottom>
+                        {t("chooseFriend")}：
+                    </Typography>
+                    <List
+                        sx={{
+                            display: 'grid',
+                            gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr' },
+                            gap: 1,
+                        }}
+                    >
+                        {friendInfoList
+                            .filter(info => !userIds.includes(info.friendUserId))
+                            .map(info => (
+                                <ListItem
+                                    key={info.friendUserId}
+                                    onClick={() => handleToggle(info.friendUserId)}
+                                    sx={{
+                                        border: '1px solid #ddd',
+                                        borderRadius: 2,
+                                        cursor: 'pointer',
+                                        '&:hover': {
+                                            backgroundColor: 'action.hover',
+                                        },
+                                        backgroundColor: selectedFriend === info.friendUserId ? 'action.selected' : 'inherit',
+                                    }}
+                                >
+                                    <Checkbox
+                                        checked={selectedFriend === info.friendUserId}
+                                        tabIndex={-1}
+                                        disableRipple
+                                    />
+                                    <ListItemAvatar>
+                                        <Avatar src={info.avatar} alt={info.showName}>
+                                            {info.showName[0]}
+                                        </Avatar>
+                                    </ListItemAvatar>
+                                    <ListItemText primary={info.showName} />
+                                </ListItem>
+                            ))}
                     </List>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={onClose} color="secondary">取消</Button>
-                    <Button onClick={handleAdd} color="primary" variant="contained">新增</Button>
+                    <Button onClick={onClose} color="secondary">{t("cancel")}</Button>
+                    <Button onClick={handleAdd} color="primary" variant="contained">{t("add")}</Button>
                 </DialogActions>
             </Dialog>
             <Snackbar
@@ -129,7 +162,7 @@ const AddMemberDialog: React.FC = () => {
                     severity={"success"}
                     variant="filled"
                 >
-                    {"新增成員成功！"}
+                    {t("addMemberSuccessfully")}
                 </Alert>
             </Snackbar>
         </>

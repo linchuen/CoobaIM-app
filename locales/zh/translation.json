@@ -30,5 +30,8 @@
     "rememberMe": "記住我",
     "forgotPassword":"忘記密碼?",
     "email":"信箱",
-    "password":"密碼"
+    "password":"密碼",
+    "addMember":"新增成員",
+    "chooseFriend":"選擇好友",
+    "addMemberSuccessfully":"新增成員成功"
 }
