@@ -23,5 +23,12 @@
     "member": "成員",
     "chatRoom": "聊天室",
     "userDetail": "個人詳情",
-    "uploadAvatar": "上傳頭像"
+    "uploadAvatar": "上傳頭像",
+    "noAccount": "尚未有帳號?",
+    "signUp": "註冊",
+    "signIn": "登入",
+    "rememberMe": "記住我",
+    "forgotPassword":"忘記密碼?",
+    "email":"信箱",
+    "password":"密碼"
 }

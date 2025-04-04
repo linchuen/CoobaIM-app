@@ -14,13 +14,14 @@ import { useNavigate } from "react-router"
 import { RegisterDiaLog } from "./components/RegisterDiaLog"
 import { ForgetPasswordDialog } from "./components/ForgetPasswordDialog"
 import { fetchLogin } from "../../services/UserAPI"
-import { setIsLogin, setTokenInfo, setEmail as setGlobaEmail} from "../globalSlice"
+import { setIsLogin, setTokenInfo, setEmail as setGlobaEmail } from "../globalSlice"
 import { useAppDispatch } from "../../app/hooks"
 import { handleFetch } from "../../services/common"
 import type { LoginResponse } from "../../services/ResponseInterface"
 import { reset } from "../chat/ChatPageSlice"
-import { reset as friendReset} from "../chat/FriendSlice"
+import { reset as friendReset } from "../chat/FriendSlice"
 import { RoleType } from "../../services/constant"
+import { t } from "i18next"
 
 const LoginRegisterPage: React.FC = () => {
   const navigate = useNavigate()
@@ -78,12 +79,12 @@ const LoginRegisterPage: React.FC = () => {
           gutterBottom
           sx={{ color: "white" }}
         >
-          Sign in
+           {t("signIn")}
         </Typography>
 
         <TextField
           fullWidth
-          label="Email"
+          label={t("email")}
           variant="filled"
           InputProps={{ style: { color: "white" } }}
           InputLabelProps={{ style: { color: "#b9bbbe" } }}
@@ -92,7 +93,7 @@ const LoginRegisterPage: React.FC = () => {
         />
         <TextField
           fullWidth
-          label="Password"
+          label={t("password")}
           type="password"
           variant="filled"
           InputProps={{ style: { color: "white" } }}
@@ -105,7 +106,7 @@ const LoginRegisterPage: React.FC = () => {
           control={<Checkbox sx={{ color: "#b9bbbe" }} />}
           label={
             <Typography variant="body2" color="#b9bbbe">
-              Remember me
+              {t("rememberMe")}
             </Typography>
           }
           sx={{ marginBottom: 2 }}
@@ -117,7 +118,7 @@ const LoginRegisterPage: React.FC = () => {
           sx={{ bgcolor: "#3f51b5", color: "white", marginBottom: 2 }}
           onClick={() => handleLogin()}
         >
-          Sign in
+          {t("signIn")}
         </Button>
 
         <Typography variant="body2" textAlign="center" sx={{ marginBottom: 2 }}>
@@ -127,7 +128,7 @@ const LoginRegisterPage: React.FC = () => {
               setOpenForgotPassword(true)
             }}
           >
-            Forgot your password?
+            {t("forgotPassword")}
           </span>
         </Typography>
 
@@ -140,24 +141,15 @@ const LoginRegisterPage: React.FC = () => {
           Sign in with Google
         </Button>
 
-        <Button
-          fullWidth
-          variant="outlined"
-          startIcon={<Facebook />}
-          sx={{ borderColor: "#3f51b5", color: "white", marginBottom: 2 }}
-        >
-          Sign in with Facebook
-        </Button>
-
         <Typography variant="body2" textAlign="center" sx={{ color: "white" }}>
-          Don’t have an account?{" "}
+          {t("noAccount")}{" "}
           <span
             style={{ color: "#3f51b5", textDecoration: "none" }}
             onClick={() => {
               setOpenSignUp(true)
             }}
           >
-            Sign up
+            {t("signUp")}
           </span>
         </Typography>
       </Paper>
