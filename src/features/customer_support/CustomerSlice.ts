@@ -20,7 +20,8 @@ const initialState: CustomerState = {
     customerDetail: {
         userId: 0,
         name: "",
-        email: ""
+        email: "",
+        createdTime: ""
     },
     bindCustomerList: [],
     customerDetailList: [],

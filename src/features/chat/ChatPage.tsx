@@ -1,5 +1,5 @@
 import type React from "react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import {
   Box,
   IconButton,
@@ -15,11 +15,34 @@ import { useNavigate } from "react-router-dom"
 import FriendApplyPaper from "./components/FriendApplyPaper"
 import FriendListPaper from "./components/FriendListPaper"
 import RoomListPaper from "./components/RoomListPaper"
+import { useAppDispatch, useAppSelector } from "../../app/hooks"
+import { refreshToken, selectTokenInfo } from "../globalSlice"
+import dayjs from "dayjs"
 
 
 const ChatPage: React.FC = () => {
   const navigate = useNavigate()
+  const dispatch = useAppDispatch()
+  const tokenInfo = useAppSelector(selectTokenInfo)
   const [activeTab, setActiveTab] = useState(TabType.PERSONAL);
+
+  useEffect(() => {
+    if (!tokenInfo) return
+    const expireTime = dayjs(tokenInfo.expireTime)
+    const now = dayjs();
+    const delay = now.diff(expireTime.subtract(10, 'second'))
+
+    if (delay <= 0) {
+      console.log('⚠️ 已經過期或太接近了，不設排程');
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      dispatch(refreshToken({ platform: tokenInfo.platform }))
+    }, delay);
+
+    return () => clearInterval(timer);
+  }, [dispatch, tokenInfo]);
 
   return (
     <>
@@ -69,3 +92,4 @@ const ChatPage: React.FC = () => {
 }
 
 export default ChatPage
+

@@ -1,6 +1,11 @@
 import type { PayloadAction } from "@reduxjs/toolkit"
 import { createAppSlice } from "../app/createAppSlice"
-import type { LiveCall } from "../services/ResponseInterface"
+import type { LiveCall, LoginResponse, UserDetail } from "../services/ResponseInterface"
+import { fetchFreshToken } from "../services/UserAPI"
+import type { RefreshRequest } from "../services/RequestInterface"
+import { CustomerDetailRequest } from "../services/cs/CsRequestInterface"
+import { fetchGetDetails } from "../services/cs/CustomerApi"
+import type { RootState } from "../app/store"
 
 interface TokenInfo {
   userId: number
@@ -50,18 +55,36 @@ export const globalSlice = createAppSlice({
     setIsLogin: create.reducer((state, action: PayloadAction<boolean>) => {
       state.isLogin = action.payload
     }),
-    setErrorMessage: (state, action: PayloadAction<string>) => {
+    setErrorMessage: create.reducer((state, action: PayloadAction<string>) => {
       state.errorMessage = action.payload
-    },
-    setErrorDialogOpen: (state, action: PayloadAction<boolean>) => {
+    }),
+    setErrorDialogOpen: create.reducer((state, action: PayloadAction<boolean>) => {
       state.errorDialogOpen = action.payload
-    },
-    setCallDialogOpen: (state, action: PayloadAction<boolean>) => {
+    }),
+    setCallDialogOpen: create.reducer((state, action: PayloadAction<boolean>) => {
       state.callDialogOpen = action.payload
-    },
-    setLiveCall: (state, action: PayloadAction<LiveCall>) => {
+    }),
+    setLiveCall: create.reducer((state, action: PayloadAction<LiveCall>) => {
       state.liveCall = action.payload
-    },
+    }),
+    refreshToken: create.asyncThunk(
+      async (request: RefreshRequest, { getState }): Promise<LoginResponse> => {
+        const state = getState() as RootState
+        const tokenInfo = selectTokenInfo(state)
+        const response = await fetchFreshToken(request, tokenInfo?.token ?? "")
+        return response.data;
+      },
+      {
+        pending: () => { },
+        fulfilled: (state, action: PayloadAction<LoginResponse>) => {
+          globalSlice.caseReducers.setTokenInfo(state, {
+            payload: action.payload,
+            type: "setTokenInfo"
+          })
+        },
+        rejected: () => { },
+      },
+    ),
   }),
   selectors: {
     selectErrorMessage: state => state.errorMessage,
@@ -83,6 +106,7 @@ export const {
   setErrorDialogOpen,
   setCallDialogOpen,
   setLiveCall,
+  refreshToken
 } = globalSlice.actions
 
 export const { selectEmail, selectErrorMessage, selectErrorDialogOpen, selectCallDialogOpen, selectLiveCall, selectTokenInfo, selectIsLogin } =
