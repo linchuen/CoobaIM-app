@@ -30,10 +30,17 @@ const CustomerSupportPage: React.FC = () => {
   return (
     <>
       <CSAgentWebSocket />
-      <Box display="flex" height="100vh" bgcolor="#333" color="#fff">
+      <Box display="flex" height="100vh" bgcolor="#424242" color="#fff">
         {/* Left Sidebar with Customer Info */}
-        <Drawer variant="permanent" sx={{ width: 260, flexShrink: 0, bgcolor: "#1e1e1e" }}>
-          <Box sx={{ width: 260, p: 2, textAlign: "center" }}>
+        <Drawer variant="permanent" sx={{ width: 260, flexShrink: 0}}>
+          <Box sx={{
+            width: 260,
+            p: 3,
+            textAlign: "center",
+            bgcolor: "#1c1c1c",
+            color: "#fff",
+            height: "100vh",
+          }}>
             <Avatar sx={{ width: 60, height: 60, mx: "auto", mb: 1 }} src="/path/to/avatar.jpg" />
             <Typography variant="h6">{tokenInfo?.name}</Typography>
             <Typography variant="body2">{email}</Typography>
@@ -116,7 +123,7 @@ const CustomerSupportPage: React.FC = () => {
   );
 
   function chatBoxWithInfo(): React.ReactNode {
-    return <Box display="flex" height="100vh">
+    return <Box display="flex" height="100vh" pl={5}>
       <ChatBox />
 
       {customerUserId && <UserDetailBox />}

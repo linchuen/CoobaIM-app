@@ -16,7 +16,7 @@ const UserDetailBox: React.FC = () => {
 
 
     return (
-        <Box width={250} p={2} bgcolor="#f9f9f9" color="#333">
+        <Box width={250} p={2} bgcolor="#efeeee" color="#333">
             <Box display="flex" justifyContent="space-between" alignItems="center">
                 <Typography variant="h6">用戶資訊</Typography>
             </Box>
