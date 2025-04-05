@@ -13,6 +13,8 @@ import {
     Typography,
     Alert,
     Snackbar,
+    Avatar,
+    ListItemAvatar,
 } from "@mui/material";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import CloseIcon from "@mui/icons-material/Close"
@@ -22,6 +24,7 @@ import { selectCurrentRoomId } from "../ChatPageSlice";
 import { handleFetch } from "../../../services/common";
 import { fetchEvictUser, fetchSearchRoomUsers } from "../../../services/RoomApi";
 import type { RoomMemberResponse, RoomUser } from "../../../services/ResponseInterface";
+import { t } from "i18next";
 
 
 const RemoveMemberDialog: React.FC = () => {
@@ -89,7 +92,7 @@ const RemoveMemberDialog: React.FC = () => {
                         alignItems: "center",
                     }}
                 >
-                    移除成員
+                    {t("removeMember")}
                     <IconButton
                         onClick={onClose}
                         size="small"
@@ -98,22 +101,52 @@ const RemoveMemberDialog: React.FC = () => {
                     </IconButton>
                 </DialogTitle>
 
-                {/* 內容區 */}
                 <DialogContent dividers>
-                    {/* 好友列表 */}
-                    <Typography variant="h6">選擇成員：</Typography>
-                    <List sx={{ columns: { xs: 1, sm: 2, md: 3 }, gap: 1 }}>
-                        {roomUsers.filter(info => info.userId !== tokenInfo?.userId).map(info => (
-                            <ListItem key={info.id} onClick={() => handleToggle(info.userId)}>
-                                <Checkbox checked={selectedMember === info.userId} />
-                                <ListItemText primary={info.showName} />
-                            </ListItem>
-                        ))}
+                    <Typography variant="h6" gutterBottom>
+                        {t("chooseMember")}：
+                    </Typography>
+                    <List
+                        sx={{
+                            display: 'grid',
+                            gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr' },
+                            gap: 1,
+                        }}
+                    >
+                        {roomUsers
+                            .filter(info => info.userId !== tokenInfo?.userId)
+                            .map(info => (
+                                <ListItem
+                                    key={info.id}
+                                    onClick={() => handleToggle(info.userId)}
+                                    sx={{
+                                        border: '1px solid #ddd',
+                                        borderRadius: 2,
+                                        cursor: 'pointer',
+                                        '&:hover': {
+                                            backgroundColor: 'action.hover',
+                                        },
+                                        backgroundColor: selectedMember === info.userId ? 'action.selected' : 'inherit',
+                                    }}
+                                >
+                                    <Checkbox
+                                        checked={selectedMember === info.userId}
+                                        tabIndex={-1}
+                                        disableRipple
+                                    />
+                                    <ListItemAvatar>
+                                        <Avatar src={info.avatar} alt={info.showName}>
+                                            {info.showName[0]}
+                                        </Avatar>
+                                    </ListItemAvatar>
+                                    <ListItemText primary={info.showName} />
+                                </ListItem>
+                            ))}
                     </List>
                 </DialogContent>
+
                 <DialogActions>
-                    <Button onClick={onClose} color="secondary">取消</Button>
-                    <Button onClick={handleRemove} color="primary" variant="contained">新增</Button>
+                    <Button onClick={onClose} color="secondary">{t("cancel")}</Button>
+                    <Button onClick={handleRemove} color="primary" variant="contained">{t("remove")}</Button>
                 </DialogActions>
             </Dialog>
             <Snackbar
@@ -127,7 +160,7 @@ const RemoveMemberDialog: React.FC = () => {
                     severity={"success"}
                     variant="filled"
                 >
-                    {"移除成員成功！"}
+                    {t("removeMemberSuccessfully")}!
                 </Alert>
             </Snackbar>
         </>

@@ -13,6 +13,8 @@ import {
     Typography,
     Alert,
     Snackbar,
+    ListItemAvatar,
+    Avatar,
 } from "@mui/material";
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import CloseIcon from "@mui/icons-material/Close"
@@ -22,6 +24,7 @@ import { selectCurrentRoomId } from "../ChatPageSlice";
 import { handleFetch } from "../../../services/common";
 import { fetchSearchRoomUsers, fetchTransferPermission } from "../../../services/RoomApi";
 import type { RoomMemberResponse, RoomUser } from "../../../services/ResponseInterface";
+import { t } from "i18next";
 
 
 const TransferPermissionDialog: React.FC = () => {
@@ -89,7 +92,7 @@ const TransferPermissionDialog: React.FC = () => {
                         alignItems: "center",
                     }}
                 >
-                    轉移聊天室權限
+                    {t("transferPermission")}
                     <IconButton
                         onClick={onClose}
                         size="small"
@@ -100,19 +103,50 @@ const TransferPermissionDialog: React.FC = () => {
 
                 {/* 內容區 */}
                 <DialogContent dividers>
-                    <Typography variant="h6">選擇聊天室成員：</Typography>
-                    <List sx={{ columns: { xs: 1, sm: 2, md: 3 }, gap: 1 }}>
-                        {roomUsers.filter(info => info.userId !== tokenInfo?.userId).map(info => (
-                            <ListItem key={info.id} onClick={() => handleToggle(info.userId)}>
-                                <Checkbox checked={selectedMember === info.userId} />
-                                <ListItemText primary={info.showName} />
-                            </ListItem>
-                        ))}
+                    <Typography variant="h6" gutterBottom>
+                        {t("chooseMember")}：
+                    </Typography>
+                    <List
+                        sx={{
+                            display: 'grid',
+                            gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr' },
+                            gap: 1,
+                        }}
+                    >
+                        {roomUsers
+                            .filter(info => info.userId !== tokenInfo?.userId)
+                            .map(info => (
+                                <ListItem
+                                    key={info.id}
+                                    onClick={() => handleToggle(info.userId)}
+                                    sx={{
+                                        border: '1px solid #ddd',
+                                        borderRadius: 2,
+                                        cursor: 'pointer',
+                                        '&:hover': {
+                                            backgroundColor: 'action.hover',
+                                        },
+                                        backgroundColor: selectedMember === info.userId ? 'action.selected' : 'inherit',
+                                    }}
+                                >
+                                    <Checkbox
+                                        checked={selectedMember === info.userId}
+                                        tabIndex={-1}
+                                        disableRipple
+                                    />
+                                    <ListItemAvatar>
+                                        <Avatar src={info.avatar} alt={info.showName}>
+                                            {info.showName[0]}
+                                        </Avatar>
+                                    </ListItemAvatar>
+                                    <ListItemText primary={info.showName} />
+                                </ListItem>
+                            ))}
                     </List>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={onClose} color="secondary">取消</Button>
-                    <Button onClick={handleTransfer} color="primary" variant="contained">送出</Button>
+                    <Button onClick={onClose} color="secondary">{t("cancel")}</Button>
+                    <Button onClick={handleTransfer} color="primary" variant="contained">{t("submit")}</Button>
                 </DialogActions>
             </Dialog>
             <Snackbar
@@ -126,7 +160,7 @@ const TransferPermissionDialog: React.FC = () => {
                     severity={"success"}
                     variant="filled"
                 >
-                    {"轉移成功！"}
+                    {t("transferPermissionSuccessfully")}!
                 </Alert>
             </Snackbar>
         </>

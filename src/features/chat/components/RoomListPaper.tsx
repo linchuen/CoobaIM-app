@@ -100,7 +100,7 @@ const RoomListPaper: React.FC = () => {
                 handleLoadChat(info.id, info.name, ChatType.ToRoom)
               } }
             >
-              <Avatar sx={{ marginRight: 2, bgcolor: "#3f51b5" }}>
+              <Avatar src={info.avatar} sx={{ marginRight: 2, bgcolor: "#3f51b5" }}>
                 <Chat />
               </Avatar>
               <ListItemText primary={info.name} secondary={<Typography

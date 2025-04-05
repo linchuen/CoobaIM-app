@@ -76,6 +76,7 @@ export interface RoomResponse {
 export interface RoomInfo {
   id: number
   name: string
+  avatar?: string
 }
 
 export interface RoomSearchResponse {
@@ -87,6 +88,7 @@ export interface RoomUser {
   roomId: number
   userId: number
   showName: string
+  avatar?: string
 }
 
 export interface RoomMemberResponse {
