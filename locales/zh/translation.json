@@ -41,5 +41,7 @@
     "submit": "送出",
     "transferPermission": "轉移權限",
     "transferPermissionSuccessfully": "Transfer permission 成功",
+    "imageDescription":"圖片說明",
+    "fileDescription":"檔案說明",
     "": ""
 }

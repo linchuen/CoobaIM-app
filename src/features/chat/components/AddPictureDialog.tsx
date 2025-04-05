@@ -1,5 +1,5 @@
 import type React from "react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
     Dialog,
     DialogTitle,
@@ -9,6 +9,7 @@ import {
     IconButton,
     Typography,
     Box,
+    TextField,
 } from "@mui/material";
 import {
     Image,
@@ -27,6 +28,7 @@ const UploadImageDialog: React.FC = () => {
     const dispatch = useAppDispatch()
     const tokenInfo = useAppSelector(selectTokenInfo)
     const currentRoomId = useAppSelector(selectCurrentRoomId)
+    const descriptionRef = useRef<HTMLInputElement>(null)
     const [image, setImage] = useState<string | null>(null)
     const [file, setFile] = useState<File | null>(null)
     const [pictureOpen, setPictureOpen] = useState(false)
@@ -59,7 +61,7 @@ const UploadImageDialog: React.FC = () => {
                     sendMessage({
                         uuid: uuidv4(),
                         roomId: currentRoomId,
-                        message: data.fileName,
+                        message: descriptionRef.current?.value || "",
                         userId: tokenInfo.userId,
                         url: data.url,
                         type: "IMAGE"
@@ -113,6 +115,15 @@ const UploadImageDialog: React.FC = () => {
                                 />
                             </Typography>
                         )}
+                    </Box>
+                    {/* 新增的圖片說明欄位 */}
+                    <Box mt={2}>
+                        <TextField
+                            fullWidth
+                            label={t("imageDescription")}
+                            multiline
+                            inputRef={descriptionRef}
+                        />
                     </Box>
                 </DialogContent>
                 <DialogActions>

@@ -29,11 +29,13 @@ const ChatPage: React.FC = () => {
   useEffect(() => {
     if (!tokenInfo) return
     const expireTime = dayjs(tokenInfo.expireTime)
+    if (!expireTime.isValid()) return
+
     const now = dayjs();
     const delay = now.diff(expireTime.subtract(10, 'second'))
 
     if (delay <= 0) {
-      console.log('⚠️ 已經過期或太接近了，不設排程');
+      console.log('⚠️ 已經過期或太接近了，不設排程', expireTime);
       return;
     }
 

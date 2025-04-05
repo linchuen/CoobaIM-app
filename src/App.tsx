@@ -12,6 +12,7 @@ import CustomerSupportPage from "./features/customer_support/agent/CustomerSuppo
 import CustomerPage from "./features/customer_support/customer/CustomerPage"
 import CustomerChatBox from "./features/customer_support/customer/CustomerChatBox"
 import './app/i18n';
+import dayjs from "dayjs"
 
 const App = () => {
   const dispatch = useAppDispatch()
@@ -22,8 +23,8 @@ const App = () => {
       token: "token",
       role: "USER",
       platform: "PC",
-      loginTime: "string",
-      expireTime: "string"
+      loginTime: new Date().toISOString(),
+      expireTime: dayjs().add(1, 'hour').toISOString()
     }))
   }
   return (

@@ -41,5 +41,7 @@
     "submit": "Submit",
     "transferPermission": "Transfer permission",
     "transferPermissionSuccessfully": "Transfer permission successfully",
+    "imageDescription": "Image description",
+    "fileDescription": "File description",
     "": ""
 }

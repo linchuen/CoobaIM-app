@@ -1,7 +1,7 @@
 import type React from "react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
-import { Dialog, DialogTitle, DialogActions, Button, LinearProgress, Typography, IconButton } from "@mui/material";
+import { Dialog, DialogTitle, DialogActions, Button, LinearProgress, Typography, IconButton, Box, TextField } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { fetchFileUpload } from "../../../services/FileApi";
 import { selectTokenInfo } from "../../globalSlice";
@@ -15,6 +15,7 @@ const UploadDialog: React.FC = () => {
     const dispatch = useAppDispatch()
     const tokenInfo = useAppSelector(selectTokenInfo)
     const currentRoomId = useAppSelector(selectCurrentRoomId)
+    const descriptionRef = useRef<HTMLInputElement>(null)
     const [file, setFile] = useState<File | null>(null);
     const [uploadProgress, setUploadProgress] = useState<number>(0)
     const [uploadedFileName, setUploadedFileName] = useState<string | null>(null)
@@ -37,7 +38,7 @@ const UploadDialog: React.FC = () => {
                     sendMessage({
                         uuid: uuidv4(),
                         roomId: currentRoomId,
-                        message: data.fileName,
+                        message: descriptionRef.current?.value || "",
                         userId: tokenInfo.userId,
                         url: data.url,
                         type: "FILE"
@@ -65,6 +66,14 @@ const UploadDialog: React.FC = () => {
                     {uploadProgress > 0 && <LinearProgress variant="determinate" value={uploadProgress} style={{ marginTop: 10 }} />}
 
                     {uploadedFileName && <Typography color="green">{t("uploadScuuess")}:{uploadedFileName}</Typography>}
+                    <Box mt={2}>
+                        <TextField
+                            fullWidth
+                            label={t("fileDescription")}
+                            multiline
+                            inputRef={descriptionRef}
+                        />
+                    </Box>
                 </div>
                 <DialogActions>
                     <Button onClick={onClose}>{t("cancel")}</Button>
