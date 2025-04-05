@@ -2,13 +2,16 @@ import { Alert, AppBar, Avatar, Box, IconButton, InputBase, Snackbar, Toolbar, T
 import { v4 as uuidv4 } from 'uuid';
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import SendIcon from "@mui/icons-material/Send";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import { selectTokenInfo } from "../../globalSlice";
 import { selectCurrentRoomId, selectCurrentRoomName, selectEmoji, sendMessage, setEmoji } from "../../chat/ChatPageSlice";
 import ChatMessages from "../../chat/components/ChatMessages";
+import EmojiChatDialog from "../../chat/components/AddEmojiDialog";
+import UploadDialog from "../../chat/components/AddFileDialog";
+import LiveRoomDialoag from "../../chat/components/AddLiveRoomDialog";
+import UploadImageDialog from "../../chat/components/AddPictureDialog";
 
 
 const CustomerChatBox: React.FC = () => {
@@ -22,6 +25,7 @@ const CustomerChatBox: React.FC = () => {
   const emoji = useAppSelector(selectEmoji)
   const [open, setOpen] = useState(false)
   const [input, setInput] = useState("");
+
 
   useEffect(() => {
     inputRef.current?.focus();
@@ -88,7 +92,9 @@ const CustomerChatBox: React.FC = () => {
           </IconButton>
           <Avatar src="/path-to-avatar.jpg" sx={{ ml: 1, mr: 1 }} />
           <Typography variant="h6" sx={{ flexGrow: 1 }}>{roomName}</Typography>
+          <LiveRoomDialoag />
         </Toolbar>
+
       </AppBar>
 
       {/* Messages */}
@@ -123,10 +129,10 @@ const CustomerChatBox: React.FC = () => {
       </Box>
 
       {/* Input Box */}
-      <Box sx={{ display: "flex", alignItems: "center", p: 1, bgcolor: "#fff", borderTop: "1px solid #ddd" }}>
-        <IconButton color="primary">
-          <AddCircleOutlineIcon />
-        </IconButton>
+      <Box sx={{ display: "flex", alignItems: "center", p: 1, bgcolor: "black", borderTop: "1px solid #ddd" }}>
+        <EmojiChatDialog />
+        <UploadImageDialog />
+        <UploadDialog />
         <InputBase
           sx={{ flexGrow: 1, ml: 1, mr: 1, p: 1, bgcolor: "#f0f0f0", borderRadius: 2 }}
           placeholder="發送消息..."
@@ -134,7 +140,8 @@ const CustomerChatBox: React.FC = () => {
           onChange={(e) => setInput(e.target.value)}
           inputRef={inputRef}
         />
-        <IconButton color="primary" onClick={handleSendMessage}>
+
+        <IconButton sx={{ color: "white" }} onClick={handleSendMessage}>
           <SendIcon />
         </IconButton>
       </Box>
