@@ -93,3 +93,17 @@ export function transferChat(chatProto: ChatProto) {
     createdTime: chatProto.createdTime,
   }
 }
+
+export const getDeviceType = () => {
+  const ua = navigator.userAgent;
+  if (/tablet|ipad|playbook|silk|mobile|blackberry|phone/i.test(ua)) {
+    return "app";
+  }
+  if (/iphone|ipod/i.test(ua)) {
+    return "ios";
+  }
+  if (/android/i.test(ua)) {
+    return "android";
+  }
+  return "web";
+};

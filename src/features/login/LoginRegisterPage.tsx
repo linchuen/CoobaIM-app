@@ -16,7 +16,7 @@ import { ForgetPasswordDialog } from "./components/ForgetPasswordDialog"
 import { fetchLogin } from "../../services/UserAPI"
 import { setIsLogin, setTokenInfo, setEmail as setGlobaEmail } from "../globalSlice"
 import { useAppDispatch } from "../../app/hooks"
-import { handleFetch } from "../../services/common"
+import { getDeviceType, handleFetch } from "../../services/common"
 import type { LoginResponse } from "../../services/ResponseInterface"
 import { reset } from "../chat/ChatPageSlice"
 import { reset as friendReset } from "../chat/FriendSlice"
@@ -39,6 +39,7 @@ const LoginRegisterPage: React.FC = () => {
       fetchLogin({
         email: email,
         password: password,
+        platform: getDeviceType()
       }),
       data => {
         dispatch(setGlobaEmail(email))

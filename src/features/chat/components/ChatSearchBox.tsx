@@ -59,7 +59,7 @@ const ChatSearchBox: React.FC = () => {
 
     };
     const handleSelect = (chat: ChatInfo) => {
-        dispatch(loadPastChats({ roomId: currentRoomId, date: dayjs(chat.createdTime).format("YYYY/MM/DD") }))
+        dispatch(loadPastChats({ roomId: currentRoomId, date: dayjs(chat.createdTime).format("YYYY-MM-DD") }))
         setOpen(false)
     };
     return (

@@ -15,6 +15,7 @@ export interface FriendSearchRequest {
 export interface LoginRequest {
     email: string;
     password: string;
+    platform: string;
 }
 
 export interface RefreshRequest {

@@ -6,6 +6,7 @@ COPY package*.json ./
 RUN npm install
 
 COPY proto ./proto
+COPY locales ./locales
 COPY src ./src
 COPY .env .
 COPY index.html .
