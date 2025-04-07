@@ -4,7 +4,7 @@ services:
   web:
     build:
       context: .
-      dockerfile: ./APP.dockerfile
+      dockerfile: ./app.dockerfile
     container_name: im_web
     ports:
       - "5173:80"
