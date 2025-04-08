@@ -42,8 +42,6 @@ const ChatContent: React.FC = () => {
         chatId: chatId,
         searchAfter: false
       }))
-      const afterChatId = usePast ? pastChatInfos[0].id : chatInfos[0].id
-      setOpen(chatId === afterChatId)
     }
   }, [chatInfos, currentRoomId, dispatch, pastChatInfos, usePast])
 

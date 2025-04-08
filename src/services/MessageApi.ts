@@ -11,7 +11,7 @@ export const fetchLoadChat = async (
 ): Promise<ApiResponse<ChatLoadResponse>> => {
   return config.useFake
     ? new FakeSuccessResponse({
-      chats: data.searchAfter === undefined ? defaultChats : data.searchAfter ? previousChats : afterChats
+      chats: data.searchAfter === undefined ? defaultChats : data.searchAfter ? afterChats : previousChats
     })
     : callFetch("/chat/load", "POST", token, data)
 }
