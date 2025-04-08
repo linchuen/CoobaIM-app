@@ -1,5 +1,6 @@
 {
     "friendApply": "Friend Apply",
+    "friendApplySuccessfully": "Friend apply successfully",
     "personChat": "Friend Chat",
     "groupChat": "Group Chat",
     "accept": "Accept",
@@ -43,5 +44,9 @@
     "transferPermissionSuccessfully": "Transfer permission successfully",
     "imageDescription": "Image description",
     "fileDescription": "File description",
+    "name": "Name",
+    "phone": "Phone",
+    "register": "Register",
+    "userId": "User ID",
     "": ""
 }

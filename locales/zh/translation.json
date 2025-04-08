@@ -1,5 +1,6 @@
 {
     "friendApply": "好友申請",
+    "friendApplySuccessfully": "好友申請成功",
     "personChat": "好友訊息",
     "groupChat": "群組訊息",
     "accept": "同意",
@@ -41,7 +42,11 @@
     "submit": "送出",
     "transferPermission": "轉移權限",
     "transferPermissionSuccessfully": "Transfer permission 成功",
-    "imageDescription":"圖片說明",
-    "fileDescription":"檔案說明",
+    "imageDescription": "圖片說明",
+    "fileDescription": "檔案說明",
+    "name": "姓名",
+    "phone": "電話",
+    "register": "註冊",
+    "userId": "用戶ID",
     "": ""
 }

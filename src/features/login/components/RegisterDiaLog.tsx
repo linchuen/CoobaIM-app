@@ -14,6 +14,7 @@ import { handleFetch } from "../../../services/common"
 import type {
   RegisterResponse,
 } from "../../../services/ResponseInterface"
+import { t } from "i18next"
 
 interface RegisterDialogProps {
   open: boolean
@@ -52,11 +53,11 @@ export const RegisterDiaLog: React.FC<RegisterDialogProps> = ({
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
-      <DialogTitle>Sign up</DialogTitle>
+      <DialogTitle>{t("signUp")}</DialogTitle>
       <DialogContent>
-      <TextField
+        <TextField
           fullWidth
-          label="Name"
+          label={t("name")}
           variant="outlined"
           margin="normal"
           value={name}
@@ -64,7 +65,7 @@ export const RegisterDiaLog: React.FC<RegisterDialogProps> = ({
         />
         <TextField
           fullWidth
-          label="Email"
+          label={t("email")}
           variant="outlined"
           margin="normal"
           value={email}
@@ -72,7 +73,7 @@ export const RegisterDiaLog: React.FC<RegisterDialogProps> = ({
         />
         <TextField
           fullWidth
-          label="Phone"
+          label={t("phone")}
           variant="outlined"
           margin="normal"
           value={phone}
@@ -80,7 +81,7 @@ export const RegisterDiaLog: React.FC<RegisterDialogProps> = ({
         />
         <TextField
           fullWidth
-          label="Password"
+          label={t("password")}
           type="password"
           variant="outlined"
           margin="normal"
@@ -90,14 +91,14 @@ export const RegisterDiaLog: React.FC<RegisterDialogProps> = ({
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} color="secondary">
-          Cancel
+          {t("cancel")}
         </Button>
         <Button
           variant="contained"
           color="primary"
           onClick={() => handleRegister()}
         >
-          Register
+          {t("register")}
         </Button>
       </DialogActions>
     </Dialog>

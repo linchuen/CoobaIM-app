@@ -18,6 +18,7 @@ import type { ApplyFriendResponse } from "../../../services/ResponseInterface"
 import { selectTokenInfo } from "../../globalSlice"
 import { fetchApplyFriend } from "../../../services/FriendApi"
 import { useAppDispatch, useAppSelector } from "../../../app/hooks"
+import { t } from "i18next"
 
 const AddFriendDiaLog: React.FC = () => {
   const dispatch = useAppDispatch()
@@ -81,7 +82,7 @@ const AddFriendDiaLog: React.FC = () => {
             alignItems: "center",
           }}
         >
-          好友申請
+          {t("friendApply")}
           <IconButton
             onClick={onClose}
             size="small"
@@ -97,7 +98,7 @@ const AddFriendDiaLog: React.FC = () => {
             <TextField
               inputRef={inputRef}
               autoFocus
-              label="User ID"
+              label={t("userId")}
               type="text"
               error={error}
               helperText={helperText}
@@ -109,7 +110,7 @@ const AddFriendDiaLog: React.FC = () => {
               variant="contained"
               sx={{ height: "56px" }}
             >
-              送出
+              {t("submit")}
             </Button>
           </Box>
         </DialogContent>
@@ -126,7 +127,7 @@ const AddFriendDiaLog: React.FC = () => {
           severity={"success"}
           variant="filled"
         >
-          {"好友申請成功！"}
+          {t("friendApplySuccessfully")}!
         </Alert>
       </Snackbar>
     </>
