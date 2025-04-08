@@ -48,5 +48,9 @@
     "phone": "電話",
     "register": "註冊",
     "userId": "用戶ID",
+    "createRoom": "建立聊天室",
+    "create": "建立",
+    "roomName": "聊天室名稱",
+    "createRoomSuccessfully": "建立聊天室成功",
     "": ""
 }

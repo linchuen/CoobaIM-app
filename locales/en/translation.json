@@ -48,5 +48,9 @@
     "phone": "Phone",
     "register": "Register",
     "userId": "User ID",
+    "createRoom": "Create chat room",
+    "create": "Create",
+    "roomName": "Room name",
+    "createRoomSuccessfully": "Create chat room successfully",
     "": ""
 }

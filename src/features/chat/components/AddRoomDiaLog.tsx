@@ -1,5 +1,6 @@
 import {
   Alert,
+  Avatar,
   Box,
   Button,
   Checkbox,
@@ -9,6 +10,7 @@ import {
   IconButton,
   List,
   ListItem,
+  ListItemAvatar,
   ListItemText,
   Snackbar,
   TextField,
@@ -27,6 +29,7 @@ import type {
 } from "../../../services/ResponseInterface"
 import { addRoom } from "../ChatPageSlice";
 import { selectFriendInfoList } from "../FriendSlice"
+import { t } from "i18next"
 
 const AddRoomDiaLog: React.FC = () => {
   const dispatch = useAppDispatch()
@@ -92,7 +95,7 @@ const AddRoomDiaLog: React.FC = () => {
             alignItems: "center",
           }}
         >
-          建立聊天室
+          {t("createRoom")}
           <IconButton
             onClick={() => {
               onClose()
@@ -110,21 +113,38 @@ const AddRoomDiaLog: React.FC = () => {
             <TextField
               inputRef={inputRef}
               autoFocus
-              label="Room Name"
+              label={t("roomName")}
               type="text"
               fullWidth
               variant="outlined"
             />
             <Button onClick={handleCreateRoom} variant="contained">
-              建立
+              {t("create")}
             </Button>
           </Box>
           {/* 好友列表 */}
-          <Typography variant="h6">選擇好友：</Typography>
+          <Typography variant="h6">{t("chooseFriend")}：</Typography>
           <List sx={{ columns: { xs: 1, sm: 2, md: 3 }, gap: 1 }}>
             {friendInfoList.map(info => (
-              <ListItem key={info.friendUserId} onClick={() => handleToggle(info.friendUserId)}>
+              <ListItem
+                key={info.friendUserId}
+                onClick={() => handleToggle(info.friendUserId)}
+                sx={{
+                  border: '1px solid #ddd',
+                  borderRadius: 2,
+                  cursor: 'pointer',
+                  '&:hover': {
+                    backgroundColor: 'action.hover',
+                  },
+                  backgroundColor: selectedFriends.includes(info.friendUserId) ? 'action.selected' : 'inherit',
+                }}
+              >
                 <Checkbox checked={selectedFriends.includes(info.friendUserId)} />
+                <ListItemAvatar>
+                  <Avatar src={info.avatar} alt={info.showName}>
+                    {info.showName[0]}
+                  </Avatar>
+                </ListItemAvatar>
                 <ListItemText primary={info.showName} />
               </ListItem>
             ))}
@@ -143,7 +163,7 @@ const AddRoomDiaLog: React.FC = () => {
           severity={"success"}
           variant="filled"
         >
-          {"聊天室建立成功！"}
+          {t("createRoomSuccessfully")}!
         </Alert>
       </Snackbar>
     </>
