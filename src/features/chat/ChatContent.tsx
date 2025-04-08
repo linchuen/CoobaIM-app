@@ -33,14 +33,27 @@ const ChatContent: React.FC = () => {
   }, [currentRoomId])
 
   const handleScroll = useCallback(() => {
-    if (!chatContainerRef.current) return
+    const chatContainer = chatContainerRef.current
+    if (!chatContainer) return
 
-    if (chatContainerRef.current.scrollTop === 0) {
-      const chatId = usePast ? pastChatInfos[0].id : chatInfos[0].id
+    if (chatContainer.scrollTop === 0) {
+      const chatId = usePast ? pastChatInfos[0]?.id : chatInfos[0]?.id
+      if (!chatId) return
       dispatch(loadChatsByScroll({
         roomId: currentRoomId,
         chatId: chatId,
         searchAfter: false
+      }))
+    }
+
+    const isAtBottom = chatContainer.scrollHeight - chatContainer.scrollTop === chatContainer.clientHeight
+    if (isAtBottom && usePast) {
+      const lastChatId = pastChatInfos[pastChatInfos.length - 1]?.id
+      if (!lastChatId) return
+      dispatch(loadChatsByScroll({
+        roomId: currentRoomId,
+        chatId: lastChatId,
+        searchAfter: true
       }))
     }
   }, [chatInfos, currentRoomId, dispatch, pastChatInfos, usePast])
