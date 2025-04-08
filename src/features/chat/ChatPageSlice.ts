@@ -34,7 +34,8 @@ type MessageState = {
 
 type ChatState = {
   chats: ChatInfo[]
-  roomId: number
+  roomId: number,
+  searchAfter?: boolean
 }
 
 type ChatRoomState = {
@@ -243,6 +244,44 @@ export const chatSlice = createAppSlice({
         rejected: () => { },
       },
     ),
+    loadChatsByScroll: create.asyncThunk(
+      async (request: ChatLoadRequest, { getState }): Promise<ChatState> => {
+        const state = getState() as RootState
+        const tokenInfo = selectTokenInfo(state)
+
+        if (!request.chatId) throw new Error
+
+        const response = await fetchLoadChat(request, tokenInfo?.token)
+        return {
+          chats: response.data.chats,
+          roomId: request.roomId,
+          searchAfter: request.searchAfter
+        }
+      },
+      {
+        pending: () => { },
+        fulfilled: (state, action) => {
+          const chats = action.payload.chats
+          const searchAfter = action.payload.searchAfter
+          const usePast = state.usePast
+
+          const targetList = usePast ? state.pastChatInfoList : state.chatInfoList
+
+          const mergedChats = searchAfter
+            ? [...targetList, ...chats]
+            : [...chats, ...targetList]
+        
+          if (usePast) {
+            console.log(mergedChats)
+            state.pastChatInfoList = mergedChats
+          } else {
+            console.log(mergedChats)
+            state.chatInfoList = mergedChats
+          }
+        },
+        rejected: () => { },
+      },
+    ),
     loadPastChats: create.asyncThunk(
       async (request: ChatLoadDateRequest, { getState }): Promise<ChatState> => {
         const state = getState() as RootState
@@ -330,6 +369,7 @@ export const chatSlice = createAppSlice({
 export const {
   loadGroups,
   loadChats,
+  loadChatsByScroll,
   loadPastChats,
   loadChatUnread,
   subscribeGroups,

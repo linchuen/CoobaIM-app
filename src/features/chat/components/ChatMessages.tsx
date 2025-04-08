@@ -1,4 +1,4 @@
-import { Box, Paper, Typography, Link, ImageList, ImageListItem, ImageListItemBar } from "@mui/material";
+import { Box, Paper, Typography, Link, ImageList, ImageListItem } from "@mui/material";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import { useAppSelector } from "../../../app/hooks";

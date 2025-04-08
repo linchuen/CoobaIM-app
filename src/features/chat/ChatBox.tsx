@@ -1,5 +1,5 @@
 import type React from "react"
-import { useCallback, useEffect, useState } from "react"
+import { useEffect } from "react"
 import { useRef } from "react"
 import {
   AppBar,
@@ -9,8 +9,6 @@ import {
   Box,
   Button,
   TextField,
-  Alert,
-  Snackbar,
   Typography,
 } from "@mui/material"
 import {
@@ -30,7 +28,6 @@ import { useNavigate } from "react-router-dom"
 import UploadDialog from "./components/AddFileDialog"
 import EmojiChatDialog from "./components/AddEmojiDialog"
 import UploadImageDialog from "./components/AddPictureDialog"
-import ChatMessages from "./components/ChatMessages"
 import LiveRoomDialoag from "./components/AddLiveRoomDialog"
 import AddMemberDialog from "./components/AddMemberDialog"
 import RemoveMemberDialog from "./components/RemoveMemberDialog"
@@ -39,6 +36,7 @@ import ChatSearchBox from "./components/ChatSearchBox"
 import { selectIsPersonal } from "./FriendSlice"
 import TransferPermissionDialog from "./components/TransferPermissionDialog"
 import { t } from "i18next"
+import ChatContent from "./ChatContent"
 
 const ChatBox: React.FC = () => {
   const navigate = useNavigate()
@@ -50,7 +48,6 @@ const ChatBox: React.FC = () => {
   const roomName = useAppSelector(selectCurrentRoomName)
   const isPersonal = useAppSelector(selectIsPersonal)
   const emoji = useAppSelector(selectEmoji)
-  const [open, setOpen] = useState(false)
 
   const handleSendMessage = () => {
     if (currentRoomId === 0) return
@@ -79,33 +76,6 @@ const ChatBox: React.FC = () => {
       dispatch(setEmoji(""))
     }
   }, [dispatch, emoji, tokenInfo])
-
-  useEffect(() => {
-    const chatContainer = chatContainerRef.current;
-    if (chatContainer) {
-      chatContainer.scrollTo({ top: chatContainer.scrollHeight, behavior: "smooth" });
-    }
-  }, [currentRoomId])
-
-  const handleScroll = useCallback(() => {
-    if (!chatContainerRef.current) return
-
-    if (chatContainerRef.current.scrollTop === 0) {
-      setOpen(true)
-    }
-  }, [])
-
-  useEffect(() => {
-    const chatContainer = chatContainerRef.current
-    if (chatContainer) {
-      chatContainer.addEventListener("scroll", handleScroll)
-    }
-    return () => {
-      if (chatContainer) {
-        chatContainer.removeEventListener("scroll", handleScroll)
-      }
-    }
-  }, [handleScroll])
 
   return (
     <Box flex={1} display="flex" flexDirection="column" padding={2}>
@@ -138,35 +108,7 @@ const ChatBox: React.FC = () => {
       </AppBar>
 
       {/* Messages */}
-      <Box
-        ref={chatContainerRef}
-        flex={1}
-        padding={2}
-        overflow="auto"
-        display="flex"
-        flexDirection="column"
-        gap={2}
-        sx={{
-          "&::-webkit-scrollbar": {
-            display: "none",
-          },
-          scrollbarWidth: "none",
-        }}
-      >
-        <ChatMessages />
-
-        {/* Snackbar 提示 */}
-        <Snackbar
-          open={open}
-          autoHideDuration={3000}
-          onClose={() => setOpen(false)}
-          anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        >
-          <Alert onClose={() => setOpen(false)} severity="info">
-            已經是最上方
-          </Alert>
-        </Snackbar>
-      </Box>
+      <ChatContent />
 
       {/* Input Area */}
       {currentRoomId !== 0 ?
