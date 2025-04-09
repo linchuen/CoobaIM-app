@@ -11,6 +11,7 @@ import {
   selectChatInfoList,
   selectCurrentRoomId,
   selectPastChatInfoList,
+  selectShowAlert,
   selectUsePast,
 } from "./ChatPageSlice"
 import ChatMessages from "./components/ChatMessages"
@@ -22,6 +23,7 @@ const ChatContent: React.FC = () => {
   const chatInfos = useAppSelector(selectChatInfoList)
   const pastChatInfos = useAppSelector(selectPastChatInfoList)
   const usePast = useAppSelector(selectUsePast)
+  const showAlert = useAppSelector(selectShowAlert)
   const [open, setOpen] = useState(false)
 
   useEffect(() => {
@@ -48,6 +50,7 @@ const ChatContent: React.FC = () => {
         searchAfter: false
       })).then(() => {
         // 加載後補回原來 scrollTop（保持視角不跳動）
+        setOpen(showAlert)
         const newScrollHeight = chatContainer.scrollHeight
         chatContainer.scrollTop = newScrollHeight - prevScrollHeight
       })

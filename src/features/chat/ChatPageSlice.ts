@@ -51,7 +51,8 @@ type ChatRoomState = {
   currentRoomId: number
   currentRoomName: string
   emoji: string
-  usePast: boolean
+  usePast: boolean,
+  showAlert: boolean
 }
 
 const initialState: ChatRoomState = {
@@ -67,7 +68,8 @@ const initialState: ChatRoomState = {
   currentRoomId: 0,
   currentRoomName: "",
   emoji: "",
-  usePast: false
+  usePast: false,
+  showAlert: false
 }
 
 function getPublishType(chatType: ChatType): string {
@@ -122,6 +124,9 @@ export const chatSlice = createAppSlice({
         state.roomChatLoaded.push(action.payload)
       },
     ),
+    setLastChatFail: create.reducer((state, action: PayloadAction<void>) => {
+      state.chatInfoList[state.chatInfoList.length - 1].success = false
+    }),
     addSubscribeEvent: create.reducer(
       (state, action: PayloadAction<string>) => {
         state.eventSubscribeSet.push(action.payload)
@@ -266,12 +271,18 @@ export const chatSlice = createAppSlice({
           const searchAfter = action.payload.searchAfter
           const usePast = state.usePast
 
+          if (chats.length === 0) {
+            state.showAlert = true
+            return
+          }
+
+          state.showAlert = false
           const targetList = usePast ? state.pastChatInfoList : state.chatInfoList
 
           const mergedChats = searchAfter
             ? [...targetList, ...chats]
             : [...chats, ...targetList]
-        
+
           if (usePast) {
             console.log(mergedChats)
             state.pastChatInfoList = mergedChats
@@ -364,6 +375,7 @@ export const chatSlice = createAppSlice({
     selectCurrentRoomName: state => state.currentRoomName,
     selectEmoji: state => state.emoji,
     selectUsePast: state => state.usePast,
+    selectShowAlert: state => state.showAlert
   },
 })
 
@@ -377,6 +389,7 @@ export const {
   setChatType,
   setCurrentRoomId,
   setCurrentRoomName,
+  setLastChatFail,
   sendMessage,
   addRoom,
   addSubscribeEvent,
@@ -398,4 +411,5 @@ export const {
   selectCurrentRoomName,
   selectEmoji,
   selectUsePast,
+  selectShowAlert,
 } = chatSlice.selectors

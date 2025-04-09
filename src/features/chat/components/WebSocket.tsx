@@ -5,9 +5,10 @@ import {
   addRoom,
   loadChatUnread,
   loadGroups,
+  setLastChatFail,
 } from "../ChatPageSlice"
 import { selectTokenInfo, setCallDialogOpen, setErrorDialogOpen, setErrorMessage, setLiveCall } from "../../globalSlice"
-import type { FriendApplyInfo, FriendInfo, LiveCall, RoomInfo } from "../../../services/ResponseInterface"
+import type { ApiResponse, FriendApplyInfo, FriendInfo, LiveCall, RoomInfo } from "../../../services/ResponseInterface"
 import { WebSocketManager } from "../../../services/websocketApi"
 import { addFriend, addFriendApply, loadFriendApply, loadFriends } from "../FriendSlice"
 
@@ -34,9 +35,14 @@ const WebSocket: React.FC = () => {
       dispatch(setLiveCall(newCall))
       console.log("addCallEvent", newCall)
     }
-    const addErrorEvent = (message: string) => {
-      dispatch(setErrorMessage(message))
-      dispatch(setErrorDialogOpen(false))
+    const addErrorEvent = (eror: ApiResponse<null>) => {
+      if (eror.code === 1011) {
+        dispatch(setLastChatFail())
+      } else {
+        dispatch(setErrorMessage(eror.errorMessage ?? "Unknown"))
+        dispatch(setErrorDialogOpen(true))
+      }
+
     }
     const loadData = (webSocket: WebSocketManager) => {
       dispatch(loadFriends({ friendUserIds: [] }))
@@ -48,7 +54,7 @@ const WebSocket: React.FC = () => {
       webSocket.subscribe<FriendInfo>("/user/queue/friend_add", addFriendEvent)
       webSocket.subscribe<RoomInfo>("/user/queue/room_add", addRoomEvent)
       webSocket.subscribe<LiveCall>("/user/queue/live_call", addCallEvent)
-      webSocket.subscribe<string>("/user/queue/error", addErrorEvent)
+      webSocket.subscribe<ApiResponse<null>>("/user/queue/error", addErrorEvent)
     }
 
     if (tokenInfo) {
