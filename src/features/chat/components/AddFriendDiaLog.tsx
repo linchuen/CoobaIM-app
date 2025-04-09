@@ -29,26 +29,17 @@ const AddFriendDiaLog: React.FC = () => {
   const [error, setError] = useState(false)
   const [helperText, setHelperText] = useState("")
 
-  function isPositiveInteger(str: string) {
-    return /^[1-9]\d*$/.test(str)
-  }
-
   const onClose = () => setOpenAddFriend(false)
 
   const handleSubmit = async () => {
     if (inputRef.current && tokenInfo) {
-      const userId = inputRef.current.value
-      if (!isPositiveInteger(userId)) {
-        setError(true)
-        setHelperText("僅允許輸入數字")
-        return
-      }
+      const userName = inputRef.current.value
 
       await handleFetch<ApplyFriendResponse>(
         dispatch,
         fetchApplyFriend({
           applyUserId: tokenInfo.userId,
-          permitUserId: Number(userId),
+          permitUserName: userName,
         }, tokenInfo.token),
         data => {
           setError(false)
@@ -98,7 +89,7 @@ const AddFriendDiaLog: React.FC = () => {
             <TextField
               inputRef={inputRef}
               autoFocus
-              label={t("userId")}
+              label={t("name")}
               type="text"
               error={error}
               helperText={helperText}

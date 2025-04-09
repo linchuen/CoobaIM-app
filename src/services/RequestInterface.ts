@@ -1,6 +1,6 @@
 export interface FriendRequest {
     applyUserId: number;
-    permitUserId: number;
+    permitUserName: string;
     isPermit?: boolean;
 }
 
