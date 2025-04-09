@@ -29,7 +29,7 @@ export const RegisterDiaLog: React.FC<RegisterDialogProps> = ({
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [name, setName] = useState("")
-  const [phone, setPhone] = useState("")
+  // const [phone, setPhone] = useState("")
 
   const handleRegister = () => {
     if (name.trim().length === 0 || email.trim().length === 0 || password.trim().length === 0) return
@@ -44,8 +44,7 @@ export const RegisterDiaLog: React.FC<RegisterDialogProps> = ({
         setEmail("")
         setPassword("")
         setName("")
-        setPhone("")
-        setPhone("")
+        // setPhone("")
         onClose()
       },
     )
@@ -71,14 +70,14 @@ export const RegisterDiaLog: React.FC<RegisterDialogProps> = ({
           value={email}
           onChange={e => setEmail(e.target.value)}
         />
-        <TextField
+        {/* <TextField
           fullWidth
           label={t("phone")}
           variant="outlined"
           margin="normal"
           value={phone}
           onChange={e => setPhone(e.target.value)}
-        />
+        /> */}
         <TextField
           fullWidth
           label={t("password")}
