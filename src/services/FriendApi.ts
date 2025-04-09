@@ -1,4 +1,5 @@
 import type {
+  FriendApplyRequest,
   FriendRemoveRequest,
   FriendRequest,
   FriendSearchRequest,
@@ -15,7 +16,7 @@ import config from "../app/config"
 import { FakeSuccessResponse } from "./FakeSuccessResponse"
 
 export const fetchApplyFriend = async (
-  data: FriendRequest,
+  data: FriendApplyRequest,
   token: string,
 ): Promise<ApiResponse<ApplyFriendResponse>> => {
   return config.useFake
