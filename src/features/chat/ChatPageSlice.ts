@@ -188,6 +188,7 @@ export const chatSlice = createAppSlice({
           state.chatInfoList.push(chatInfo)
           const chatInfoList = state.roomChatMap[chatInfo.roomId] ?? []
           chatInfoList.push(chatInfo)
+          state.usePast = false
         },
         rejected: () => { },
       },

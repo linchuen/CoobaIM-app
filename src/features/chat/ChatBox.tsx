@@ -65,7 +65,7 @@ const ChatBox: React.FC = () => {
 
       const chatContainer = chatContainerRef.current;
       if (chatContainer) {
-        chatContainer.scrollTo({ top: chatContainer.scrollHeight, behavior: "smooth" });
+        chatContainer.scrollTop = chatContainer.scrollHeight
       }
     }
   }
