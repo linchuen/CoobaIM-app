@@ -71,7 +71,7 @@ export interface SpeakRequest {
 
 export interface ChatLoadRequest {
     roomId: number;
-    chatId?: number;
+    chatId?: string;
     searchAfter?: boolean;
 }
 
@@ -94,7 +94,7 @@ export interface ParticipantTokenRequest {
 
 export interface ChatIsReadRequest{
     roomId: number;
-    chatId: number;
+    chatId: string;
 }
 
 export interface ChatLoadDateRequest{

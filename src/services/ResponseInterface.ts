@@ -97,7 +97,7 @@ export interface RoomMemberResponse {
 
 export interface ChatInfo {
   uuid?: string,
-  id: number
+  id: string
   name: string
   roomId: number
   userId: number

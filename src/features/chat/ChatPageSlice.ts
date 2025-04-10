@@ -173,7 +173,7 @@ export const chatSlice = createAppSlice({
 
         return {
           uuid: request.uuid,
-          id: Math.floor(Math.random() * 100000000),
+          id: Math.floor(Math.random() * 100000000)+"",
           name: tokenInfo?.name ?? "",
           roomId: request.roomId,
           userId: tokenInfo?.userId ?? 1,
@@ -348,7 +348,7 @@ export const chatSlice = createAppSlice({
         const state = getState() as RootState
         const tokenInfo = selectTokenInfo(state)
         const roomUnreadMap = selectRoomUnreadMap(state)
-        const chatId = roomUnreadMap[roomId] ? roomUnreadMap[roomId].chat.id : 0
+        const chatId = roomUnreadMap[roomId] ? roomUnreadMap[roomId].chat.id : "0"
         await fetchSetChatIsRead({ roomId: roomId, chatId: chatId }, tokenInfo?.token)
         return roomId
       },

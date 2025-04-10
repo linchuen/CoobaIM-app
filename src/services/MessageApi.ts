@@ -26,7 +26,7 @@ export const fetchLoadChatUnread = async (
         {
           "roomId": 1,
           "chat": {
-            "id": 22,
+            "id": "22",
             "name": "Alice",
             "roomId": 2,
             "userId": 2,
@@ -39,7 +39,7 @@ export const fetchLoadChatUnread = async (
         {
           "roomId": 2,
           "chat": {
-            "id": 22,
+            "id": "22",
             "name": "Bob",
             "roomId": 10,
             "userId": 1,
@@ -52,7 +52,7 @@ export const fetchLoadChatUnread = async (
         {
           "roomId": 10,
           "chat": {
-            "id": 22,
+            "id": "22",
             "name": "Alice",
             "roomId": 1,
             "userId": 2,
@@ -84,7 +84,7 @@ export const fetchLoadChatByDate = async (
     ? new FakeSuccessResponse({
       chats: [
         {
-          "id": 1,
+          "id": "1",
           "userId": 2,
           "name": "Alice",
           "roomId": 1,
@@ -93,7 +93,7 @@ export const fetchLoadChatByDate = async (
           "createdTime": "2025-04-01T10:00:00Z"
         },
         {
-          "id": 2,
+          "id": "2",
           "userId": 1,
           "name": "Bob",
           "roomId": 1,
@@ -102,7 +102,7 @@ export const fetchLoadChatByDate = async (
           "createdTime": "2025-04-01T10:01:15Z"
         },
         {
-          "id": 3,
+          "id": "3",
           "userId": 2,
           "name": "Alice",
           "roomId": 1,
@@ -111,7 +111,7 @@ export const fetchLoadChatByDate = async (
           "createdTime": "2025-04-01T10:02:40Z"
         },
         {
-          "id": 4,
+          "id": "4",
           "userId": 1,
           "name": "Bob",
           "roomId": 1,
@@ -120,7 +120,7 @@ export const fetchLoadChatByDate = async (
           "createdTime": "2025-04-01T10:04:00Z"
         },
         {
-          "id": 5,
+          "id": "5",
           "userId": 2,
           "name": "Alice",
           "roomId": 1,
@@ -130,7 +130,7 @@ export const fetchLoadChatByDate = async (
           "createdTime": "2025-04-01T10:05:30Z"
         },
         {
-          "id": 6,
+          "id": "6",
           "userId": 1,
           "name": "Bob",
           "roomId": 1,
@@ -139,7 +139,7 @@ export const fetchLoadChatByDate = async (
           "createdTime": "2025-04-01T10:06:45Z"
         },
         {
-          "id": 7,
+          "id": "7",
           "userId": 2,
           "name": "Alice",
           "roomId": 1,
@@ -148,7 +148,7 @@ export const fetchLoadChatByDate = async (
           "createdTime": "2025-04-01T10:08:10Z"
         },
         {
-          "id": 8,
+          "id": "8",
           "userId": 1,
           "name": "Bob",
           "roomId": 1,
@@ -157,7 +157,7 @@ export const fetchLoadChatByDate = async (
           "createdTime": "2025-04-01T10:09:30Z"
         },
         {
-          "id": 9,
+          "id": "9",
           "userId": 2,
           "name": "Alice",
           "roomId": 1,
@@ -166,7 +166,7 @@ export const fetchLoadChatByDate = async (
           "createdTime": "2025-04-01T10:10:45Z"
         },
         {
-          "id": 10,
+          "id": "10",
           "userId": 1,
           "name": "Bob",
           "roomId": 1,
@@ -175,7 +175,7 @@ export const fetchLoadChatByDate = async (
           "createdTime": "2025-04-01T10:12:00Z"
         },
         {
-          "id": 11,
+          "id": "11",
           "userId": 2,
           "name": "Alice",
           "roomId": 1,
@@ -185,7 +185,7 @@ export const fetchLoadChatByDate = async (
           "createdTime": "2025-04-01T10:13:30Z"
         },
         {
-          "id": 12,
+          "id": "12",
           "userId": 1,
           "name": "Bob",
           "roomId": 1,
@@ -194,7 +194,7 @@ export const fetchLoadChatByDate = async (
           "createdTime": "2025-04-01T10:15:00Z"
         },
         {
-          "id": 13,
+          "id": "13",
           "userId": 2,
           "name": "Alice",
           "roomId": 1,
@@ -203,7 +203,7 @@ export const fetchLoadChatByDate = async (
           "createdTime": "2025-04-01T10:16:20Z"
         },
         {
-          "id": 14,
+          "id": "14",
           "userId": 1,
           "name": "Bob",
           "roomId": 1,
@@ -212,7 +212,7 @@ export const fetchLoadChatByDate = async (
           "createdTime": "2025-04-01T10:17:40Z"
         },
         {
-          "id": 15,
+          "id": "15",
           "userId": 2,
           "name": "Alice",
           "roomId": 1,
@@ -222,7 +222,7 @@ export const fetchLoadChatByDate = async (
           "createdTime": "2025-04-01T10:19:00Z"
         },
         {
-          "id": 16,
+          "id": "16",
           "userId": 1,
           "name": "Bob",
           "roomId": 1,
@@ -243,7 +243,7 @@ export const fetchSearchChat = async (
     ? new FakeSuccessResponse({
       chats: [
         {
-          "id": 9,
+          "id": "9",
           "userId": 2,
           "name": "Alice",
           "roomId": 1,
@@ -252,7 +252,7 @@ export const fetchSearchChat = async (
           "createdTime": "2025-03-30T09:09:20Z"
         },
         {
-          "id": 10,
+          "id": "10",
           "userId": 1,
           "name": "Bob",
           "roomId": 1,
@@ -261,7 +261,7 @@ export const fetchSearchChat = async (
           "createdTime": "2025-03-30T09:10:30Z"
         },
         {
-          "id": 11,
+          "id": "11",
           "userId": 2,
           "name": "Alice",
           "roomId": 1,
@@ -271,7 +271,7 @@ export const fetchSearchChat = async (
           "createdTime": "2025-03-30T09:11:45Z"
         },
         {
-          "id": 12,
+          "id": "12",
           "userId": 1,
           "name": "Bob",
           "roomId": 1,
@@ -280,7 +280,7 @@ export const fetchSearchChat = async (
           "createdTime": "2025-03-30T09:13:00Z"
         },
         {
-          "id": 13,
+          "id": "13",
           "userId": 2,
           "name": "Alice",
           "roomId": 1,
@@ -289,7 +289,7 @@ export const fetchSearchChat = async (
           "createdTime": "2025-03-30T09:14:10Z"
         },
         {
-          "id": 22,
+          "id": "22",
           "userId": 1,
           "name": "Bob",
           "roomId": 1,

@@ -35,7 +35,7 @@ const FloatingModal: React.FC = () => {
   const addMessageEvent = () => {
     dispatch(subscribeGroups({
       newChat: {
-        id: 23,
+        id: "23",
         name: "Alice",
         roomId: 1,
         userId: 2,

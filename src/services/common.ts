@@ -82,7 +82,7 @@ export function transferChat(chatProto: ChatProto) {
   console.log("new chat", chatProto)
   return {
     uuid: chatProto.uuid,
-    id: Number(chatProto.id),
+    id: chatProto.id,
     name: chatProto.name,
     roomId: chatProto.roomId,
     userId: chatProto.userId,
