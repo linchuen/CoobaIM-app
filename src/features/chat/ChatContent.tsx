@@ -25,6 +25,7 @@ const ChatContent: React.FC = () => {
   const usePast = useAppSelector(selectUsePast)
   const showAlert = useAppSelector(selectShowAlert)
   const [open, setOpen] = useState(false)
+  const isLoadingRef = useRef(false)
 
   useEffect(() => {
     const chatContainer = chatContainerRef.current
@@ -33,44 +34,49 @@ const ChatContent: React.FC = () => {
     }
   }, [currentRoomId, chatInfos.length])
 
+
   const handleScroll = useCallback(() => {
+    if (isLoadingRef.current) return
     const chatContainer = chatContainerRef.current
     if (!chatContainer) return
-
-    // 向上加載
+  
     if (chatContainer.scrollTop === 0) {
-      const chatId = usePast ? pastChatInfos[0]?.id : chatInfos[0]?.id
+      const currentChatInfos = usePast ? pastChatInfos : chatInfos
+      const chatId = currentChatInfos?.[0]?.id
       if (!chatId) return
-
+  
       const prevScrollHeight = chatContainer.scrollHeight
-
+      isLoadingRef.current = true
+  
       dispatch(loadChatsByScroll({
         roomId: currentRoomId,
-        chatId: chatId,
+        chatId,
         searchAfter: false
       })).then(() => {
-        // 加載後補回原來 scrollTop（保持視角不跳動）
+        isLoadingRef.current = false
         setOpen(showAlert)
         const newScrollHeight = chatContainer.scrollHeight
         chatContainer.scrollTop = newScrollHeight - prevScrollHeight
       })
-
+  
       return
     }
-
-    // 向下加載（只在 usePast 為 true 時支援）
+  
     const isAtBottom = chatContainer.scrollTop + chatContainer.clientHeight >= chatContainer.scrollHeight - 10
     if (isAtBottom && usePast) {
       const lastChatId = pastChatInfos[pastChatInfos.length - 1]?.id
       if (!lastChatId) return
-
+      isLoadingRef.current = true
       dispatch(loadChatsByScroll({
         roomId: currentRoomId,
         chatId: lastChatId,
         searchAfter: true
-      }))
+      })).finally(() => {
+        isLoadingRef.current = false
+      })
     }
-  }, [chatInfos, currentRoomId, dispatch, pastChatInfos, usePast])
+  }, [chatInfos, currentRoomId, dispatch, pastChatInfos, showAlert, usePast])
+  
 
   // 綁定 scroll 事件
   useEffect(() => {
