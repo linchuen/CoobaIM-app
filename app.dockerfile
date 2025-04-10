@@ -8,6 +8,7 @@ RUN --mount=type=cache,target=/root/.npm \
 
 COPY proto ./proto
 COPY locales ./locales
+COPY .env ./.env
 COPY src ./src
 COPY index.html .
 COPY vite.config.ts .
