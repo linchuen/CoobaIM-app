@@ -53,6 +53,8 @@ const ChatBox: React.FC = () => {
     if (currentRoomId === 0) return
 
     if (inputRef.current && tokenInfo) {
+      if(inputRef.current.value.trim() === "") return
+
       dispatch(
         sendMessage({
           uuid: uuidv4(),
