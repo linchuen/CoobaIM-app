@@ -12,6 +12,21 @@ const ChatMessages: React.FC = () => {
     const tokenInfo = useAppSelector(selectTokenInfo)
     const userId = tokenInfo?.userId
 
+    const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>, url: string | undefined) => {
+        if (!url) return;
+        try {
+            const { pathname } = new URL(url);
+            const img = e.currentTarget as HTMLImageElement;
+
+            if (img.dataset.retried === "true") return
+            img.onerror = null;
+            img.src = `/api/file/images${pathname}`
+            img.dataset.retried = "true"
+        } catch (error) {
+            console.error("Invalid image URL:", url, error);
+        }
+    }
+
     return (
         <Box display="flex" flexDirection="column" gap={1}>
             {(usePast ? pastChatInfos : chatInfos).map((chat) => {
@@ -55,6 +70,7 @@ const ChatMessages: React.FC = () => {
                                                         alt={`image-${index}`}
                                                         loading="lazy"
                                                         style={{ borderRadius: 8, width: "100%" }}
+                                                        onError={(e) => handleImageError(e, url)}
                                                     />
                                                 </ImageListItem>
                                             ))}
