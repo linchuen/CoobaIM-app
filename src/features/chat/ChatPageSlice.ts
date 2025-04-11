@@ -151,7 +151,10 @@ export const chatSlice = createAppSlice({
           unread: state.currentRoomId === roomId ? 0 : lastChatAndUnRead.unread + 1
         }
 
-        if (state.currentRoomId === roomId && userId !== newChat.userId) {
+        if (state.currentRoomId === roomId) {
+          if (userId === newChat.userId) {
+            state.chatInfoList.pop()
+          }
           state.chatInfoList.push(newChat)
         }
         state.roomSubscribeSet.push(roomId)
@@ -173,7 +176,7 @@ export const chatSlice = createAppSlice({
 
         return {
           uuid: request.uuid,
-          id: Math.floor(Math.random() * 100000000)+"",
+          id: "0",
           name: tokenInfo?.name ?? "",
           roomId: request.roomId,
           userId: tokenInfo?.userId ?? 1,
@@ -191,8 +194,6 @@ export const chatSlice = createAppSlice({
           console.log("new chat", chatInfo)
 
           state.chatInfoList.push(chatInfo)
-          const chatInfoList = state.roomChatMap[chatInfo.roomId] ?? []
-          chatInfoList.push(chatInfo)
           state.usePast = false
         },
         rejected: () => { },
