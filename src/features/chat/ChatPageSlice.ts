@@ -357,7 +357,9 @@ export const chatSlice = createAppSlice({
         pending: () => { },
         fulfilled: (state, action) => {
           const roomId = action.payload
-          state.roomUnreadMap[roomId].unread = 0
+          if (state.roomUnreadMap[roomId]) {
+            state.roomUnreadMap[roomId].unread = 0
+          }
         },
         rejected: () => { },
       },
