@@ -40,7 +40,9 @@ export class WebSocketManager {
             reconnectDelay: 5000, // 自動重連間隔（5秒）
             connectHeaders: {
                 Authorization: `Bearer ${token}`
-            }
+            },
+            heartbeatIncoming: 10000,
+            heartbeatOutgoing: 10000
         });
 
         this.stompClient.onConnect = () => {
