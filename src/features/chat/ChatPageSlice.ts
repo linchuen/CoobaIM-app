@@ -335,7 +335,7 @@ export const chatSlice = createAppSlice({
           state.roomUnreadMap = chatAndUnReads.reduce((accumulator, chat) => {
             accumulator[chat.roomId] = chat;
             const isSelf = chat.chat.userId === action.payload.userId
-            console.log(chat.roomId, isSelf)
+            console.log("room %s unread isSelf:%s",chat.roomId, isSelf)
             chat.unread = isSelf ? 0 : chat.unread
             return accumulator;
           }, {} as Record<number, LastChatAndUnRead>);
