@@ -40,7 +40,7 @@ const ChatMessages: React.FC = () => {
                 const fileUrls = [chat.url];
                 return (
                     <Box
-                        key={chat.id}
+                        key={chat.uuid}
                         display="flex"
                         flexDirection="column"
                         alignItems={isSelf ? "flex-end" : "flex-start"}
