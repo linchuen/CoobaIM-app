@@ -41,8 +41,8 @@ export class WebSocketManager {
             connectHeaders: {
                 Authorization: `Bearer ${token}`
             },
-            heartbeatIncoming: 10000,
-            heartbeatOutgoing: 10000
+            heartbeatIncoming: 60000,
+            heartbeatOutgoing: 60000
         });
 
         this.stompClient.onConnect = () => {
