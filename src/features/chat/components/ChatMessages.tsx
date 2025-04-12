@@ -2,25 +2,31 @@ import { Box, Paper, Typography, Link, ImageList, ImageListItem } from "@mui/mat
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import { useAppSelector } from "../../../app/hooks";
-import { selectChatInfoList, selectPastChatInfoList, selectUsePast } from "../ChatPageSlice";
+import { selectChatInfoList, selectCurrentRoomId, selectPastChatInfoList, selectUsePast } from "../ChatPageSlice";
 import { selectTokenInfo } from "../../globalSlice";
+import { fetchGetImage } from "../../../services/FileApi";
 
 const ChatMessages: React.FC = () => {
     const chatInfos = useAppSelector(selectChatInfoList)
     const pastChatInfos = useAppSelector(selectPastChatInfoList)
     const usePast = useAppSelector(selectUsePast)
     const tokenInfo = useAppSelector(selectTokenInfo)
+    const currentRoomId = useAppSelector(selectCurrentRoomId)
     const userId = tokenInfo?.userId
 
-    const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>, url: string | undefined) => {
+    const handleImageError = async (e: React.SyntheticEvent<HTMLImageElement, Event>, url: string | undefined) => {
         if (!url) return;
         try {
             const { pathname } = new URL(url);
             const img = e.currentTarget as HTMLImageElement;
 
-            if (img.dataset.retried === "true") return
+            if (img.dataset.retried === "true" || !tokenInfo) return
+
+            const fileName = pathname.split("/")[2]
+
+            const imageUrl = await fetchGetImage(currentRoomId, fileName, tokenInfo.token)
             img.onerror = null;
-            img.src = `/api/file/images${pathname}`
+            img.src = imageUrl
             img.dataset.retried = "true"
         } catch (error) {
             console.error("Invalid image URL:", url, error);

@@ -91,3 +91,25 @@ export const fetchAvatarUpload = async (
         throw error;
     }
 }
+
+export const fetchGetImage = async (
+    roomId: number,
+    fileName: string,
+    token: string,
+): Promise<string> => {
+    try {
+        const res = await fetch(`/api/file/images/${roomId}/${fileName}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        const blob = await res.blob();
+        const objectUrl = URL.createObjectURL(blob);
+
+        return objectUrl;
+    } catch (error) {
+        console.error("Fallback image fetch failed:", error);
+        throw error;
+    }
+}

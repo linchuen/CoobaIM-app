@@ -1,10 +1,8 @@
 import type { PayloadAction } from "@reduxjs/toolkit"
 import { createAppSlice } from "../app/createAppSlice"
-import type { LiveCall, LoginResponse, UserDetail } from "../services/ResponseInterface"
+import type { LiveCall, LoginResponse } from "../services/ResponseInterface"
 import { fetchFreshToken } from "../services/UserAPI"
 import type { RefreshRequest } from "../services/RequestInterface"
-import { CustomerDetailRequest } from "../services/cs/CsRequestInterface"
-import { fetchGetDetails } from "../services/cs/CustomerApi"
 import type { RootState } from "../app/store"
 
 interface TokenInfo {

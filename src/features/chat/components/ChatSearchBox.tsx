@@ -1,14 +1,12 @@
 import type React from 'react';
 import { useState, useRef } from 'react';
 import {
-    TextField,
     Popper,
     Paper,
     List,
     ListItem,
     ListItemButton,
     ListItemText,
-    CircularProgress,
     InputBase,
     IconButton,
     Alert,
