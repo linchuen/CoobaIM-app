@@ -67,6 +67,8 @@ const UploadImageDialog: React.FC = () => {
                         type: "IMAGE"
                     }),
                 )
+                setFile(null);
+                setImage(null);
             },
         )
         onClose()

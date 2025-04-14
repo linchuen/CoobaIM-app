@@ -45,6 +45,7 @@ const UploadDialog: React.FC = () => {
                     }),
                 )
                 setUploadedFileName(data.fileName ?? "")
+                setFile(null)
             },
         )
         onClose()
