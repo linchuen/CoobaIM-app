@@ -5,7 +5,7 @@ const globalConfig = {
   wsUrl:  "/ws" ,
   livekitUrl: import.meta.env.VITE_LIVEKIT,
   appName: "Cooba IM App",
-  useFake: false,
+  useFake: true,
   testRole: RoleType.USER,
 }
 
