@@ -61,9 +61,7 @@ const ChatBox: React.FC = () => {
           uuid: uuidv4(),
           roomId: currentRoomId,
           message: inputRef.current.value,
-          userId: tokenInfo.userId,
-          url: "",
-          type: MessageType.TEXT
+          userId: tokenInfo.userId
         }),
       )
       inputRef.current.value = ""
