@@ -65,8 +65,8 @@ export interface SpeakRequest {
     roomId: number;
     userId: number,
     message: string;
-    url?: string;
-    type?: string;
+    url: string;
+    type: string;
 }
 
 export interface ChatLoadRequest {

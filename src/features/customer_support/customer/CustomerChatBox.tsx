@@ -12,6 +12,7 @@ import EmojiChatDialog from "../../chat/components/AddEmojiDialog";
 import UploadDialog from "../../chat/components/AddFileDialog";
 import LiveRoomDialoag from "../../chat/components/AddLiveRoomDialog";
 import UploadImageDialog from "../../chat/components/AddPictureDialog";
+import { MessageType } from "../../../services/constant";
 
 
 const CustomerChatBox: React.FC = () => {
@@ -40,7 +41,9 @@ const CustomerChatBox: React.FC = () => {
           uuid: uuidv4(),
           roomId: currentRoomId,
           message: inputRef.current.value,
-          userId: tokenInfo.userId
+          userId: tokenInfo.userId,
+          url: "",
+          type: MessageType.TEXT
         }),
       )
       setInput("");

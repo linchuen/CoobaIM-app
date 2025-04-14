@@ -37,6 +37,7 @@ import { selectIsPersonal } from "./FriendSlice"
 import TransferPermissionDialog from "./components/TransferPermissionDialog"
 import { t } from "i18next"
 import ChatContent from "./ChatContent"
+import { MessageType } from "../../services/constant"
 
 const ChatBox: React.FC = () => {
   const navigate = useNavigate()
@@ -60,7 +61,9 @@ const ChatBox: React.FC = () => {
           uuid: uuidv4(),
           roomId: currentRoomId,
           message: inputRef.current.value,
-          userId: tokenInfo.userId
+          userId: tokenInfo.userId,
+          url: "",
+          type: MessageType.TEXT
         }),
       )
       inputRef.current.value = ""
