@@ -23,6 +23,7 @@ import { handleFetch } from "../../../services/common";
 import type { UploadFileResponse } from "../../../services/ResponseInterface";
 import { fetchFileUpload } from "../../../services/FileApi";
 import { t } from "i18next";
+import { MessageType } from "../../../services/constant";
 
 const UploadImageDialog: React.FC = () => {
     const dispatch = useAppDispatch()
@@ -64,7 +65,7 @@ const UploadImageDialog: React.FC = () => {
                         message: descriptionRef.current?.value || "",
                         userId: tokenInfo.userId,
                         url: data.url,
-                        type: "IMAGE"
+                        type: MessageType.IMAGE
                     }),
                 )
                 setFile(null);

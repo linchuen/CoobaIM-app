@@ -5,6 +5,7 @@ import { useAppSelector } from "../../../app/hooks";
 import { selectChatInfoList, selectCurrentRoomId, selectPastChatInfoList, selectUsePast } from "../ChatPageSlice";
 import { selectTokenInfo } from "../../globalSlice";
 import { fetchGetImage } from "../../../services/FileApi";
+import { MessageType } from "../../../services/constant";
 
 const ChatMessages: React.FC = () => {
     const chatInfos = useAppSelector(selectChatInfoList)
@@ -62,11 +63,11 @@ const ChatMessages: React.FC = () => {
                                     boxShadow: 2,
                                 }}
                             >
-                                {(chat.type === "TEXT" || chat.type === undefined) && (
+                                {(chat.type === MessageType.TEXT || chat.type === undefined) && (
                                     <Typography variant="body2">{chat.message}</Typography>
                                 )}
 
-                                {chat.type === "IMAGE" && fileUrls && fileUrls.length > 0 && (
+                                {chat.type === MessageType.IMAGE && fileUrls && fileUrls.length > 0 && (
                                     <>
                                         <ImageList cols={fileUrls.length > 1 ? 2 : 1} gap={8}>
                                             {fileUrls.map((url, index) => (
@@ -85,7 +86,7 @@ const ChatMessages: React.FC = () => {
                                     </>
                                 )}
 
-                                {chat.type === "FILE" && chat.url && chat.message && (
+                                {chat.type === MessageType.FILE && chat.url && chat.message && (
                                     <Box display="flex" alignItems="center" sx={{ gap: 0.5 }}>
                                         <AttachFileIcon sx={{ fontSize: 23, color: "white" }} />
                                         <Link

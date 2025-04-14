@@ -140,7 +140,7 @@ export class WebSocketManager {
         this.stompClient.publish({
             destination: destination,
             binaryBody: message.serializeBinary(),
-            headers: { "content-type": "application/protobuf" },
+            headers: { "content-type": "application/octet-stream" },
         });
         console.log(`📤 Sent message to ${destination}:`, message);
     }

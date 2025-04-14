@@ -37,6 +37,7 @@ import { selectIsPersonal } from "./FriendSlice"
 import TransferPermissionDialog from "./components/TransferPermissionDialog"
 import { t } from "i18next"
 import ChatContent from "./ChatContent"
+import { MessageType } from "../../services/constant"
 
 const ChatBox: React.FC = () => {
   const navigate = useNavigate()

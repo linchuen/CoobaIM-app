@@ -10,6 +10,7 @@ import { AttachFile } from "@mui/icons-material";
 import { handleFetch } from "../../../services/common";
 import type { UploadFileResponse } from "../../../services/ResponseInterface";
 import { t } from "i18next";
+import { MessageType } from "../../../services/constant";
 
 const UploadDialog: React.FC = () => {
     const dispatch = useAppDispatch()
@@ -41,7 +42,7 @@ const UploadDialog: React.FC = () => {
                         message: descriptionRef.current?.value || "",
                         userId: tokenInfo.userId,
                         url: data.url,
-                        type: "FILE"
+                        type: MessageType.FILE
                     }),
                 )
                 setUploadedFileName(data.fileName ?? "")

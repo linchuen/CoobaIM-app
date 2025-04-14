@@ -17,3 +17,10 @@ export enum TabType {
     PERSONAL = "personal",
     FRIEND_APPLY = "friendApply",
 }
+
+export enum MessageType {
+    TEXT = "TEXT",
+    IMAGE = "IMAGE",
+    FILE = "FILE",
+    VIDEO = "VIDEO",
+}

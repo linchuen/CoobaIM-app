@@ -12,6 +12,7 @@ import EmojiChatDialog from "../../chat/components/AddEmojiDialog";
 import UploadDialog from "../../chat/components/AddFileDialog";
 import LiveRoomDialoag from "../../chat/components/AddLiveRoomDialog";
 import UploadImageDialog from "../../chat/components/AddPictureDialog";
+import { MessageType } from "../../../services/constant";
 
 
 const CustomerChatBox: React.FC = () => {
