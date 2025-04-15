@@ -7,7 +7,7 @@ import type { AppDispatch } from "../app/store"
 import config from "../app/config"
 import type { ChatType } from "./constant"
 import { loadChats, setChatType, setCurrentRoomId, setCurrentRoomName } from "../features/chat/ChatPageSlice"
-import type { ChatInfo as ChatProto } from "../../proto/ChatProto"
+import type { ChatInfo as ChatProto } from "../proto/ChatProto"
 
 export async function callFetch(
   url: string,

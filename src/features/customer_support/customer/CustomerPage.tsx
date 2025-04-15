@@ -25,7 +25,7 @@ import { selectRoomSubscribeSet, subscribeGroups, setCurrentRoomId, setCurrentRo
 import { selectChannelList, selectChannelLoaded } from "../ChannelSlice";
 import { fetchEnterRoom } from "../../../services/cs/CustomerApi";
 import { selectCustomerAgents } from "../AgentSlice";
-import { ChatInfo as ChatProto } from "../../../../proto/ChatProto"
+import { ChatInfo as ChatProto } from "../../../proto/ChatProto"
 
 const CustomerPage: React.FC = () => {
   const navigate = useNavigate()

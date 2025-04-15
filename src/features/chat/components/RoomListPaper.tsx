@@ -11,7 +11,7 @@ import { selectTokenInfo } from "../../globalSlice"
 import { selectRoomInfoList, selectRoomSubscribeSet, selectRoomUnreadMap, subscribeGroups, setChatType, setCurrentRoomId, setCurrentRoomName, loadChats, resetUnreadCount } from "../ChatPageSlice"
 import { setIsPersonal } from "../FriendSlice"
 import AddRoomDiaLog from "./AddRoomDiaLog"
-import { ChatInfo as ChatProto } from "../../../../proto/ChatProto"
+import { ChatInfo as ChatProto } from "../../../proto/ChatProto"
 
 
 const RoomListPaper: React.FC = () => {

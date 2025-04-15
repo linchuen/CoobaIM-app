@@ -15,8 +15,7 @@ export default defineConfig({
       devOptions: {
         enabled: true,
         type: 'module',
-        navigateFallback: 'index.html',
-        suppressWarnings: true
+        navigateFallback: 'index.html'
       },
       manifest: {
         name: 'todoListEX',

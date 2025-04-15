@@ -19,7 +19,7 @@ import type { PayloadAction } from "@reduxjs/toolkit"
 import { WebSocketManager } from "../../services/websocketApi"
 import config from "../../app/config"
 import { ChatType } from "../../services/constant"
-import { SpeakRequest as Speak } from "../../../proto/SpeakProto"
+import { SpeakRequest as Speak } from "../../proto/SpeakProto"
 
 type UnreadState = {
   chatAndUnReads: LastChatAndUnRead[]
