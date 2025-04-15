@@ -18,8 +18,9 @@ export default defineConfig({
         navigateFallback: 'index.html'
       },
       manifest: {
-        name: 'todoListEX',
-        short_name: 'todoListEX',
+        name: 'Cooba',
+        short_name: 'Cooba',
+        description: 'Cooba App 聊天室',
         theme_color: '#070809',
         background_color: '#070809',
         display: 'standalone',
@@ -27,14 +28,12 @@ export default defineConfig({
         start_url: '/',
         icons: [
           {
-            purpose: 'maskable',
-            src: '/src/assets/icons/"icon512_maskable.png',
+            src: '/logo.svg',
             sizes: '512x512',
-            type: 'image/png'
+            type: 'image/svg+xml'
           },
           {
-            purpose: 'any',
-            src: '/src/assets/icons/icon512_rounded.png',
+            src: '/apple-touch-icon.png',
             sizes: '512x512',
             type: 'image/png'
           }
