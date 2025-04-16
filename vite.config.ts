@@ -11,7 +11,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate', // 每次啟動會自動檢查更新
-      includeAssets: ['favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
+      includeAssets: ['favicon.ico', 'robots.txt', 'apple-touch-icon.png', 'android-chrome-512x512.png', '/android-chrome-192x192.png'],
       devOptions: {
         enabled: true,
         type: 'module',
@@ -28,13 +28,23 @@ export default defineConfig({
         start_url: '/',
         icons: [
           {
-            src: '/logo.svg',
-            sizes: '512x512',
-            type: 'image/svg+xml'
-          },
-          {
             src: '/apple-touch-icon.png',
             sizes: '512x512',
+            type: 'image/png'
+          },
+          {
+            src: '/android-chrome-512x512.png',
+            sizes: '512x512',
+            type: 'image/png'
+          },
+          {
+            src: '/android-chrome-192x192.png',
+            sizes: '192x192',
+            type: 'image/png'
+          },
+          {
+            src: '/favicon.ico',
+            sizes: '48x48',
             type: 'image/png'
           }
         ]
